@@ -24,8 +24,12 @@
           </li>
         </ul>
         <div class="d-flex d-grid gap-1">
-          <button class="btn btn-outline-primary" ><i class="fa-solid fa-right-to-bracket"></i> Login</button>
-          <button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Signup</button>
+          <router-link to="/login">
+            <button class="btn btn-outline-primary" ><i class="fa-solid fa-right-to-bracket"></i> Login</button>
+          </router-link>
+          <router-link to="/signup">
+            <button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Signup</button>
+          </router-link>
         </div>
       </div>
     </div>
