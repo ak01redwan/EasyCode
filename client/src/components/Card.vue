@@ -8,9 +8,9 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">{{ projectTitle }}</h5>
-            <p class="card-text">{{ projectDescription }}</p>
-            <p class="text-muted m-0">Likes: 42</p>
+            <h5 class="card-title">{{ Title }}</h5>
+            <p class="card-text">{{ Description }}</p>
+            <p class="text-muted m-0">Likes: {{ LikesNo }}</p>
             <div class="row">
                 <button class="m-1 col-3 btn btn-outline-secondary"><i class="fa fa-thumbs-up"></i></button>
                 <button class="m-1 col-4 btn btn-outline-secondary"><i class="fa fa-circle-info"></i> Details</button>
@@ -25,14 +25,18 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({
     props: {
-        projectId: Number,
-        projectTitle: String,
-        projectDescription: String
+        Id: Number,
+        Title: String,
+        Description: String,
+        Type: String,
+        LikesNo: Number,
     }
 })
 export default class CoursesGallery extends Vue {
-    projectId!: Number;
-    projectTitle!: String;
-    projectDescription!: String;
+    Id!: Number;
+    Title!: String;
+    Description!: String;
+    Type!: String;
+    LikesNo!: Number;
 }
 </script>

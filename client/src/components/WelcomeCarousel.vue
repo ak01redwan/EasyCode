@@ -59,7 +59,12 @@
         <p>3 - Easy Code choose for you the best from the best.</p>
         <p>4 - Easy Code provide you with all those services for free.</p>
       </p>
-      <p><strong> Start Now For Free </strong><button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Signup </button></p>
+      <p>
+        <strong> Start Now For Free </strong>
+        <router-link to="/signup">
+          <button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Signup </button>
+        </router-link>
+      </p>
     </div>
   </div>
   <hr class="my-5">
@@ -97,7 +102,6 @@
               Go to courses and categories and pick one to start with step by step until you finish it and git the degree of that course.
             </p>
             <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i> Go To The Courses</button>
-
           </div>
         </div>
       </div>
@@ -110,12 +114,13 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Sign up</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the
-              card's content.
+              Sign up as a new student or supervisor to EasyCode website an have your own personal page and issuse.
             </p>
-            <a href="#!" class="btn btn-primary">Button</a>
+            <router-link to="/signup">
+              <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-user-plus"></i> Go To Sign Up</button>
+            </router-link>
           </div>
         </div>
       </div>
@@ -128,12 +133,11 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Students</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the
-              card's content.
+              Show, Filtter and search for any student in this page as well as open any student personal page to see more details about it.
             </p>
-            <a href="#!" class="btn btn-primary">Button</a>
+            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-users"></i> Go To Show Students</button>
           </div>
         </div>
       </div>
@@ -146,12 +150,12 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">Supervisors</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the
-              card's content.
+              Show all supervisors and what courses did they teach,
+              browsing their personal's pages to see more details.
             </p>
-            <a href="#!" class="btn btn-primary">Button</a>
+            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-person-chalkboard"></i> Go To Show Supervisors</button>
           </div>
         </div>
       </div>
@@ -164,12 +168,13 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
+            <h5 class="card-title">About</h5>
             <p class="card-text">
-              Some quick example text to build on the card title and make up the bulk of the
-              card's content.
+              Go to about page so you can read more and have clear and fulfill idea about the EasyCode website.
             </p>
-            <a href="#!" class="btn btn-primary">Button</a>
+            <router-link to="/about">
+              <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-circle-info"></i> Go To About EasyCode</button>
+            </router-link>
           </div>
         </div>
       </div>

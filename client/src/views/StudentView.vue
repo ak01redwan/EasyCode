@@ -90,5 +90,7 @@ import CourseStage from '@/components/CourseStage.vue';
     }
   }
 })
-export default class StudentView extends Vue {}
+export default class StudentView extends Vue {
+  [x: string]: any;
+}
 </script>
