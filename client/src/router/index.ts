@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import StudentView from '../views/StudentView.vue'
 import LoginViewVue from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
+import CourseView from '@/views/CourseView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -23,6 +24,11 @@ const routes: Array<RouteRecordRaw> = [
     name: 'student',
     component: StudentView
 
+  },
+  {
+    path: '/course',
+    name: 'course',
+    component: CourseView
   },
   {
     path: '/login',
