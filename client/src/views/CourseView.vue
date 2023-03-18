@@ -39,10 +39,12 @@
         currentOption: "CourseDetails",
         listOptions: ['CourseDetails','MyCourses','MyProjects','CompleteCourses','Settings'],
         SideBarData: [
-            {itemName: 'Course Info', itemIconClass: 'fa-circle-info'},
-            {itemName: 'Course Stages', itemIconClass: 'fa-video'},
-            {itemName: 'Course Chatting Room', itemIconClass: 'fa-message'},
-            {itemName: 'Course Settings', itemIconClass: 'fa-gear'},
+            {itemName: 'Details', itemIconClass: 'fa-circle-info'},
+            {itemName: 'Stages', itemIconClass: 'fa-circle-play'},
+            {itemName: 'Students', itemIconClass: 'fa-users'},
+            {itemName: 'Supervisors', itemIconClass: 'fa-person-chalkboard'},
+            {itemName: 'Chatting Room', itemIconClass: 'fa-comments'},
+            {itemName: 'Settings', itemIconClass: 'fa-gear'},
         ],
         CourseStages: [
           {stageId: 1, stageTitle: 'Stage Title 1',isOpen: true},
