@@ -38,16 +38,25 @@
             </ul>
           </div>
       </div>
-      <div class="col py-3 scroll">
+      <div class="col py-3" 
+      style="
+        overflow-y: auto;
+        max-height: 720px;
+      ">
+        <!--Getting Current Course Stages-->
         <div class="row" v-if="currentOption === listOptions[0]">
           <CourseStage v-for="stage in CurrentCourseStages" 
           :stageId="stage.stageId" 
           :stageTitle="stage.stageTitle"
           :isOpen="stage.isOpen" />
         </div>
+        <!--Getting Student's Courses-->
         <CoursesGallery :Title="listOptions[1]" v-if="currentOption === listOptions[1]"/>
+        <!--Getting Student's Projects-->
         <ProjectsGallery :Title="listOptions[2]" v-else-if="currentOption === listOptions[2]" />
+        <!--Getting Student's Completed Courses-->
         <CoursesGallery :Title="listOptions[3]" v-if="currentOption === listOptions[3]"/>
+        <!--Getting Student's Settings-->
         <Settings :Title="listOptions[4]" v-else-if="currentOption === listOptions[4]"/>   
       </div>
     </div>
