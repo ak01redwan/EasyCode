@@ -4,7 +4,7 @@
             <p class="m-0 text-center">{{ stageTitle }}</p>
         </div>
         <div class="card-body text-center">
-            <i class="fa-solid" :class="{'fa-lock-open': isOpen, 'fa-lock': !isOpen}" style="font-size: 8rem;"></i>
+            <i class="fa-solid color text-color4" :class="{'fa-lock-open': isOpen, 'fa-lock': !isOpen}" style="font-size: 8rem;"></i>
             <h6 class="text-muted font-size-26 mt-2">{{ stageId }}</h6>
         </div>
     </div>

@@ -7,11 +7,20 @@
 .background-color2 {
     background-color: #6f5ed0;
 }
+.text-color2 {
+    color: #c37eff;
+}
 .background-color3 {
     background-color: #c37eff;
 }
+.text-color3 {
+    color: #6f5ed0;
+}
 .background-color4 {
     background-color: #ebecf1;
+}
+.text-color4 {
+    color: #243b67;
 }
 
 .font-size-14 {
