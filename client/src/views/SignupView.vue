@@ -15,8 +15,8 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import StudentSignup from '@/components/StudentSignup.vue';
-import SupervisorSignup from '@/components/SupervisorSignup.vue';
+import StudentSignup from '@/components/Student/StudentSignup.vue';
+import SupervisorSignup from '@/components/Supervisor/SupervisorSignup.vue';
 
 @Options({
   components: {
@@ -58,7 +58,9 @@ import SupervisorSignup from '@/components/SupervisorSignup.vue';
     }
   }
 })
-export default class SignupView extends Vue {}
+export default class SignupView extends Vue {
+[x: string]: any;
+}
 </script>
 
 <style scoped>

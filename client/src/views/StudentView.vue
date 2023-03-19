@@ -65,10 +65,10 @@
 
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Settings from '@/components/Settings.vue';
-import ProjectsGallery from '@/components/ProjectsGallery.vue';
-import CoursesGallery from '@/components/CoursesGallery.vue';
-import CourseStage from '@/components/CourseStage.vue';
+import Settings from '@/components/Student/Settings.vue';
+import ProjectsGallery from '@/components/Project/ProjectsGallery.vue';
+import CoursesGallery from '@/components/Course/CoursesGallery.vue';
+import CourseStage from '@/components/Course/CourseStage.vue';
 
 @Options({
   components: {

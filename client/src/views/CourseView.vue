@@ -26,7 +26,7 @@
   
   <script lang="ts">
   import { Options, Vue } from 'vue-class-component';
-  import CourseStage from '@/components/CourseStage.vue';
+  import CourseStage from '@/components/Course/CourseStage.vue';
   import CourseDetails from '@/components/Course/CourseDetails.vue'
   
   @Options({
