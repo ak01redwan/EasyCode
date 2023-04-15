@@ -13,6 +13,9 @@
           <li class="nav-item">
             <router-link to="/about" class="nav-link"><i class="fa-solid fa-circle-info"></i> About</router-link>
           </li>
+          <li class="nav-item">
+            <router-link to="/dashboard" class="nav-link"><i class="fa-solid fa-dashboard"></i> Dashboard</router-link>
+          </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="fa-solid fa-list"></i> More Things</a>
             <ul class="dropdown-menu">

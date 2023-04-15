@@ -5,8 +5,14 @@ import StudentView from '../views/StudentView.vue'
 import LoginViewVue from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import CourseView from '@/views/CourseView.vue'
+import DashboardView from "@/views/DashboardView.vue"
 
 const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: DashboardView
+  },
   {
     path: '/',
     name: 'home',
