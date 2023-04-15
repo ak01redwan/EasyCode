@@ -1,5 +1,4 @@
 <template>
-    <h1>Supervisor</h1>
     <form action="" class="needs-validated row">
        <div class="form-group was-validated col-lg-6 mb-2">
            <label class="form-label"  for="my-name">User Name</label>
@@ -66,10 +65,6 @@
                <div class="valid-feedback fs-6">Looks Good</div>
            </div>
        </div>           
-       <input type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" value="LOGIN">
-       <ul class="form-options col-3 mt-3 mb-0 ms-4 ms-lg-5 p-0"  accesskey="none">
-           <router-link to='/login'><li class="m-0 ms-5 p-0 w-100 list-unstyled fs-6"><a >Let's go login</a></li></router-link>
-       </ul>
-       
+       <input type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" value="SIGN UP">
    </form>
 </template>

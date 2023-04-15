@@ -9,6 +9,9 @@
             </div>
             <StudentSignup v-if="usertype === userstypes[0]"/>
             <SupervisorSignup v-else-if="usertype === userstypes[1]" />
+            <ul class="form-options col-3 mt-3 mb-0 ms-4 ms-lg-5 p-0"  accesskey="none">
+                <router-link to='/login'><li class="m-0 ms-5 p-0 w-100 list-unstyled fs-6"><a >Let's go login</a></li></router-link>
+            </ul>
         </div>
     </div>
 </template>

@@ -17,7 +17,7 @@
           <li><a class="dropdown-item" @click="changeFilterValue('Student')">Student</a></li>
         </ul>
       </div>
-      <a class="btn btn-primary" href="#" role="button">Add New User <i class="fas fa-plus"></i></a>
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User <i class="fas fa-plus"></i></button>
     </div>
   </nav>
   <div class="container">
@@ -40,6 +40,8 @@
       </div>
     </div>
   </div>
+  <!--Adding New User Modal-->
+  <AddNewUser />
 </template>
 <style scoped>
     .user-card {
@@ -61,8 +63,12 @@
 </style>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
+import AddNewUser from '@/components/Dashboard/AddNewUser.vue'
 
 @Options({
+    components:{
+      AddNewUser,
+    },
     methods:{
       changeFilterValue(value: String) { this.filter = value; }/*for change the filter parameter value*/,
     },
