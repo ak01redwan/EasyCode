@@ -11,10 +11,10 @@
           Filter: {{ filter }}
         </button>
         <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
-          <li><a class="dropdown-item" @click="changeFilterValue('')">All Users</a></li>
-          <li><a class="dropdown-item" @click="changeFilterValue('Admin Supervisor')">Admin Supervisor</a></li>
-          <li><a class="dropdown-item" @click="changeFilterValue('Normal Supervisor')">Normal Supervisor</a></li>
-          <li><a class="dropdown-item" @click="changeFilterValue('Student')">Student</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('')">All Users</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('Admin Supervisor')">Admin Supervisor</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('Normal Supervisor')">Normal Supervisor</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('Student')">Student</a></li>
         </ul>
       </div>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User <i class="fas fa-plus"></i></button>

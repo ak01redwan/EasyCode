@@ -14,9 +14,9 @@
                                 max-height: 415px;
                                 overflow-y: scroll;
                                 margin: 0;">
-        <div v-for="(user,index) in searchResults" :key="index" class="user-card">
-          <span class="fw-bold">{{ user.name }}</span>
-          <span class="text-muted">@_{{user.numberOfCourses}}_course</span>
+        <div v-for="(category,index) in searchResults" :key="index" class="user-card">
+          <span class="fw-bold">{{ category.name }}</span>
+          <span class="text-muted">@_{{category.numberOfCourses}}_course</span>
           <div class="btn-group float-end">
             <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
           </div>
@@ -53,9 +53,7 @@ import AddNewCategory from '@/components/Dashboard/AddNewCategory.vue'
     components:{
       AddNewCategory,
     },
-    methods:{
-      changeFilterValue(value: String) { this.filter = value; }/*for change the filter parameter value*/,
-    },
+    methods:{},
     computed:{
         searchResults() {
             return this.categories.filter((category: { id: number; name: string; numberOfCourses: number; }): any => {

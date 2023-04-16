@@ -1,5 +1,5 @@
 <template>
-     <form action="" class="needs-validated row">
+    <form action="" class="needs-validated row">
         <div class="form-group was-validated col-lg-6 mb-2">
             <label class="form-label"  for="my-name">User Name</label>
             <input  id="my-name" class="form-control" type="text" name="" placeholder="Enter your username" required>

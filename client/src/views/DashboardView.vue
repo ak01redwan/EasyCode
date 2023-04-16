@@ -18,6 +18,7 @@
                 <div id="page-content">
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
+                    <ShowCourses v-else-if="currentDisplayedContent === 'ShowCourses'" />
                 </div>
             </div>
         </div>
@@ -27,11 +28,13 @@
 import { Options, Vue } from 'vue-class-component';
 import ShowUsers from '@/components/Dashboard/ShowUsers.vue';
 import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
+import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
 
 @Options({
   components: {
     ShowUsers,
     ShowCategories,
+    ShowCourses
   },
   data () {
     return {
