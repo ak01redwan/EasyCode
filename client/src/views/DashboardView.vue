@@ -4,36 +4,20 @@
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 bg-dark text-white" style="height: 500px;">
                 <ul class="nav flex-column">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#">
-                    <i class="fas fa-users me-2"></i>
-                    Show Users
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                    <i class="fas fa-chart-bar me-2"></i>
-                    Analytics
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                    <i class="fas fa-envelope me-2"></i>
-                    Messages
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
-                    <i class="fas fa-cog me-2"></i>
-                    Settings
-                    </a>
-                </li>
+                    <li v-for="(item, index) in sidebarItems" :key="index" class="nav-item">
+                        <a class="nav-link active sidebarItemButton" 
+                        @click="changeCurrentDisplayedContent(item.content)">
+                            <i :class="item.icon"></i>
+                            {{ item.text }}
+                        </a>
+                    </li>
                 </ul>
             </div>
             <!-- Content -->
             <div class="col-md-9 col-lg-10 bg-white" style="height: 500px;">
                 <div id="page-content">
-                    <ShowUsers />
+                    <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
+                    <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
                 </div>
             </div>
         </div>
@@ -42,17 +26,36 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import ShowUsers from '@/components/Dashboard/ShowUsers.vue';
+import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
+
 @Options({
   components: {
-    ShowUsers
+    ShowUsers,
+    ShowCategories,
   },
   data () {
     return {
+        currentDisplayedContent: 'ShowUsers',
+        sidebarItems:[ // those are the sidebar items
+            {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
+            {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
+            {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
+            {text: 'Analytics',  icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
+            {text: 'Messages',   icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
+            {text: 'Settings',   icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
+        ]
     }
   },
   methods: {
+    changeCurrentDisplayedContent(newContent: string){ this.currentDisplayedContent = newContent; },
   }
 })
 export default class DashboardView extends Vue {
+    [x: string]: any;
 }
 </script>
+<style>
+    .sidebarItemButton:hover {
+        cursor: pointer;
+    }
+</style>
