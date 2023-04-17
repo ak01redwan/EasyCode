@@ -102,7 +102,7 @@
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color:#243B67">
           © 2023 Copyright:
-          <a class="text-white" href="https://easycode.com/">easycode.come</a>
+          <a class="text-white" href="https://easycode.com/">easycode.com</a>
         </div>
         <!-- Copyright -->
   </footer>
