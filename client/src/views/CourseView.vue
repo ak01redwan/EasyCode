@@ -19,6 +19,7 @@
         <!--Content-->
         <div class="col py-3" style="overflow-y: auto; max-height: 720px;">
           <CourseDetails v-if="currentOption === listOptions[0]" />
+          <ChatRoom v-if="currentOption === listOptions[4]" />
         </div>
       </div>
     </div>
@@ -28,11 +29,13 @@
   import { Options, Vue } from 'vue-class-component';
   import CourseStage from '@/components/Course/CourseStage.vue';
   import CourseDetails from '@/components/Course/CourseDetails.vue'
+  import ChatRoom from '@/components/Course/ChatRoom.vue';
   
   @Options({
     components: {
       CourseStage,
       CourseDetails,
+      ChatRoom,
     },
     data () {
       return {
