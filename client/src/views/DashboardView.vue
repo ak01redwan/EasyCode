@@ -2,19 +2,19 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
-            <div class="col-md-3 col-lg-2 bg-dark text-white" style="height: 500px;">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg h-atuo" >
                 <ul class="nav flex-column">
                     <li v-for="(item, index) in sidebarItems" :key="index" class="nav-item">
                         <a class="nav-link active sidebarItemButton" 
-                        @click="changeCurrentDisplayedContent(item.content)">
+                               @click="changeCurrentDisplayedContent(item.content)">
                             <i :class="item.icon"></i>
-                            {{ item.text }}
+                            <span class="ms-1 d-none d-sm-inline"> {{ item.text }} </span>
                         </a>
                     </li>
                 </ul>
             </div>
             <!-- Content -->
-            <div class="col-md-9 col-lg-10 bg-white" style="height: 500px;">
+            <div class="col py-3" style="overflow-y: auto;">
                 <div id="page-content">
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
@@ -40,12 +40,12 @@ import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
     return {
         currentDisplayedContent: 'ShowUsers',
         sidebarItems:[ // those are the sidebar items
-            {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
+            {text: 'Show Users', icon: 'fa-solid fa-users me-2',       content: 'ShowUsers'},
             {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
             {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
-            {text: 'Analytics',  icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
-            {text: 'Messages',   icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
-            {text: 'Settings',   icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
+            {text: 'Analytics',  icon: 'fa-solid fa-chart-bar me-2',   content: 'ShowAnalytics'},
+            {text: 'Messages',   icon: 'fa-solid fa-envelope me-2',    content: 'ShowMessages'},
+            {text: 'Settings',   icon: 'fa-solid fa-cog me-2',         content: 'ShowSettings'},
         ]
     }
   },

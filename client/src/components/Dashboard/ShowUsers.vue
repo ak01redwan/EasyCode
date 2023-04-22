@@ -1,23 +1,24 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <div class="container-fluid">
-      <form class="d-flex me-auto" @submit.prevent="onSubmit">
-        <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
-        <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+    <div class="container-fluid row">
+      <form class="d-flex col-sm-12 col-lg-5 col-md-7" @submit.prevent="onSubmit">
+        <input v-model="searchTerm" class="form-control me-2 w-100" type="search" placeholder="Search" aria-label="Search" id="search-bar">
+        <button class="btn btn-outline-success " type="submit"><i class="fas fa-search"></i></button>
       </form>
-      
-      <div class="dropdown me-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Filter: {{ filter }}
+      <div class="dropdown col-lg-2 col-md-2 col-sm-11 me-1 mt-2 text-start">
+        <button class="btn btn-secondary dropdown-toggle w-100" type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+         <span class="d-sm-inline d-md-none d-lg-inline">Filter: </span>  {{ filter }}
         </button>
-        <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
+        <ul class="dropdown-menu w-100" aria-labelledby="filter-dropdown">
           <li><a class="dropdown-item btn" @click="changeFilterValue('')">All Users</a></li>
           <li><a class="dropdown-item btn" @click="changeFilterValue('Admin Supervisor')">Admin Supervisor</a></li>
           <li><a class="dropdown-item btn" @click="changeFilterValue('Normal Supervisor')">Normal Supervisor</a></li>
           <li><a class="dropdown-item btn" @click="changeFilterValue('Student')">Student</a></li>
         </ul>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User <i class="fas fa-plus"></i></button>
+      <div class="col-lg-5 col-md-2 mt-2 col-sm-11">
+           <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addUserModal"><span class="d-sm-inline d-md-none d-lg-inline">Add New User </span><i class="fas fa-plus"></i></button>
+      </div>
     </div>
   </nav>
   <div class="container">
@@ -26,11 +27,11 @@
                                 max-height: 415px;
                                 overflow-y: scroll;
                                 margin: 0;">
-        <div v-for="(user,index) in searchResults" :key="index" class="user-card">
-          <img src="https://via.placeholder.com/50" alt="User Avatar">
-          <span class="fw-bold">{{ user.fullname }}</span>
-          <span class="text-muted">@{{user.username}}</span>
-          <div class="btn-group float-end">
+        <div v-for="(user,index) in searchResults" :key="index" class="user-card row">
+          <div class="col-sm-10 col-md-1 col-lg-1 mb-2 text-center"><img src="https://via.placeholder.com/50" alt="User Avatar"></div>
+          <div class="fw-bold col-sm-6 col-md-4 col-lg-4 mb-2 text-center">{{ user.fullname }}</div>
+          <div class="text-muted col-sm-6 col-md-3 col-lg-3 mb-2 text-center">@{{user.username}}</div>
+          <div class="btn-group col-sm-12 col-md-4 col-lg-4 mb-2 text-center">
             <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
             <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
             <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>

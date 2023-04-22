@@ -1,21 +1,23 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <div class="container-fluid">
-      <form class="d-flex me-auto" @submit.prevent="onSubmit">
-        <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
+    <div class="container-fluid row">
+      <form class="d-flex col-sm-12 col-lg-7 col-md-7" @submit.prevent="onSubmit">
+        <input v-model="searchTerm" class="form-control me-2 w-100" type="search" placeholder="Search" aria-label="Search" id="search-bar">
         <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
       </form>
-      <div class="dropdown me-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Filter: {{ filter }}
+      <div class="dropdown col-lg-2 col-md-2 col-sm-11 me-1 mt-2 text-start">
+        <button class="btn btn-secondary dropdown-toggle w-100 " type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <span class="d-sm-inline d-md-none d-lg-inline">Filter: </span> {{ filter }}  
         </button>
-        <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
+        <ul class="dropdown-menu w-100" aria-labelledby="filter-dropdown">
           <li><a class="dropdown-item btn" @click="changeFilterValue('')">All Course</a></li>
           <li><a class="dropdown-item btn" @click="changeFilterValue('Published')">Published</a></li>
           <li><a class="dropdown-item btn" @click="changeFilterValue('Unpublished')">Unpublished</a></li>
         </ul>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">Add New Course <i class="fas fa-plus"></i></button>
+      <div class="col-lg-3 col-md-2 mt-2 col-sm-11 text-end">
+        <button class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addCourseModal"><span class="d-sm-inline d-md-none d-lg-inline">Add New Course </span><i class="fas fa-plus "></i> </button>
+      </div>
     </div>
   </nav>
   <div class="container">
