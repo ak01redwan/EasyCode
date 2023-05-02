@@ -4,13 +4,9 @@
             <div class="row d-flex justify-content-center">
                 <div class="h-100 w-100">
                     <div class="card h-75" >
-                        <div class="card-header d-flex justify-content-between align-items-center p-3">  
-                            <span class="bi bi-chat-left-dots-fill "></span>
-                            <p class="mb-0 fs-4 fw-bold d-block ">ChatRoom Tital</p>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input form-check-input-lg" type="checkbox" id="flexSwitchCheckDefault" checked>
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Notifications</label>
-                            </div>
+                        <div class="card-header align-items-center p-3">  
+                            <span class="bi bi-chat-left-dots-fill"></span>
+                            <p class="mb-0 fs-4 fw-bold d-block ">CourseName ChattingRoom</p>
                         </div>
                         <div class="card-body overflow-auto" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px">           
                             <div class="d-flex flex-row justify-content-start">
