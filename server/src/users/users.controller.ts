@@ -2,15 +2,17 @@ import { Controller, Get, Post, Body, Put, Param, Delete } from '@nestjs/common'
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { createUserDtoToUserEntity } from './mappers/user.mappers'
+import { UpdateUserDto } from './dto/update-user.dto';
+import { createUserDtoToUserEntity, updateUserDtoToUserEntity } from './mappers/user.mappers';
+
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
-  async create(@Body() user: CreateUserDto): Promise<User> {
-    // here is the validation
-    return await this.usersService.create(createUserDtoToUserEntity(user));
+  async create(@Body() createUserDto: CreateUserDto): Promise<User> {
+    const user = createUserDtoToUserEntity(createUserDto);
+    return await this.usersService.create(user);
   }
 
   @Get()
@@ -24,7 +26,8 @@ export class UsersController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() user: User): Promise<User> {
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
+    const user = updateUserDtoToUserEntity(updateUserDto);
     return await this.usersService.update(+id, user);
   }
 
