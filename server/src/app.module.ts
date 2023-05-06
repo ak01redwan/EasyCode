@@ -17,10 +17,9 @@ import { User } from './users/entities/user.entity';
       options: {
         encrypt: false
       },
-      entities: [User],
+      entities: [ User ],
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User]),
     UsersModule,
   ],
   controllers: [AppController],
