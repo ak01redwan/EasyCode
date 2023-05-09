@@ -12,11 +12,11 @@ export class CategoriesService {
   }
 
   async findAll(): Promise<Category[]> {
-    return await this.categoriesRepository.find();
+    return await this.categoriesRepository.find({ relations: ['courses'] });
   }
 
   async findOne(id: number): Promise<Category> {
-    return await this.categoriesRepository.findOne({ where: { id: id}});
+    return await this.categoriesRepository.findOne({ where: { id }, relations: ['courses'] });
   }
 
   async update(id: number, category: Category): Promise<Category> {
@@ -29,6 +29,13 @@ export class CategoriesService {
   }
 
   async remove(id: number): Promise<void> {
+    const category = await this.categoriesRepository.findOne({ where: { id }, relations: ['courses'] });
+    if (!category) {
+      throw new HttpException(`Category with ID '${id}' not found.`, HttpStatus.NOT_FOUND);
+    }
+    if (category.courses.length > 0) {
+      throw new HttpException(`Category '${category.name}' cannot be deleted because it has associated courses.`, HttpStatus.BAD_REQUEST);
+    }
     await this.categoriesRepository.delete(id);
   }
 }

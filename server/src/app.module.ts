@@ -9,6 +9,8 @@ import { CategoriesModule } from './categories/categories.module';
 // entities
 import { User } from './users/entities/user.entity';
 import { Category } from './categories/entities/category.entity';
+import { CoursesModule } from './courses/courses.module';
+import { Course } from './courses/entities/course.entity';
 
 @Module({
   imports: [
@@ -22,12 +24,13 @@ import { Category } from './categories/entities/category.entity';
       options: {
         encrypt: false
       },
-      entities: [ User, Category ],
+      entities: [User, Category, Course],
       synchronize: true,
     }),
     UsersModule,
     AuthModule,
     CategoriesModule,
+    CoursesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
