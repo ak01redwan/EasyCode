@@ -30,7 +30,7 @@ export class UsersController {
       };
       return userWithTokens;
     } catch (error) {
-      if (error.number == '2627') { // 2627 sql error for the unique error
+      if (error.number == '2627') { // 2627 sql error for duplicate value
         throw new HttpException(`User with this email and username already exists!.`, HttpStatus.CONFLICT);
       } // for the others errors
       throw new HttpException(`Internal server error ==== Error Details: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
