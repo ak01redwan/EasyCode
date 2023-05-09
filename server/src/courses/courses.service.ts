@@ -34,6 +34,10 @@ export class CoursesService {
   }
 
   async remove(id: number): Promise<void> {
+    const course = await this.coursesRepository.findOneOrFail({ where: { id }, relations: ['stages'] });
+    if (course.stages.length > 0) {
+      throw new Error('Cannot delete course with associated stages.');
+    }
     await this.coursesRepository.delete(id);
   }
 }

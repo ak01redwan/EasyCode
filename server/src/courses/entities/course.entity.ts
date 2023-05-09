@@ -1,5 +1,6 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Category } from '../../categories/entities/category.entity';
+import { Stage } from 'src/stages/entities/stage.entity';
 
 @Entity()
 export class Course {
@@ -26,4 +27,7 @@ export class Course {
 
   @ManyToOne(() => Category, category => category.courses)
   category: Category;
+
+  @OneToMany(() => Stage, stage => stage.course)
+  stages: Stage[];
 }
