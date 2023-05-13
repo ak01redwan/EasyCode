@@ -7,7 +7,7 @@
     <div class="carousel-inner">
       <div class="carousel-item active" data-bs-interval="5000">
         <img src="../assets/images/introBackground2.jpg" class="d-block w-100" alt="...">
-        <div class="carousel-caption position-absolute top-50 start-10 font-size-30">
+        <div class="carousel-caption position-absolute start-10 font-size-30">
           <h3 class="text-color1">Start Now With EasyCode</h3>
           <p class="text-color1 font-size-26">Start Learning any programming language or frameworke you want right now.</p>
           <router-link to="/student" >
@@ -17,7 +17,7 @@
       </div>
       <div class="carousel-item" data-bs-interval="5000">
         <img src="../assets/images/introBackground.jpg" class="d-block w-100" alt="...">
-        <div class="carousel-caption position-absolute top-50 start-10 font-size-30">
+        <div class="carousel-caption position-absolute start-10 font-size-30">
           <h3 class="text-color1">CODING IS POER</h3>
           <p class="text-color1 font-size-22">Descover your skills and build your own projects</p>
           <router-link to="/student" >
