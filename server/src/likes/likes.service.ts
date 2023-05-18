@@ -12,17 +12,19 @@ export class LikesService {
   ) {}
 
   async courseLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
-    const like = await this.likeRepository.findOne({
-      where: { user: likeDto.user, id: id },
+    let like = await this.likeRepository.findOne({
+      where: { user: { id: likeDto.user.id } },
     });
-    if (like){
+    if (like) {
       like.course = likeDto.course;
-      return await this.likeRepository.save(like);
+      like = await this.likeRepository.save(like);
+    } else {
+      const newLike  = new Like();
+      newLike.user   = likeDto.user;
+      newLike.course = likeDto.course;
+      like = await this.likeRepository.save(newLike);
     }
-    const newLike = new Like();
-    newLike.course = likeDto.course;
-    newLike.user = likeDto.user;
-    return await this.likeRepository.save(newLike);
+    return like;
   }
 
   async projectLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
@@ -34,7 +36,7 @@ export class LikesService {
   }
 
   async getAll(): Promise<Like[]> {
-    return await this.likeRepository.find();
+    return await this.likeRepository.find({ relations: ['user', 'course'] });
   }
 
 }

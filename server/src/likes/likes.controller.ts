@@ -8,8 +8,6 @@ export class LikesController {
 
   @Post('/course/:id')
   courseLikeAndUnlike(@Body() likeDto: LikeDto, @Param('id') id: string) {
-    console.log(likeDto);
-    console.log(id);
     return this.likesService.courseLikeAndUnlike(likeDto, +id);
   }
 
