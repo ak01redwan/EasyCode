@@ -13,6 +13,8 @@ import { CoursesModule } from './courses/courses.module';
 import { Course } from './courses/entities/course.entity';
 import { StagesModule } from './stages/stages.module';
 import { Stage } from './stages/entities/stage.entity';
+import { LikesModule } from './likes/likes.module';
+import { Like } from './likes/entities/like.entity';
 
 @Module({
   imports: [
@@ -26,7 +28,7 @@ import { Stage } from './stages/entities/stage.entity';
       options: {
         encrypt: false
       },
-      entities: [User, Category, Course, Stage],
+      entities: [User, Category, Course, Stage, Like],
       synchronize: true,
     }),
     UsersModule,
@@ -34,6 +36,7 @@ import { Stage } from './stages/entities/stage.entity';
     CategoriesModule,
     CoursesModule,
     StagesModule,
+    LikesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

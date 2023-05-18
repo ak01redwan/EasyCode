@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Like } from 'src/likes/entities/like.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -47,4 +48,8 @@ export class User {
 
   @Column({ default: true })
   isDeleted: boolean;
+
+  // realtions
+  @OneToMany(() => Like, (like) => like.user)
+  likes: Like[];
 }
