@@ -1,34 +1,38 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
+import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
+import { plainToClass } from 'class-transformer';
 import { UpdateProjectDto } from './dto/update-project.dto';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(private readonly projectsService: ProjectsService) {}
 
-  @Post()
-  create(@Body() createProjectDto: CreateProjectDto) {
-    return this.projectsService.create(createProjectDto);
-  }
-
   @Get()
-  findAll() {
+  async findAll(): Promise<Project[]> {
     return this.projectsService.findAll();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.projectsService.findOne(+id);
+  async findById(@Param('id') id: number): Promise<Project> {
+    return this.projectsService.findById(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateProjectDto: UpdateProjectDto) {
-    return this.projectsService.update(+id, updateProjectDto);
+  @Post()
+  async create(@Body() createProjectDto: CreateProjectDto): Promise<Project> {
+    const project = plainToClass(Project, createProjectDto);
+    return this.projectsService.create(project);
+  }
+
+  @Put(':id')
+  async update(@Param('id') id: number, @Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
+    const project = plainToClass(Project, updateProjectDto);
+    return this.projectsService.update(id, project);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.projectsService.remove(+id);
+  async delete(@Param('id') id: number): Promise<void> {
+    return this.projectsService.delete(id);
   }
 }

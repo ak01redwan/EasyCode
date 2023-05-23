@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { UpdateProjectDto } from './dto/update-project.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Project } from './entities/project.entity';
 
 @Injectable()
 export class ProjectsService {
-  create(createProjectDto: CreateProjectDto) {
-    return 'This action adds a new project';
+  constructor(
+    @InjectRepository(Project)
+    private readonly projectRepository: Repository<Project>,
+  ) {}
+
+  async findAll(): Promise<Project[]> {
+    return this.projectRepository.find();
   }
 
-  findAll() {
-    return `This action returns all projects`;
+  async findById(id: number): Promise<Project> {
+    return this.projectRepository.findOne({ where: { id: id}});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} project`;
+  async create(projectData: Project): Promise<Project> {
+    const newProject = this.projectRepository.create(projectData);
+    return this.projectRepository.save(newProject);
   }
 
-  update(id: number, updateProjectDto: UpdateProjectDto) {
-    return `This action updates a #${id} project`;
+  async update(id: number, projectData: Partial<Project>): Promise<Project> {
+    const projectToUpdate = await this.projectRepository.findOne({ where: { id: id}});
+    this.projectRepository.merge(projectToUpdate, projectData);
+    return this.projectRepository.save(projectToUpdate);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} project`;
+  async delete(id: number): Promise<void> {
+    await this.projectRepository.delete(id);
   }
 }
