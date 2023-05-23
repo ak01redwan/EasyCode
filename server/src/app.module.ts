@@ -15,6 +15,7 @@ import { StagesModule } from './stages/stages.module';
 import { Stage } from './stages/entities/stage.entity';
 import { LikesModule } from './likes/likes.module';
 import { Like } from './likes/entities/like.entity';
+import { ProjectsModule } from './projects/projects.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { Like } from './likes/entities/like.entity';
     CoursesModule,
     StagesModule,
     LikesModule,
+    ProjectsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
