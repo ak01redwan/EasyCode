@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Like } from './entities/like.entity';
 import { LikeDto } from './dto/like.dto';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class LikesService {
@@ -11,20 +12,18 @@ export class LikesService {
     private readonly likeRepository: Repository<Like>
   ) {}
 
-  async courseLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
+  async toggleLikeCourse(likeDto: LikeDto): Promise<any> {
     let like = await this.likeRepository.findOne({
-      where: { user: { id: likeDto.user.id } },
+      where: { user: { id: likeDto.user.id }, course: { id: likeDto.course.id }},
     });
-    if (like) {
-      like.course = likeDto.course;
-      like = await this.likeRepository.save(like);
+    if (like) { // unlike the course if it is exist
+      await this.likeRepository.remove(like)
+      return {message: "course's like has been removed", like:like};
     } else {
-      const newLike  = new Like();
-      newLike.user   = likeDto.user;
-      newLike.course = likeDto.course;
+      const newLike = plainToClass(Like, likeDto)
       like = await this.likeRepository.save(newLike);
+      return {message: "course's like added", like};
     }
-    return like;
   }
 
   async projectLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
