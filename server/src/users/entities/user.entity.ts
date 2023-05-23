@@ -1,4 +1,5 @@
 import { Like } from 'src/likes/entities/like.entity';
+import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
@@ -52,4 +53,7 @@ export class User {
   // realtions
   @OneToMany(() => Like, (like) => like.user)
   likes: Like[];
+
+  @OneToMany(() => Subscription, subscribe => subscribe.course)
+  subscriptions: Subscription[];
 }

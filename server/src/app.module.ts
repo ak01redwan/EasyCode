@@ -11,6 +11,7 @@ import { StagesModule } from './stages/stages.module';
 import { ProjectsModule } from './projects/projects.module';
 import { LikesModule } from './likes/likes.module';
 import { CoursesModule } from './courses/courses.module';
+import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 
 // entities
 import { User } from './users/entities/user.entity';
@@ -19,6 +20,7 @@ import { Course } from './courses/entities/course.entity';
 import { Stage } from './stages/entities/stage.entity';
 import { Like } from './likes/entities/like.entity';
 import { Project } from './projects/entities/project.entity';
+import { Subscription } from './subscriptions/entities/subscription.entity';
 
 @Module({
   imports: [
@@ -32,7 +34,7 @@ import { Project } from './projects/entities/project.entity';
       options: {
         encrypt: false
       },
-      entities: [User, Category, Course, Stage, Like, Project],
+      entities: [User, Category, Course, Stage, Like, Project, Subscription],
       synchronize: true,
     }),
     UsersModule,
@@ -42,6 +44,7 @@ import { Project } from './projects/entities/project.entity';
     StagesModule,
     LikesModule,
     ProjectsModule,
+    SubscriptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
