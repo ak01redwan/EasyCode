@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
       <div class="row flex-nowrap">
-          <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg">
+          <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
             <div class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
               <router-link to="/student" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                   <span class="fs-4 m-1"> Course Title </span>
@@ -17,22 +17,32 @@
             </div>
         </div>
         <!--Content-->
-        <div class="col py-3" style="overflow-y: auto; max-height: 720px;">
+        <div class="col m-0 " style="overflow-y: auto;">
           <!--Getting Course Details-->
           <CourseDetails v-if="currentOption === listOptions[0]" />
           <!--Getting Course ChatRoom-->
           <ChatRoom v-if="currentOption === listOptions[4]" />
           <!--Getting Course Stages-->
-          <CourseStage v-if="currentOption === listOptions[1]" v-for="stage in CourseStages"
-            :stageId="stage.stageId" 
-            :stageTitle="stage.stageTitle"
-            :isOpen="stage.isOpen"
-          /> 
+          <div v-if="currentOption === listOptions[1]" class="row">
+            <CourseStage v-for="stage in CourseStages" 
+              :stageId="stage.stageId" 
+              :stageTitle="stage.stageTitle"
+              :isOpen="stage.isOpen"
+            /> 
+          </div>
+          
           <!--Getting Students-->
           <div v-if="currentOption === listOptions[2]" class="row m-0" style="            
           overflow-y: scroll;
           ">
-            <div v-for="(student,index) in students" :key="index" class="user-card col-12 p-3">
+            <div class="container-fluid bg-light m-0 p-1">
+              <form class="d-flex w-50 m-1" @submit.prevent="onSubmit">
+                <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
+                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+          
+            <div v-for="(student,index) in (searchResults)" :key="index" class="user-card col-12 p-3">
               <img src="https://via.placeholder.com/50"  alt="User Avatar" class="bd-placeholder-img rounded-circle">
               <span class="fw-bold m-4">{{ student.fullname }}</span>
               <span class="text-muted m-3">{{student.username}}</span>
@@ -44,7 +54,28 @@
               </div>
             </div>
           </div>
-          
+          <!--Getting Supervisers-->
+          <div v-if="currentOption === listOptions[3]" class="row m-0" style="            
+          overflow-y: scroll;
+          ">
+            <div class="container-fluid bg-light m-0 p-1">
+              <form class="d-flex w-50 m-1" @submit.prevent="onSubmit">
+                <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
+                <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+              </form>
+            </div>
+            <div v-for="(student,index) in searchResultsSuperviser" :key="index" class="user-card col-12  p-3">
+              <img src="https://via.placeholder.com/50"  alt="User Avatar" class="bd-placeholder-img rounded-circle">
+              <span class="fw-bold m-4 ">{{ student.fullname }}</span>
+              <span class="text-muted m-3 ">{{student.username}}</span>
+              <div class="btn-group float-end">
+                <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
+                <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
+                <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
+                <button class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          </div> 
         </div>
       </div>
     </div>
@@ -84,27 +115,44 @@
           {stageId: 7, stageTitle: 'Stage Title 7',isOpen: false},
         ],
         students: [
-          {fullname: 'Abdu Khalid Abdullh', username:'AK01REDWAN',type: 'Admin'},
-          {fullname: 'Salem Nagy Khasem', username:'5488', type: 'Student'},
-          {fullname: 'Ahmed Mohammed', username:'AK01REDWAN', type: 'Student'},
-          {fullname: 'Weas Humza', username:'AK01REDWAN', type: 'Student'},
-          {fullname: 'Abdurhman Khald', username:'AK01REDWAN', type: 'Student'},
-          {fullname: 'New Person Name', username:'AK01REDWAN', type: 'Student'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Student'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'}
-        ]
+          {fullname: 'Salem Nagy Khasem', username:'5488'},
+          {fullname: 'Ahmed Mohammed', username:'AK01REDWAN'},
+          {fullname: 'Weas Humza', username:'AK01REDWAN'},
+          {fullname: 'Abdurhman Khald', username:'AK01REDWAN'},
+          {fullname: 'New Person Name', username:'AK01REDWAN'},
+          {fullname: 'Another Person Name', username:'AK01REDWAN'},
+        ],
+        Supervisers: [        
+          {fullname: 'ali', username:'AK01REDWAN'},
+          {fullname: 'Another Person Name', username:'AK01REDWAN'},
+          {fullname: 'Another Person Name', username:'AK01REDWAN'},
+          {fullname: 'Person Name', username:'AK01REDWAN'},
+          {fullname: 'Person Name', username:'AK01REDWAN'},
+          {fullname: 'Another Person Name', username:'AK01REDWAN'}
+        ],
+        searchTerm: "",
+
       }
     },
     methods: {
       ShowOption(optionNumber: number){
         this.currentOption = this.listOptions[optionNumber];
       }
-    }
+    },
+    computed:{
+        searchResults() {
+            return this.students.filter((student: { fullname: string; username: string}): any => {
+                const searchTerm = this.searchTerm.toLowerCase();
+                return (student.fullname.toLowerCase().includes(searchTerm) || student.username.toLowerCase().includes(searchTerm));
+            });
+        },
+        searchResultsSuperviser() {
+            return this.Supervisers.filter((superviser: { fullname: string; username: string}): any => {
+                const searchTerm = this.searchTerm.toLowerCase();
+                return (superviser.fullname.toLowerCase().includes(searchTerm) || superviser.username.toLowerCase().includes(searchTerm));
+            });
+        }
+    },
   })
   export default class CourseView extends Vue {
     [x: string]: any;

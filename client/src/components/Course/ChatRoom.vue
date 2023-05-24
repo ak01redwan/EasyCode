@@ -1,25 +1,31 @@
 <template>
-    <section class="bg-white m-0 p-0">
+    <section class="bg-white m-2 p-0 ">
         <div class="container h-100 w-100 ">
             <div class="row d-flex justify-content-center">
                 <div class="h-100 w-100">
-                    <div class="card h-75" >
-                        <div class="card-header align-items-center p-3">  
-                            <span class="bi bi-chat-left-dots-fill"></span>
-                            <p class="mb-0 fs-4 fw-bold d-block ">CourseName ChattingRoom</p>
+                    <div class="card h-100" >
+                        <div class="card-header align-items-center fw-bold p-3">  
+                            <span class="fa fa-comments me-2 fs-5"></span>
+                            <span class="mb-0 fs-4  ">CourseName ChattingRoom</span>
                         </div>
                         <div class="card-body overflow-auto" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px">           
-                            <div class="d-flex flex-row justify-content-start">
-                                <img src="@/assets/images/img-user.png"
-                                alt="avatar 1" style="width: 45px; height: 100%;">
-                                <div>
-                                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">Hi</p>
-                                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">How are you ...???</p>
-                                <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">What are you doing tomorrow? Can we come up a bar?</p>
-                                <p class="small ms-3 mb-3 rounded-3 text-muted">23:58</p>
+                            <div v-for="message in messages" >
+                                <div v-if="message.typeUser === 'I' " class="d-flex flex-row justify-content-end">
+                                    <div>
+                                        <p class="small p-2 me-3 mb-1 rounded-3 bg-primary" >{{ message.contant }}</p>
+                                        <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{{ message.time }}</p>
+                                    </div>
+                                    <img src="@/assets/images/img-user.png" alt="avatar 1" style="width: 45px; height: 100%;">
+                                </div>
+                                <div v-else class="d-flex flex-row justify-content-start">
+                                    <img src="@/assets/images/img-user.png" alt="avatar 1" style="width: 45px; height: 100%;">
+                                    <div>
+                                        <p class="small p-2 ms-3 mb-1 rounded-3 bg-light" >{{ message.contant }}</p>
+                                        <p class="small ms-3 mb-3 rounded-3 text-muted">{{ message.time }}</p>
+                                    </div>
                                 </div>
                             </div>           
-                            <div class="divider d-flex align-items-center mb-4 w-100">
+                            <!--<div class="divider d-flex align-items-center mb-4 w-100">
                               
                                 <p class="text-center w-100" style="color: #a2aab7;">Today</p>
                                
@@ -94,7 +100,7 @@
                                 </div>
                                 <img src="@/assets/images/img-user.png"
                                 alt="avatar 1" style="width: 45px; height: 100%;">
-                            </div>            
+                            </div>   -->         
                         </div>
                         <div class="card-footer text-muted d-flex justify-content-start align-items-center p-2">
                             <img src="@/assets/images/img-user.png" class="m-1" alt="avatar 3" style="width: 40px; height: 100%;">
@@ -107,3 +113,25 @@
         </div>
     </section>
 </template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+
+@Options({
+    data(){
+        return{
+            messages: [
+            {contant: 'hi', time:'3:30',imgePath: '@/assets/images/img-user.png',typeUser:'I'},
+            {contant: 'hi', time:'3:30',imgePath: '@/assets/images/img-user.png',typeUser:'he'},
+            {contant: 'how are you', time:'3:30',imgePath: '@/assets/images/img-user.png',typeUser:'you'},
+            {contant: 'fine thanks', time:'3:30',imgePath: '@/assets/images/img-user.png',typeUser:'I'},
+            {contant: 'hi', time:'3:30',imgePath: '@/assets/images/img-user.png'},
+            {contant: 'hi', time:'3:30',imgePath: '@/assets/images/img-user.png'},
+            {contant: 'hi', time:'3:30',imgePath: '@/assets/images/img-user.png',typeUser:'I'}                
+            ]
+        }
+    }
+})
+export default class ChatRoom extends Vue {
+[x: string]: any;
+}
+</script>
