@@ -1,10 +1,10 @@
 <template>
     <div class="main-body m-1">
         <div class="row" >           
-          <div class="col-lg-5 col-md-10 mt-4">
-            <img src="@/assets/images/man.jpg" class="w-100 " alt="" srcset="">
+          <div class="col-lg-5 h-50 col-md-10 mt-4">
+            <img src="@/assets/images/javaicon.png" class="w-100" alt="" srcset="">
           </div>
-          <div class="col-lg-6 col-md-12 m-1">
+          <div class="col-lg-6  col-md-12 m-1">
               <ul class="list-group text-right">
                   <li class="list-group-item bg-dark text-white"><strong>Course Details </strong></li>
                   <li class="list-group-item"><strong>Course Name: </strong>{{ course.name }}</li>
