@@ -10,8 +10,8 @@
           </div>
           <div class="d-flex align-items-center mb-4">
             <span class="like-btn me-3">👍 100 likes</span>
-            <span class="previous-btn"><i class="bi bi-caret-left"></i></span>
-            <span class="next-btn"><i class="bi bi-caret-right"></i></span>
+            <span class="btn btn-primary m-2"><i class="bi bi-caret-left"></i>&leftarrow; Previous</span>
+            <span class="btn btn-primary m-2"><i class="bi bi-caret-right"></i>Next &rightsquigarrow;</span>
           </div>
           <h1 class="mt-4">Description</h1>
           <hr>
