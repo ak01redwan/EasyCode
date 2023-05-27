@@ -21,7 +21,10 @@ export class StagesService {
     });
   }
 
-  async create(stage: Stage): Promise<Stage> {
+  async create(stage: Stage): Promise<any> {
+    const existStage = await this.stageRepository.find({ where: { title: stage.title }});
+    if (existStage.length > 0)
+      return {message: `${stage.title} title is already exist!.`};
     return await this.stageRepository.save(stage);
   }
 

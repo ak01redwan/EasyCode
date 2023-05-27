@@ -20,7 +20,7 @@ export class StagesController {
   }
 
   @Post()
-  async create(@Body() createStageDto: CreateStageDto): Promise<Stage> {
+  async create(@Body() createStageDto: CreateStageDto): Promise<any> {
     const stage = plainToClass(Stage, createStageDto);
     return await this.stagesService.create(stage);
   }
