@@ -30,31 +30,31 @@
     <h3 class="text-center">Our Team</h3>
     <hr >
     <!-- four columns of text below the carousel -->
-    <div class="row text-center justify-content-center ">
-      <div class="col-lg-3 mb-3">
-        <img src="../assets/images/img-user.png" alt="" srcset="" class="bd-placeholder-img rounded-circle bg-info pt-1"  width="150" height="150"  role="img"/>
-        <h4 class="fw-normal">parsonal name</h4>
-        <p>Developer website.</p>					
-      </div>
-      
-      <div class="col-lg-3 mb-3">
-        <img src="../assets/images/img-user.png" alt="" srcset="" class="bd-placeholder-img rounded-circle bg-info pt-1"  width="150" height="150"  role="img"/>
-        <h4 class="fw-normal">parsonal name</h4>
-        <p>Developer website.</p>					
-      </div>
-
-      <div class="col-lg-3 mb-3">
-        <img src="../assets/images/img-user.png" alt="" srcset="" class="bd-placeholder-img rounded-circle bg-info pt-1"  width="150" height="150" role="img"/>
-        <h4 class="fw-normal">parsonal name</h4>
-        <p>Developer website.</p>					
-      </div>
-
-      <div class="col-lg-3 mb-3">
-        <img src="../assets/images/img-user.png" alt="" srcset="" class="bd-placeholder-img rounded-circle bg-info pt-1"  width="150" height="150"  role="img"/>
-        <h4 class="fw-normal">parsonal name</h4>
-        <p>Developer website.</p>					
+    <div class="row text-center justify-content-center">
+      <div v-for=" Developer in Developers " class="col-lg-3 mb-3">
+        <img :src=" Developer.imgPath" alt="" srcset="" class="bd-placeholder-img rounded-circle bg-info pt-1"  width="150" height="150"  role="img"/>
+        <h4 class="fw-normal">{{ Developer.name }}.</h4>
+        <p>{{ Developer.Description }}.</p>					
       </div>
     </div>
-
   </div>
 </template>
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+
+  @Options({   
+    data () {
+      return {
+        Developers: [
+          {id:1, name:"Abdallrahman", imgPath:"@/assets/images/img-user.png", Description:"Developer website"},
+          {id:1, name:"salem",        imgPath:"@/assets/images/img-user.png", Description:"Developer website"},
+          {id:1, name:"mohammed",     imgPath:"@/assets/images/img-user.png", Description:"Developer website"},
+          {id:1, name:"mohasn",       imgPath:"@/assets/images/img-user.png", Description:"Developer website"}
+        ]
+      }
+    }
+  })
+  export default class AboutView extends Vue {
+    [x: string]: any;
+  }
+</script>

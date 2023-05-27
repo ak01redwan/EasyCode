@@ -37,5 +37,5 @@
   export default class CoursesView extends Vue {
     [x: string]: any;
   }
-  </script>
+</script>
   
