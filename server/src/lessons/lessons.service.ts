@@ -10,8 +10,8 @@ export class LessonsService {
     private readonly lessonsRepository: Repository<Lesson>
     ) {}
   
-  async create(lesson: Lesson) {
-    return await this.lessonsRepository.save(lesson);
+  async create(lessons: Lesson[]) {
+    return await this.lessonsRepository.save(lessons);
   }
 
   async findAll() {
@@ -22,11 +22,22 @@ export class LessonsService {
     return await this.lessonsRepository.find({ where: { id: id }});
   }
 
-  async update(lesson: Lesson) {
-    return await this.lessonsRepository.save(lesson);
+  async findStageLessons(id: number) {
+    return await this.lessonsRepository.find({ where: { stage: { id: id }}});
+  }
+
+  async update(lessons: Lesson[]) {
+    return await this.lessonsRepository.save(lessons);
   }
 
   async remove(id: number) {
     await this.lessonsRepository.delete(id);
   }
+
+  async removeStageLessons(id: number){
+    const lessons = await this.findStageLessons(id);
+    await this.lessonsRepository.remove(lessons);
+  }
+
+  
 }

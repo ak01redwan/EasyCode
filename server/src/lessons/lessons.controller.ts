@@ -10,9 +10,12 @@ export class LessonsController {
   constructor(private readonly lessonsService: LessonsService) {}
 
   @Post()
-  create(@Body() createLessonDto: CreateLessonDto) {
-    const lesson = plainToClass(Lesson, createLessonDto);
-    return this.lessonsService.create(lesson);
+  create(@Body() createLessonDTOs: CreateLessonDto[]) {
+    let lessons: Lesson[] = new Lesson[createLessonDTOs.length];
+    createLessonDTOs.forEach((dto)=>{
+      lessons.push(plainToClass(Lesson, dto));
+    });
+    return this.lessonsService.create(lessons);
   }
 
   @Get()
@@ -26,14 +29,22 @@ export class LessonsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateLessonDto: UpdateLessonDto) {
-    const lesson = plainToClass(Lesson, updateLessonDto);
-    lesson.id = parseInt(id);
-    return this.lessonsService.update(lesson);
+  update(@Param('id') id: string, @Body() updateLessonDTOs: UpdateLessonDto[]) {
+    let lessons: Lesson[] = new Lesson[updateLessonDTOs.length];
+    updateLessonDTOs.forEach((dto)=>{
+      lessons.push(plainToClass(Lesson, dto));
+    });
+    return this.lessonsService.update(lessons);
   }
+
 
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.lessonsService.remove(+id);
+  }
+
+  @Delete('/all-in-stage/:id')
+  removeAllLessonsUnderThisStageId(@Param('id') id: string) {
+    return this.lessonsService.removeStageLessons(+id);
   }
 }

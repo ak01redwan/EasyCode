@@ -6,9 +6,6 @@ export class CreateLessonDto {
     @MinLength(15)
     url: string;
 
-    @IsNumber()
-    recommandedTimes: number;
-
     @IsNotEmpty()
     stage: Stage;
 }

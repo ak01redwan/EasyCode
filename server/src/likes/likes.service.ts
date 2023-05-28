@@ -26,6 +26,20 @@ export class LikesService {
     }
   }
 
+  async toggleLikeLesson(likeDto: LikeDto): Promise<any> {
+    let like = await this.likeRepository.findOne({
+      where: { user: { id: likeDto.user.id }, lesson: { id: likeDto.lesson.id }},
+    });
+    if (like) { // unlike the course if it is exist
+      await this.likeRepository.remove(like)
+      return {message: "lesson's like has been removed", like:like};
+    } else {
+      const newLike = plainToClass(Like, likeDto)
+      like = await this.likeRepository.save(newLike);
+      return {message: "lesson's like added", like};
+    }
+  }
+
   async projectLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
     const like = await this.likeRepository.findOne({
       where: { user: likeDto.user, id: id },
