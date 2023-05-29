@@ -2,16 +2,15 @@
     <div class="container mt-5">
       <div class="row">
         <div class="col-md-6">
-          <img :src="projects.image" class="img-fluid" alt="">
+          <img :src="project.image" class="img-fluid" alt="">
         </div>
         <div class="col-md-6">
-          <h1>{{ projects.name }}</h1>
-          <p class="lead">{{ projects.description }}</p>
-          <p>Created: {{ projects.createdDate }}</p>
-          <p>Likes: {{ projects.likes }}</p>
+          <h1>{{ project.name }}</h1>
+          <p class="lead">{{project.description}} </p>
+          <p>Created {{project.createdDate}} </p>
+          <p>Likes:{{project.likes}}</p>
           <hr>
-          <h4 class="mb-3">Comments</h4>
-          <div v-for="comment in projects.comments" :key="comment.id">
+          <div v-for="comment in project.comments" :key="comment.id">
             <div class="d-flex mb-2">
               <div class="flex-grow-1">
                 <p class="font-weight-bold mb-0">{{ comment.author }}</p>
@@ -43,33 +42,32 @@
     </div>
   </template>
   <script lang="ts">
-    import { Options, Vue } from 'vue-class-component';
-  
-  
-  @Options({
+
+  import { Options, Vue } from 'vue-class-component';
+    @Options({
     components: {
      
   },
-  data () {
-        return {
-          newComment : '',
-          projects:[
-            {name: 'Project Name',description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-      likes: 10,
-      comments: [
-        { id: 1, author: 'John Doe', message: 'Great project!', date: '2023-05-26' },
-        { id: 2, author: 'Jane Doe',message: 'I really enjoyed working on this project. Thanks for the opportunity!', date: '2023-05-25' }
-      ],
-      image: 'https://via.placeholder.com/600x400',
-      createdDate: '2023-05-24',
-      supervisorComment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-      downloadLink: 'https://www.example.com/download'
+  data(){
+    return{
+      newComment : '',
+      project: {
+        id :1,
+        name:'Project Name',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
+        likes: 10,
+        comments: [
+          { id: 1, author: 'John Doe', message: 'Great project!', date: '2023-05-26' },
+          { id: 2, author: 'Jane Doe',message: 'I really enjoyed working on this project. Thanks for the opportunity!', date: '2023-05-25' }
+        ],
+        image: 'https://via.placeholder.com/600x400',
+        createdDate: '2023-05-24',
+        supervisorComment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
+        downloadLink: 'https://www.example.com/download'
+      }
     }
-          ]
-  
-        }
-      },
-      methods:{
+  },
+  methods:{
         addComment() {
     if (this.newComment.length > 0) {
       this.project.comments.push({
@@ -83,11 +81,12 @@
   }
       }
   
-    })
-  
-    export default class ProjectsDetails extends Vue {
+
+
+})
+export default class ProjectsDetails extends Vue {
       [x: string]: any;
     }
    
-  </script>
+</script>
   
