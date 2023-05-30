@@ -9,7 +9,7 @@
       >
         Add Question <i class="fas fa-plus"></i>
       </button>
-      <AddNewQusetion @AddQuestionEvent="addQuestion" />
+      <AddNewQusetion @AddQuestionEvent="addQuestion"   />
     </div>
     <div class="mt-4">
       <div
@@ -55,20 +55,31 @@ import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
     };
   },
   methods: {
-    addQuestion(question: any) {
-      //console.log(question);
-      this.questions.push(question);
-    },
+    addQuestion(questionData:any) {
+  this.questions.push(questionData);
+  this.$bvModal.hide('add-question-modal');
+},
+updateQuestion(questionData:any, index:number) {
+  this.questions.splice(index, 1, questionData);
+  this.$bvModal.hide('add-question-modal');
+  this.editingQuestion = null;
+  this.editingQuestionIndex = undefined;
+},
+   // addQuestion(question: any) {
+   //   //console.log(question);
+   //   this.questions.push(question);
+   // },
     editQuestion(index: number) {
-      const question = this.questions[index];
-      this.$bvModal.show("add-question-modal");
-      this.editingQuestionIndex = index;
-      this.editingQuestion = {
-        text: question.text,
-        rightAnswer: question.rightAnswer,
-        wrongAnswers: [...question.wrongAnswers],
-      };
-    },
+  const question = this.questions[index];
+  this.$bvModal.show('add-question-modal');
+  this.editingQuestionIndex = index;
+  this.editingQuestion = {
+    text: question.text,
+    rightAnswer: question.rightAnswer,
+    wrongAnswers: [...question.wrongAnswers],
+      
+    }
+  },
     deleteQuestion(index: number) {
       this.questions.splice(index, 1);
     },

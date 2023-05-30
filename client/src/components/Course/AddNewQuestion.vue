@@ -29,6 +29,12 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
             <button type="button" class="btn btn-primary" @click="addQuestion()">Add Question</button>
+            <div>
+              ...
+              <div v-if="errorMessage" class="alert alert-danger" role="alert">
+                Please fill in all fields.
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -45,6 +51,7 @@ import { Options, Vue } from 'vue-class-component';
         questionText: "",
         rightAnswer: "",
         wrongAnswers: [] ,
+        errorMessage: '',
       };
     },
     methods: {
@@ -55,7 +62,9 @@ import { Options, Vue } from 'vue-class-component';
         this.wrongAnswers.splice(index, 1);
       },
       addQuestion() {
-        const question = {
+        if (this.questionText && this.rightAnswer && this.wrongAnswers.every((answer: string) => answer)){
+           // add the question
+           const question = {
           text: this.questionText,
           rightAnswer: this.rightAnswer,
           wrongAnswers: this.wrongAnswers,
@@ -69,7 +78,12 @@ import { Options, Vue } from 'vue-class-component';
         (document.getElementById("addQuestionModal") as HTMLDivElement).style.display = "none";
         (document.body as HTMLBodyElement).classList.remove("modal-open");
         (document.querySelector(".modal-backdrop") as HTMLDivElement).remove();
+         } else {
+           // show error message
+           this.errorMessage = 'Please fill in all fields.';
+         }
       },
+  
       editQuestion(index: number) {
   this.$emit('EditQuestionEvent', index);
      },
