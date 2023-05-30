@@ -19,10 +19,10 @@
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"><i class="fa-solid fa-list"></i> More Things</a>
             <ul class="dropdown-menu">
-              <li><router-link to="" class="dropdown-item"><i class="fa-solid fa-users"></i> Students</router-link></li>
-              <li><router-link to="" class="dropdown-item"><i class="fa-solid fa-person-chalkboard"></i> Supervisors</router-link></li>
-              <li><router-link to="" class="dropdown-item"><i class="fa-solid fa-video"></i> Courses</router-link></li>
-              <li><router-link to="" class="dropdown-item"><i class="fa-solid fa-diagram-project"></i> Progects</router-link></li>
+              <li><router-link to="/students" class="dropdown-item"><i class="fa-solid fa-users"></i> Students</router-link></li>
+              <li><router-link to="/supervisors" class="dropdown-item"><i class="fa-solid fa-person-chalkboard"></i> Supervisors</router-link></li>
+              <li><router-link to="/courses" class="dropdown-item"><i class="fa-solid fa-video"></i> Courses</router-link></li>
+              <li><router-link to="/projects" class="dropdown-item"><i class="fa-solid fa-diagram-project"></i> Progects</router-link></li>
             </ul>
           </li>
         </ul>
@@ -101,7 +101,7 @@
       
         <!-- Copyright -->
         <div class="text-center p-3" style="background-color:#243B67">
-          © 2023 Copyright:
+          &copy; {{ new Date().getFullYear() }} Copyright:
           <a class="text-white" href="https://easycode.com/">easycode.com</a>
         </div>
         <!-- Copyright -->

@@ -84,7 +84,7 @@
             <p class="card-text">
               Projects has been built by the students during their learning inside the EasyCode website.
             </p>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-diagram-project"></i> Go To The Projects</button>
+            <router-link to="/projects" class="btn btn-outline-secondary"><i class="fa-solid fa-diagram-project"></i> Go To The Projects</router-link>
           </div>
         </div>
       </div>
@@ -101,7 +101,7 @@
             <p class="card-text">
               Go to courses and categories and pick one to start with step by step until you finish it and git the degree of that course.
             </p>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i> Go To The Courses</button>
+            <router-link to="/courses" class="btn btn-outline-secondary"><i class="fa-solid fa-video"></i> Go To The Courses</router-link>
           </div>
         </div>
       </div>
@@ -137,7 +137,7 @@
             <p class="card-text">
               Show, Filtter and search for any student in this page as well as open any student personal page to see more details about it.
             </p>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-users"></i> Go To Show Students</button>
+            <router-link to="/students" class="btn btn-outline-secondary"><i class="fa-solid fa-users"></i> Go To Show Students</router-link>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@
               Show all supervisors and what courses did they teach,
               browsing their personal's pages to see more details.
             </p>
-            <button type="button" class="btn btn-outline-secondary"><i class="fa-solid fa-person-chalkboard"></i> Go To Show Supervisors</button>
+            <router-link to="/superviors" class="btn btn-outline-secondary"><i class="fa-solid fa-person-chalkboard"></i> Go To Show Supervisors</router-link>
           </div>
         </div>
       </div>
