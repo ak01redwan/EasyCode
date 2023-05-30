@@ -4,6 +4,7 @@ import { Stage } from 'src/stages/entities/stage.entity';
 import { Like } from 'src/likes/entities/like.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { subscribe } from 'diagnostics_channel';
+import { Message } from 'src/messages/entities/message.entity';
 
 @Entity()
 export class Course {
@@ -40,5 +41,8 @@ export class Course {
 
   @OneToMany(() => Like, (like) => like.course)
   likes: Like[];
+
+  @OneToMany(() => Message, message => message.course)
+  messages: Message[];
 
 }

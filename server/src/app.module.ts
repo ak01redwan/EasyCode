@@ -14,6 +14,7 @@ import { CoursesModule } from './courses/courses.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { LessonsModule } from './lessons/lessons.module';
 import { ExamsModule } from './exams/exams.module';
+import { MessagesModule } from './messages/messages.module';
 
 // entities
 import { User } from './users/entities/user.entity';
@@ -25,6 +26,7 @@ import { Project } from './projects/entities/project.entity';
 import { Subscription } from './subscriptions/entities/subscription.entity';
 import { Lesson } from './lessons/entities/lesson.entity';
 import { Exam } from './exams/entities/exam.entity';
+import { Message } from './messages/entities/message.entity';
 
 @Module({
   imports: [
@@ -38,7 +40,7 @@ import { Exam } from './exams/entities/exam.entity';
       options: {
         encrypt: false
       },
-      entities: [User, Category, Course, Stage, Like, Project, Subscription, Lesson, Exam],
+      entities: [User, Category, Course, Stage, Like, Project, Subscription, Lesson, Exam, Message],
       synchronize: true,
     }),
     UsersModule,
@@ -51,6 +53,7 @@ import { Exam } from './exams/entities/exam.entity';
     SubscriptionsModule,
     LessonsModule,
     ExamsModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
