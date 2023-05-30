@@ -3,9 +3,13 @@
     <div class="row flex-nowrap">
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg">
           <div class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-            <router-link to="/student" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                <i class="fa fa-user"></i>
-                <span class="fs-4 m-1"> Student Name </span>
+            <router-link to="/student" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">               
+              <div @click="ShowOption(5)" class="">
+                <i class="fa-solid fa-user"></i>
+                <span class="fs-4 ms-1 d-none d-sm-inline"> Student Name </span>
+                <br>
+                <a class="mt-3 text-center ms-3 d-none d-sm-inline">More Details</a>
+              </div>                
             </router-link>
             <hr>
             <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
@@ -37,28 +41,30 @@
                 </li>
             </ul>
           </div>
-      </div>
-      <div class="col py-3" 
-      style="
-        overflow-y: auto;
-        max-height: 720px;
-      ">
-        <!--Getting Current Course Stages-->
-        <div class="row" v-if="currentOption === listOptions[0]">
-          <CourseStage v-for="stage in CurrentCourseStages" 
-          :stageId="stage.stageId" 
-          :stageTitle="stage.stageTitle"
-          :isOpen="stage.isOpen" />
         </div>
-        <!--Getting Student's Courses-->
-        <CoursesGallery :Title="listOptions[1]" v-if="currentOption === listOptions[1]"/>
-        <!--Getting Student's Projects-->
-        <ProjectsGallery :Title="listOptions[2]" v-else-if="currentOption === listOptions[2]" />
-        <!--Getting Student's Completed Courses-->
-        <CoursesGallery :Title="listOptions[3]" v-if="currentOption === listOptions[3]"/>
-        <!--Getting Student's Settings-->
-        <Settings :Title="listOptions[4]" v-else-if="currentOption === listOptions[4]"/>   
-      </div>
+        <div class="col py-3" 
+        style="
+          overflow-y: auto;
+          max-height: 720px;
+        ">
+          <!--Getting Current Course Stages-->
+          <div class="row" v-if="currentOption === listOptions[0]">
+            <CourseStage v-for="stage in CurrentCourseStages" 
+            :stageId="stage.stageId" 
+            :stageTitle="stage.stageTitle"
+            :isOpen="stage.isOpen" />
+          </div>
+          <!--Getting Student's Courses-->
+          <CoursesGallery :Title="listOptions[1]" v-if="currentOption === listOptions[1]"/>
+          <!--Getting Student's Projects-->
+          <ProjectsGallery :Title="listOptions[2]" v-else-if="currentOption === listOptions[2]" />
+          <!--Getting Student's Completed Courses-->
+          <CoursesGallery :Title="listOptions[3]" v-if="currentOption === listOptions[3]"/>
+          <!--Getting Student's Settings-->
+          <Settings :Title="listOptions[4]" v-else-if="currentOption === listOptions[4]"/>  
+          <!--Getting Student's Details--> 
+          <StudentDetials :Title="listOptions[5]" v-else-if="currentOption === listOptions[5]"/>   
+        </div>
     </div>
   </div>
 </template>
@@ -69,6 +75,7 @@ import Settings from '@/components/Student/Settings.vue';
 import ProjectsGallery from '@/components/Project/ProjectsGallery.vue';
 import CoursesGallery from '@/components/Course/CoursesGallery.vue';
 import CourseStage from '@/components/Course/CourseStage.vue';
+import StudentDetials from '@/components/Student/StudentDetails.vue';
 
 @Options({
   components: {
@@ -76,11 +83,12 @@ import CourseStage from '@/components/Course/CourseStage.vue';
     ProjectsGallery,
     CoursesGallery,
     CourseStage,
+    StudentDetials,
   },
   data () {
     return {
       currentOption: "CurrentCourse",
-      listOptions: ['CurrentCourse','MyCourses','MyProjects','CompleteCourses','Settings'],
+      listOptions: ['CurrentCourse','MyCourses','MyProjects','CompleteCourses','Settings','StudentDetials'],
       CurrentCourseStages: [
         {stageId: 1, stageTitle: 'Stage Title 1',isOpen: true},
         {stageId: 2, stageTitle: 'Stage Title 2',isOpen: true},
