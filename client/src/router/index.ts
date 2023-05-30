@@ -10,6 +10,7 @@ import DashboardView from "@/views/DashboardView.vue"
 import ProjectsGallery from '@/components/Project/ProjectsGallery.vue'
 import ProjectVeiwVue from '@/views/ProjectVeiw.vue'
 import ProjectsDetails from '@/views/ProjectsDetails.vue'
+import ExamViewVue from '@/views/ExamView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -61,6 +62,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/projectdetails',
     name: 'projectdetails',
     component: ProjectsDetails
+  },
+  {
+    path: '/exam',
+    name: 'exam',
+    component: ExamViewVue
   },
   {
     path: '/login',
