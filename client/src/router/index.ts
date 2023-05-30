@@ -7,7 +7,6 @@ import SignupView from '@/views/SignupView.vue'
 import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
 import DashboardView from "@/views/DashboardView.vue"
-import ProjectsGallery from '@/components/Project/ProjectsGallery.vue'
 import ProjectVeiwVue from '@/views/ProjectVeiw.vue'
 import ProjectsDetails from '@/views/ProjectsDetails.vue'
 import ExamViewVue from '@/views/ExamView.vue'

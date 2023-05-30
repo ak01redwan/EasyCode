@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-4">
+  <div class="container mt-4" style="min-height: 70vh;">
     <h1>Stage Question</h1>
     <div class="d-flex align-items-center">
       <button
@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import AddNewQusetion from "@/views/AddNewQuestion.vue";
+import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
 
 @Options({
   name: "StageQuestion",
