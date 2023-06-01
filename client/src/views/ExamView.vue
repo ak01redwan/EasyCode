@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-4" style="min-height: 70vh;">
+  <div class="container mt-4" style="min-height: 70vh">
     <h1>Stage Question</h1>
     <div class="d-flex align-items-center">
       <button
@@ -9,7 +9,34 @@
       >
         Add Question <i class="fas fa-plus"></i>
       </button>
-      <AddNewQusetion @AddQuestionEvent="addQuestion"   />
+      <AddNewQusetion @AddQuestionEvent="addQuestion" />
+      
+      <b-modal id="edit-question-modal" title="Edit Question" aria-labelledby="edit-question-modal" aria-hidden="true" v-if="showEditModal">
+        <div>
+          <label>Question:</label>
+          <input v-model="editingQuestion.text" class="form-control" />
+        </div>
+        <div class="mt-3">
+          <label>Right Answer:</label>
+          <input v-model="editingQuestion.rightAnswer" class="form-control" />
+        </div>
+        <div class="mt-3">
+          <label>Wrong Answers:</label>
+          <div
+            v-for="(answer, index) in editingQuestion.wrongAnswers"
+            :key="index"
+          >
+            <input
+              v-model="editingQuestion.wrongAnswers[index]"
+              class="form-control"
+            />
+          </div>
+        </div>
+        <div class="mt-3">
+          <button class="btn btn-primary" @click="saveQuestion">Save</button>
+          <button class="btn btn-secondary" @click="resetModal">Cancel</button>
+        </div>
+      </b-modal>
     </div>
     <div class="mt-4">
       <div
@@ -32,6 +59,7 @@
             >
               <i class="bi bi-trash"></i> Delete
             </button>
+
           </div>
         </div>
       </div>
@@ -52,34 +80,40 @@ import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
     return {
       showModal: false,
       questions: [],
+      showEditModal: false,
+      editingQuestion: {
+        text: "",
+        rightAnswer: "",
+        wrongAnswers: ["", "", "", ""],
+      },
+      editingQuestionIndex: undefined,
     };
   },
   methods: {
-    addQuestion(questionData:any) {
-  this.questions.push(questionData);
-  this.$bvModal.hide('add-question-modal');
-},
-updateQuestion(questionData:any, index:number) {
-  this.questions.splice(index, 1, questionData);
-  this.$bvModal.hide('add-question-modal');
-  this.editingQuestion = null;
-  this.editingQuestionIndex = undefined;
-},
-   // addQuestion(question: any) {
-   //   //console.log(question);
-   //   this.questions.push(question);
-   // },
+    addQuestion(questionData: any) {
+      this.questions.push(questionData);
+      this.$bvModal.hide("add-question-modal");
+    },
+    updateQuestion(questionData: any, index: number) {
+      this.questions.splice(index, 1, questionData);
+      this.$bvModal.hide("add-question-modal");
+      this.editingQuestion = null;
+      this.editingQuestionIndex = undefined;
+    },
+    // addQuestion(question: any) {
+    //   //console.log(question);
+    //   this.questions.push(question);
+    // },
     editQuestion(index: number) {
-  const question = this.questions[index];
-  this.$bvModal.show('add-question-modal');
-  this.editingQuestionIndex = index;
-  this.editingQuestion = {
-    text: question.text,
-    rightAnswer: question.rightAnswer,
-    wrongAnswers: [...question.wrongAnswers],
-      
-    }
-  },
+      const question = this.questions[index];
+      this.editingQuestionIndex = index;
+      this.editingQuestion = {
+        text: question.text,
+        rightAnswer: question.rightAnswer,
+        wrongAnswers: [...question.wrongAnswers],
+      };
+      this.showEditModal = true;
+    },
     deleteQuestion(index: number) {
       this.questions.splice(index, 1);
     },
@@ -90,15 +124,24 @@ updateQuestion(questionData:any, index:number) {
           1,
           this.editingQuestion
         );
-      } else {
-        this.questions.push(this.editingQuestion);
       }
-      this.resetModal();
+      
+      this.showEditModal = false;
+    },
+    resetModal() {
+      this.editingQuestion = {
+        text: "",
+        rightAnswer: "",
+        wrongAnswers: ["", "", "", ""],
+      };
+      this.editingQuestionIndex = undefined;
+      this.showEditModal = false;
     },
   },
 })
 export default class ExamViewVue extends Vue {
   [x: string]: any;
+  $bvModal!: { show: Function; hide: Function };
 }
 </script>
 

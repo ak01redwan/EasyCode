@@ -70,10 +70,10 @@ import { Options, Vue } from 'vue-class-component';
           wrongAnswers: this.wrongAnswers,
         };
         this.$emit('AddQuestionEvent', question);
-        
-        this.questionText = "";
-        this.rightAnswer = "";
-        this.wrongAnswers = [];
+        this.questions.push(question);
+    this.questionText = "";
+    this.rightAnswer = ""; 
+    this.wrongAnswers = ["", "", "", ""];
         (document.getElementById("addQuestionModal") as HTMLDivElement).classList.remove("show");
         (document.getElementById("addQuestionModal") as HTMLDivElement).style.display = "none";
         (document.body as HTMLBodyElement).classList.remove("modal-open");
@@ -84,9 +84,7 @@ import { Options, Vue } from 'vue-class-component';
          }
       },
   
-      editQuestion(index: number) {
-  this.$emit('EditQuestionEvent', index);
-     },
+
     },
   })
   export default class AddNewQusetion extends Vue {
