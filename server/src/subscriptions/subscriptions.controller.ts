@@ -25,6 +25,13 @@ export class SubscriptionsController {
     return await this.subscriptionsService.findByUser(userId);
   }
 
+  @Get('by-user/:userId/by-course/:courseId')
+  async findByUserAndCourse(@Param('userId') userId: number,@Param('courseId') courseId: number): Promise<Subscription> {
+    return await this.subscriptionsService.findByUserAndCourse(userId,courseId);
+  }
+
+
+
   @Get('by-course/:courseId')
   async findByCourse(@Param('courseId') courseId: number): Promise<Subscription[]> {
     return await this.subscriptionsService.findByCourse(courseId);

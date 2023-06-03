@@ -1,6 +1,10 @@
-import { IsBoolean, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Course } from 'src/courses/entities/course.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export class CreateMessageDto {
+
+  @IsOptional()
   @IsBoolean()
   isDeleted: boolean;
 
@@ -8,12 +12,13 @@ export class CreateMessageDto {
   @IsString()
   textContent: string;
 
+  @IsOptional()
   @IsNotEmpty()
   DateAndTime: Date;
 
   @IsNotEmpty()
-  senderId: number;
+  sender: User;
 
   @IsNotEmpty()
-  courseId: number;
+  course: Course;
 }

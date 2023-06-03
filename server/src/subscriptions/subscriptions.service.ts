@@ -38,6 +38,13 @@ export class SubscriptionsService {
     });
   }
 
+  async findByUserAndCourse(courseId: number, userId: number): Promise<Subscription>{
+    return this.subscriptionsRepository.findOne({
+        where: { course: { id: courseId }, user: { id: userId}},
+        relations: ['user', 'course'],
+    });
+  }
+
   async create(subscription: Subscription): Promise<Subscription> {
     return this.subscriptionsRepository.save(subscription);
   }
