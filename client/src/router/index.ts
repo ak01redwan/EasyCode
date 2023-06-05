@@ -7,6 +7,7 @@ import SignupView from '@/views/SignupView.vue'
 import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
 import DashboardView from "@/views/DashboardView.vue"
+import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
