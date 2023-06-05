@@ -4,14 +4,14 @@
         <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark">
             <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
                 <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                    <span class="fs-5 d-none d-sm-inline">courses</span>
+                    <span class="fs-5 d-none d-sm-inline">projects</span>
                 </a>
                 <p> {{ currentCategory }} </p>
                 <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li class="nav-item" v-for="(course,index) in getUniqueCoursesByCategory(courses)" :key="index">
+                    <li class="nav-item" v-for="(project,index) in getUniqueprojectsByCategory(projects)" :key="index">
                         <a href="#" class="nav-link align-middle px-0" 
-                        @click="changeCurrentCategoryValue(course.catogery)">
-                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">{{ course.catogery }}</span>
+                        @click="changeCurrentCategoryValue(project.catogery)">
+                            <i class="fs-4 bi-house"></i> <span class="ms-1 d-none d-sm-inline">{{ project.catogery }}</span>
                         </a>
                     </li>
                 </ul>
@@ -28,11 +28,11 @@
             </form>
             </div>
           <div class="row">
-            <Card v-for="course in filteringCourses" 
-            :Id="course.id" 
-            :Title="course.name" 
-            :Description="course.description"
-            :Type="course.catogery"
+            <Card v-for="project in filteringprojects" 
+            :Id="project.id" 
+            :Title="project.name" 
+            :Description="project.description"
+            :Type="project.catogery"
             :LikesNo="0"/>
           </div>
         </main>
@@ -57,28 +57,28 @@
         displayedCategories:[],
         currentCategory: "",
         searchText: "",
-        courses: [
-            {id:1, name: 'laravel', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is course 1'},
-            {id:2, name: 'php fundmentals', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is course 2'},
-            {id:3, name: 'php oop', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is course 3'},
-            {id:4, name: 'Nodejs js pure', imagePath: 'public/upload/java.png', catogery: 'nodejs', description: 'this is course 4'},
-            {id:5, name: 'nodejs using nest', imagePath: 'public/upload/java.png', catogery: 'nodejs', description: 'this is course 5'}
+        projects: [
+            {id:1, name: 'laravel', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is project 1'},
+            {id:2, name: 'php fundmentals', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is project 2'},
+            {id:3, name: 'php oop', imagePath: 'public/upload/java.png', catogery: 'php', description: 'this is project 3'},
+            {id:4, name: 'Nodejs js pure', imagePath: 'public/upload/java.png', catogery: 'nodejs', description: 'this is project 4'},
+            {id:5, name: 'nodejs using nest', imagePath: 'public/upload/java.png', catogery: 'nodejs', description: 'this is project 5'}
         ] 
       }
     },
     methods: {
       changeCurrentCategoryValue(value: string) { this.currentCategory = value; },
       chooseByCategory() {
-        return this.courses.filter(( course: { catogery: string; }): any => {
+        return this.projects.filter(( project: { catogery: string; }): any => {
           const searchCatoTerm = this.currentCategory.toLowerCase();
-          return (course.catogery.toLowerCase().includes(searchCatoTerm));
+          return (project.catogery.toLowerCase().includes(searchCatoTerm));
         });
       },
-      getUniqueCoursesByCategory(courses: any[]): any[] {
+      getUniqueprojectsByCategory(projects: any[]): any[] {
         const categoriesSet = new Set<string>();
-        return courses.filter((course) => {
-          if (!categoriesSet.has(course.catogery)) {
-            categoriesSet.add(course.catogery);
+        return projects.filter((project) => {
+          if (!categoriesSet.has(project.catogery)) {
+            categoriesSet.add(project.catogery);
             return true;
           }
           return false;
@@ -88,16 +88,17 @@
   },
       
     computed:{
-      filteringCourses() {
-        return this.chooseByCategory().filter(( course: { name: string; description: string; catogery: string; }): any => {
+      filteringprojects() {
+        return this.chooseByCategory().filter(( project: { name: string; description: string; catogery: string; }): any => {
           const searchTerm = this.searchText.toLowerCase();
-          return (course.name.toLowerCase().includes(searchTerm) || course.description.toLowerCase().includes(searchTerm));
+          return (project.name.toLowerCase().includes(searchTerm) || project.description.toLowerCase().includes(searchTerm));
         });
       }
     }
   })
-  export default class CoursesView extends Vue {
+  export default class ProjectVeiwVue extends Vue {
     [x: string]: any;
   }
   </script>
+
   

@@ -7,8 +7,6 @@ import SignupView from '@/views/SignupView.vue'
 import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
 import DashboardView from "@/views/DashboardView.vue"
-import LessonView from '@/views/LessonView.vue'
-import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -50,11 +48,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/course',
     name: 'course',
     component: CourseView
-  },
-  {
-    path: '/lesson',
-    name: 'lesson',
-    component: LessonView
   },
   {
     path: '/login',
