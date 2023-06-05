@@ -17,6 +17,8 @@
     </div>
     <div class="card border-primary m-5 row" style="background:#EAEBED">
       <form @submit.prevent="" class="col-12 needs-validated p-4">
+        <!--title the form -->
+        <h3 class="col-12" >Submit The Project.</h3>
         <!-- Project title input -->
         <div class="mb-3 was-validated">
           <label for="projectTitle" class="form-label ms-2">Enter your project title</label>
