@@ -49,17 +49,16 @@
     </div>
   </div>
 </template>
-  
-  <script lang="ts">
-  
-  export default {
-    data() {
-      return {
-        projectTitle: '',
-      }
-    },
-    methods: {
-   
-    },
+
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';  
+@Options({
+  data() {
+    return {
+      projectTitle: '',
+    }
   }
-  </script>
+})
+export default class StageAskedProjectView extends Vue {
+}
+</script>
