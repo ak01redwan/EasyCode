@@ -16,9 +16,9 @@ export class LikesController {
     return this.likesService.toggleLikeLesson(likeDto);
   }
 
-  @Post('/project/:id')
-  projectLikeAndUnlike(@Body() likeDto: LikeDto, @Param('id') id: string) {
-    return this.likesService.projectLikeAndUnlike(likeDto, +id);
+  @Post('/project')
+  toggleLikeProject(@Body() likeDto: LikeDto) {
+    return this.likesService.toggleLikeProject(likeDto);
   }
 
   @Get()

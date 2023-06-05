@@ -40,13 +40,21 @@ export class LikesService {
     }
   }
 
-  async projectLikeAndUnlike(likeDto: LikeDto, id: number): Promise<Like> {
-    const like = await this.likeRepository.findOne({
-      where: { user: likeDto.user, id: id },
+  async toggleLikeProject(likeDto: LikeDto): Promise<any> {
+    let like = await this.likeRepository.findOne({
+      where: { user: { id: likeDto.user.id }, project: { id: likeDto.project.id }},
     });
-    like.course = likeDto.course;
-    return await this.likeRepository.save(like);
+    if (like) {
+      await this.likeRepository.remove(like)
+      return {message: "project's like has been removed", like:like};
+    } else {
+      const newLike = plainToClass(Like, likeDto)
+      like = await this.likeRepository.save(newLike);
+      return {message: "project's like added", like};
+    }
   }
+
+  
 
   async getAll(): Promise<Like[]> {
     return await this.likeRepository.find({ relations: ['user', 'course'] });

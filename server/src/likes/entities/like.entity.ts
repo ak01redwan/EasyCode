@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from '../../courses/entities/course.entity';
 import { User } from '../../users/entities/user.entity';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
+import { Project } from 'src/projects/entities/project.entity';
 
 @Entity()
 export class Like {
@@ -16,4 +17,7 @@ export class Like {
 
   @ManyToOne(() => Lesson, (lesson) => lesson.likes)
   lesson: Lesson;
+
+  @ManyToOne(() => Project, (project) => project.likes)
+  project: Project;
 }

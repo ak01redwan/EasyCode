@@ -3,6 +3,7 @@ import { Course } from '../../courses/entities/course.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
 import { Exam } from 'src/exams/entities/exam.entity';
+import { StageAskedProject } from 'src/stage-asked-project/entities/stage-asked-project.entity';
 
 @Entity()
 export class Stage {
@@ -27,4 +28,7 @@ export class Stage {
 
   @OneToMany(() => Exam, exam => exam.stage)
   exams: Exam[];
+
+  @OneToMany(() => StageAskedProject, stageAskedProject => stageAskedProject.stage)
+  stageAskedProjects: StageAskedProject[];
 }

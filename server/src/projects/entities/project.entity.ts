@@ -1,4 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Like } from 'src/likes/entities/like.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
 export class Project {
@@ -23,9 +24,13 @@ export class Project {
   @Column({ default: () => 'getdate()' })
   createdDate: Date;
 
-  @Column({ type: 'tinyint', default: false })
+  @Column({ default: false })
   isSubmitted: boolean;
 
-  @Column({ type: 'tinyint', default: false })
+  @Column({ default: false })
   isAcceptedAndDone: boolean;
+
+  // relations
+  @OneToMany(() => Like, (like) => like.project)
+  likes: Like[];
 }

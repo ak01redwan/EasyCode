@@ -11,7 +11,8 @@ export class LessonsController {
 
   @Post()
   create(@Body() createLessonDTOs: CreateLessonDto[]) {
-    let lessons: Lesson[] = new Lesson[createLessonDTOs.length];
+    //console.log(createLessonDTOs);
+    let lessons: Lesson[] = new Array<Lesson>();
     createLessonDTOs.forEach((dto)=>{
       lessons.push(plainToClass(Lesson, dto));
     });
