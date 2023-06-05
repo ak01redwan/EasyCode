@@ -3,8 +3,8 @@ import { Category } from '../../categories/entities/category.entity';
 import { Stage } from 'src/stages/entities/stage.entity';
 import { Like } from 'src/likes/entities/like.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
-import { subscribe } from 'diagnostics_channel';
 import { Message } from 'src/messages/entities/message.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 
 @Entity()
 export class Course {
@@ -45,4 +45,6 @@ export class Course {
   @OneToMany(() => Message, message => message.course)
   messages: Message[];
 
+  @OneToMany(() => Comment, comment => comment.course)
+  comments: Comment[];
 }

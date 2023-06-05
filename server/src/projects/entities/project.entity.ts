@@ -1,4 +1,5 @@
 import { Like } from 'src/likes/entities/like.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
@@ -33,4 +34,7 @@ export class Project {
   // relations
   @OneToMany(() => Like, (like) => like.project)
   likes: Like[];
+
+  @OneToMany(() => Comment, comment => comment.project)
+  comments: Comment[];
 }

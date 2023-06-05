@@ -1,6 +1,7 @@
 import { Like } from 'src/likes/entities/like.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
+import { Comment } from 'src/comments/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 
 @Entity()
@@ -61,4 +62,6 @@ export class User {
   @OneToMany(() => Message, message => message.sender)
   messages: Message[];
 
+  @OneToMany(() => Comment, comment => comment.user)
+  comments: Comment[];
 }
