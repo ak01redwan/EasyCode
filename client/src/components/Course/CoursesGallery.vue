@@ -16,16 +16,16 @@ import Card from '@/components/Card.vue'
     data(){
         return {
             Courses:[
-                { projectId: '1',projectTitle: 'Course 1', projectDescription: 'description for this current course 1',LikesNo: 41},
-                { projectId: '2',projectTitle: 'Course 2', projectDescription: 'description for this current course 2',LikesNo: 42},
-                { projectId: '3',projectTitle: 'Course 3', projectDescription: 'description for this current course 3',LikesNo: 100},
-                { projectId: '4',projectTitle: 'Course 4', projectDescription: 'description for this current course 4',LikesNo: 10},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 5',LikesNo: 88},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 6',LikesNo: 63},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 7',LikesNo: 50},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 8',LikesNo: 78},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 9',LikesNo: 11},
-                { projectId: '5',projectTitle: 'Course 5', projectDescription: 'description for this current course 10',LikesNo: 41},
+                { projectId: 1,projectTitle: 'Course 1', projectDescription: 'description for this current course 1',LikesNo: 41},
+                { projectId: 2,projectTitle: 'Course 2', projectDescription: 'description for this current course 2',LikesNo: 42},
+                { projectId: 3,projectTitle: 'Course 3', projectDescription: 'description for this current course 3',LikesNo: 100},
+                { projectId: 4,projectTitle: 'Course 4', projectDescription: 'description for this current course 4',LikesNo: 10},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 5',LikesNo: 88},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 6',LikesNo: 63},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 7',LikesNo: 50},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 8',LikesNo: 78},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 9',LikesNo: 11},
+                { projectId: 5,projectTitle: 'Course 5', projectDescription: 'description for this current course 10',LikesNo: 41},
             ],
         }
     },

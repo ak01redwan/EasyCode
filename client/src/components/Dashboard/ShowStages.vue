@@ -61,7 +61,11 @@
                 ><i class="fas fa-clipboard-list"></i
               ></router-link>
               <router-link
+
+
                 to="/stage"
+
+
                 class="btn btn-outline-info"
                 title="View Stage Details"
                 ><i class="fas fa-info-circle"></i
