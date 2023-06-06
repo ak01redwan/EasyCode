@@ -29,7 +29,6 @@
           <span class="fw-bold">{{ course.name }}</span>
           <span class="text-muted">@{{course.category}}</span>
           <div class="btn-group float-end">
-            <button data-bs-toggle="modal" data-bs-target="#addNewtageAskedProject" class="btn btn-outline-primary" title="Upload Exam"><i class="fas fa-clipboard-list"></i></button>
             <button v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
             <button v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
             <router-link to="/course" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></router-link>
@@ -42,9 +41,6 @@
   </div>
   <!--Adding New User Modal-->
   <AddNewCourse />
-
-  <!--Adding New Stage Asked Project Modal-->
-  <AddNewStageAskedProject />
 </template>
 <style scoped>
     .user-card {
@@ -67,12 +63,10 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import AddNewCourse from '@/components/Dashboard/AddNewCourse.vue';
-import AddNewStageAskedProject from '@/components/Dashboard/AddNewStageAskedProject.vue'
 
 @Options({
     components:{
       AddNewCourse,
-      AddNewStageAskedProject,
     },
     methods:{
       changeFilterValue(value: string){ this.filter = value; },

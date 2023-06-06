@@ -139,7 +139,7 @@ import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
     },
   },
 })
-export default class ExamViewVue extends Vue {
+export default class ExamView extends Vue {
   [x: string]: any;
   $bvModal!: { show: Function; hide: Function };
 }

@@ -8,12 +8,18 @@ import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
 import DashboardView from "@/views/DashboardView.vue"
 import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
+import ExamView from '@/views/ExamView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
     name: 'dashboard',
     component: DashboardView
+  },
+  {
+    path: '/exam',
+    name: 'examView',
+    component: ExamView
   },
   {
     path: '/',

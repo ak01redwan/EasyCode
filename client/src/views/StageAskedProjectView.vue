@@ -7,13 +7,14 @@
             <span class="fs-5">EasyCode Website</span>
         </div>
         <div class="m-3">
-            <span class="fs-4 fw-bold me-1 fw-bold">Decoument: </span>
-            <button class="btn btn-info fa-circle-play"> Download. </button>
+            <span class="fs-4 fw-bold me-1 fw-bold"> <i class="fa fa-file-archive" aria-hidden="true"></i> Decoument: </span>
+            <button class="btn btn-info"><i class="fa fa-cloud-download" aria-hidden="true"></i> Download. </button>
         </div>
     </div>
     <div class="border rounded p-3 m-5 ">
-        <h5 class="border-bottom pb-2 text-warning">Note</h5>
-        <p class="text-secondary">You need to download the documents to read the detials and then submipt the project from the form bellow.<span class="text-info d-block">(save your project in .zip or .rar and submit it bellow.)</span></p>
+        <h5 class="border-bottom pb-2 text-warning"> <i class="fa fa-exclamation-triangle" aria-hidden="true"></i> Note</h5>
+        <p class="text-secondary">You need to download the documents to read the details and then submit the project from the form bellow.
+        <span class="text-warning d-block"> (save your project in .zip or .rar and submit it bellow)</span></p>
     </div>
     <div class="card border-primary m-5 row" style="background:#EAEBED">
       <form @submit.prevent="" class="col-12 needs-validated p-4">

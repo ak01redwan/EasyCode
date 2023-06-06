@@ -19,6 +19,7 @@
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
                     <ShowCourses v-else-if="currentDisplayedContent === 'ShowCourses'" />
+                    <ShowStages v-else-if="currentDisplayedContent === 'ShowStages'" />
                 </div>
             </div>
         </div>
@@ -29,12 +30,14 @@ import { Options, Vue } from 'vue-class-component';
 import ShowUsers from '@/components/Dashboard/ShowUsers.vue';
 import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
 import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
+import ShowStages from '@/components/Dashboard/ShowStages.vue'
 
 @Options({
   components: {
     ShowUsers,
     ShowCategories,
-    ShowCourses
+    ShowCourses,
+    ShowStages
   },
   data () {
     return {
@@ -43,6 +46,7 @@ import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
             {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
             {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
             {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
+            {text: 'Stages',     icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
             {text: 'Analytics',  icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
             {text: 'Messages',   icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
             {text: 'Settings',   icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
