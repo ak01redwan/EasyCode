@@ -84,7 +84,7 @@
             <p class="card-text">
               Projects has been built by the students during their learning inside the EasyCode website.
             </p>
-            <router-link to="/projects" class="btn btn-outline-secondary"><i class="fa-solid fa-diagram-project"></i> Go To The Projects</router-link>
+            <router-link to="/students" class="btn btn-outline-secondary"><i class="fa-solid fa-diagram-project"></i> Go To The Projects</router-link>
           </div>
         </div>
       </div>
@@ -155,7 +155,7 @@
               Show all supervisors and what courses did they teach,
               browsing their personal's pages to see more details.
             </p>
-            <router-link to="/superviors" class="btn btn-outline-secondary"><i class="fa-solid fa-person-chalkboard"></i> Go To Show Supervisors</router-link>
+            <router-link to="/students" class="btn btn-outline-secondary"><i class="fa-solid fa-person-chalkboard"></i> Go To Show Supervisors</router-link>
           </div>
         </div>
       </div>

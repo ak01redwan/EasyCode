@@ -143,8 +143,15 @@ import { Options, Vue } from "vue-class-component";
     onSubmit() { 
         const form = document.querySelector('.needs-validation') as HTMLFormElement;
         if (form.checkValidity() === true) {
-            this.$emit("stage-created", this.stage);
-            //$('#addStageModal').modal('hide');
+            if (!this.stage.course){
+                alert('we do not found any course to put this stage inside it!.');
+            }else{ // when inputs are validated and parent course is selected
+                this.$emit("stage-created", this.stage);
+                const modal = document.getElementById('addStageModal');
+                modal?.classList.remove('show');
+                modal?.setAttribute('aria-hidden', 'true');
+                modal?.setAttribute('style', 'display: none');
+            }
         } else {
             alert('You should fill all boxes!.');
         }

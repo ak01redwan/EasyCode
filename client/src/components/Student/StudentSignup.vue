@@ -1,8 +1,8 @@
 <template>
     <form action="" class="needs-validated row">
         <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label"  for="my-name">User Name</label>
-            <input  id="my-name" class="form-control" type="text" name="" placeholder="Enter your username" required>
+            <label class="form-label"  for="username">User Name</label>
+            <input  id="username" class="form-control" type="text" name="" placeholder="Enter your username" required>
             <div class="invalid-feedback fs-6">Please enter your user name</div>
             <div class="valid-feedback fs-6">Looks Good</div>
         </div>
@@ -26,8 +26,8 @@
             <div class="valid-feedback fs-6">Looks Good</div>
         </div>
         <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label"  for="my-name">Full Name</label>
-            <input  id="my-name" class="form-control" type="text" name="" placeholder="Enter your full name" required>
+            <label class="form-label"  for="fullname">Full Name</label>
+            <input  id="fullname" class="form-control" type="text" name="" placeholder="Enter your full name" required>
             <div class="invalid-feedback fs-6">Please enter your full name</div>
             <div class="valid-feedback fs-6">Looks Good</div>
         </div>
@@ -39,8 +39,8 @@
         </div>
         <div class="group-Elements-supervisor col-lg-12 row p-0  m-auto " id="supervisorElement">
             <div class="form-group col-lg-6 was-validated">
-                <label for="my-input">Degree Score 100%</label>
-                <input id="my-input" class="form-control" type="number" name="" required>
+                <label for="degree-score">Degree Score 100%</label>
+                <input id="degree-score" class="form-control" type="number" name="" required>
                 <div class="invalid-feedback fs-6 ">Please enter your Degree Score</div>
             <div class="valid-feedback fs-6">Looks Good</div>
             </div>
@@ -53,14 +53,14 @@
         </div>
         <div class="group-Elements-supervisor col-lg-12 row p-0  m-auto " id="supervisorElement">
             <div class="form-group col-lg-6 was-validated">
-                <label for="my-input">Personal Image</label>
-                <input id="my-input" class="form-control" type="file" name="" required>
+                <label for="personal-image">Personal Image</label>
+                <input id="personal-image" class="form-control" type="file" name="" required>
                 <div class="invalid-feedback fs-6 ">Please enter your personal image</div>
                 <div class="valid-feedback fs-6">Looks Good</div>
             </div>
             <div class="form-group col-lg-6 was-validated">
-                <label for="my-input">Certifications Documents</label>
-                <input id="my-input" class="form-control" type="file" name="" required>
+                <label for="certifications-documents">Certifications Documents</label>
+                <input id="certifications-documents" class="form-control" type="file" name="" required>
                 <div class="invalid-feedback fs-6 ">Please enter your Certifications Documents</div>
                 <div class="valid-feedback fs-6">Looks Good</div>
             </div>
