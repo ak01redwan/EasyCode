@@ -13,6 +13,7 @@ export class UsersController {
     private readonly authService: AuthService
     ) {}
 
+  // not signed up user and admin
   @Post()
   async create(@Body() createUserDto: CreateUserDto): Promise<any> {
     // converting createUsetDto to User type
@@ -37,22 +38,26 @@ export class UsersController {
     }
   }
 
+  // for admin
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
   }
 
+  // for admin
   @Get(':id')
   async findOne(@Param() params): Promise<User> {
     return await this.usersService.findOne(params.id);
   }
 
+  // for admin or the account owner
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
     const user = updateUserDtoToUserEntity(updateUserDto);
     return await this.usersService.update(+id, user);
   }
 
+  // for admin or the account owner
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     await this.usersService.remove(+id);

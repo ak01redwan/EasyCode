@@ -8,6 +8,7 @@ import { UpdateExamDto } from './dto/update-exam.dto';
 export class ExamsController {
   constructor(private readonly examsService: ExamsService) {}
 
+  // accessed by course supervisor 
   @Post()
   async create(@Body() createExamDto: CreateExamDto): Promise<Exam> {
     return this.examsService.create(createExamDto);
@@ -27,11 +28,13 @@ export class ExamsController {
     return exam;
   }
 
+  // accessed by course supervisor 
   @Put(':id')
   async update(@Param('id') id: number, @Body() updateExamDto: UpdateExamDto): Promise<Exam> {
     return this.examsService.update(id, updateExamDto);
   }
 
+  // accessed by course supervisor
   @Delete(':id')
   async remove(@Param('id') id: number): Promise<void> {
     await this.examsService.remove(id);

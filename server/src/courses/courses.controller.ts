@@ -9,6 +9,7 @@ import { CourseMapper } from './mappers/course.mappers';
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
+  // for admin
   @Post()
   async create(@Body() createCourseDto: CreateCourseDto): Promise<Course> {
     try {
@@ -22,11 +23,13 @@ export class CoursesController {
     }
   }
 
+  // all actors student, admin, supervisor, course admin
   @Get()
   async findAll(): Promise<Course[]> {
     return await this.coursesService.findAll();
   }
 
+  // all actors student, admin, supervisor, course admin
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Course> {
     const course = await this.coursesService.findOne(+id);
@@ -36,6 +39,7 @@ export class CoursesController {
     return course;
   }
 
+  // for admin and course admin
   @Put(':id')
   async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto): Promise<Course> {
     try {
@@ -49,6 +53,7 @@ export class CoursesController {
     }
   }
 
+  // for admin if this course dose not have content inside it
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     await this.coursesService.remove(+id);
