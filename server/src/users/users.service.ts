@@ -18,15 +18,15 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find();
+    return await this.usersRepository.find({ where: { isDeleted: false}});
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id: id}});
+    return await this.usersRepository.findOne({ where: { id: id, isDeleted: false}});
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { username: username}});
+    return await this.usersRepository.findOne({ where: { username: username, isDeleted: false}});
   }
 
   async update(id: number, user: User): Promise<User> {
@@ -35,6 +35,6 @@ export class UsersService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.usersRepository.delete(id);
+    await this.usersRepository.update(id, { isDeleted: true });
   }
 }

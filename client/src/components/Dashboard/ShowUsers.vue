@@ -28,13 +28,13 @@
                                 margin: 0;">
         <div v-for="(user,index) in searchResults" :key="index" class="user-card">
           <img src="https://via.placeholder.com/50" alt="User Avatar">
-          <span class="fw-bold">{{ user.fullname }}</span>
+          <span class="fw-bold">{{ user.fullName }}</span>
           <span class="text-muted">@{{user.username}}</span>
           <div class="btn-group float-end">
             <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
             <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
             <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+            <button @click="deletUserById(user.id)" class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       </div>
@@ -64,6 +64,8 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import AddNewUser from '@/components/Dashboard/AddNewUser.vue'
+import axios from 'axios';
+import { useSSRContext } from 'vue';
 
 @Options({
     components:{
@@ -71,38 +73,44 @@ import AddNewUser from '@/components/Dashboard/AddNewUser.vue'
     },
     methods:{
       changeFilterValue(value: String) { this.filter = value; }/*for change the filter parameter value*/,
+      async getAllUsers() {
+        try {
+          const response = await axios.get('http://localhost:3000/users');
+          this.users = response.data;
+        } catch (error) {
+          alert(error);
+        }
+      },
+      async deletUserById(userId: number) {
+        try {
+          console.log(userId);
+          await axios.delete(`http://localhost:3000/users/${userId}`);
+          await this.getAllUsers(); // fetch users from the db
+        } catch (error) {
+          alert(error);
+        }
+      }
+    },
+    async created() {
+      await this.getAllUsers();
     },
     computed:{
-        searchResults() {
-            return this.users.filter((user: { fullname: string; username: string; type: string;}): any => {
-                const searchTermLC = this.searchTerm.toLowerCase();
-                const userTypeFilter = this.filter.toLowerCase();
-                return (user.fullname.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC)) 
-                  && user.type.toLowerCase().includes(userTypeFilter);
-            });
-        }
+      searchResults() {
+        return this.users.filter((user: { id: number; fullName: string; username: string; userType: string;}): any => {
+          const searchTermLC = this.searchTerm.toLowerCase();
+          const userTypeFilter = this.filter.toLowerCase();
+          return (user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC)) 
+            && user.userType.toLowerCase().includes(userTypeFilter);
+        });
+      }
     },
     data(){
         return {
             searchTerm: '',
             filter: '',
-            users: [
-                {fullname: 'Abdu Khalid Abdullh', username:'AK01REDWAN',type: 'Admin'},
-                {fullname: 'Salem Nagy Khasem', username:'5488', type: 'Student'},
-                {fullname: 'Ahmed Mohammed', username:'AK01REDWAN', type: 'Student'},
-                {fullname: 'Weas Humza', username:'AK01REDWAN', type: 'Student'},
-                {fullname: 'Abdurhman Khald', username:'AK01REDWAN', type: 'Student'},
-                {fullname: 'New Person Name', username:'AK01REDWAN', type: 'Student'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Student'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Admin Supervisor'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'},
-                {fullname: 'Another Person Name', username:'AK01REDWAN', type: 'Normal Supervisor'}
-            ]
+            users: [] // data will be fetched into this array when create method call getAllUsers method
         }
-    }
+    },
 })
 export default class ShowUsers extends Vue {
 [x: string]: any;
