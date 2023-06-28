@@ -2,6 +2,9 @@ import { Transform } from 'class-transformer';
 import { IsNotEmpty, IsEmail, IsDate, IsOptional, IsEmpty } from 'class-validator';
 
 export class CreateUserDto {
+  isValid() {
+    throw new Error('Method not implemented.');
+  }
   @IsNotEmpty()
   fullName: string;
 

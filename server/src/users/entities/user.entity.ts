@@ -49,7 +49,7 @@ export class User {
   @Column({ default: true })
   isConfirmed: boolean;
 
-  @Column({ default: true })
+  @Column({ default: false })
   isDeleted: boolean;
 
   // realtions

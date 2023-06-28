@@ -1,70 +1,179 @@
 <template>
-    <form action="" class="needs-validated row">
-        <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label"  for="username">User Name</label>
-            <input  id="username" class="form-control" type="text" name="" placeholder="Enter your username" required>
-            <div class="invalid-feedback fs-6">Please enter your user name</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label" for="my-email">Email Address</label>
-            <input  id="my-email" class="form-control" type="email" name="" placeholder="Enter your email address" required>
-            <div class="invalid-feedback fs-6">Please enter your email address</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        <div class="form-group was-validated col-lg-6 mb-2 mb-2">
-            <label class="form-label" for="my-password">Password</label>
-            <input id="my-password" class="form-control" type="password" name="" placeholder="Enter your password" required>
-            <div class="invalid-feedback fs-6">Please enter your password</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        
-        <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label" for="my-repassword">Repeat Password</label>
-            <input id="my-repassword" class="form-control" type="password" name="" placeholder="Enter repeat your password" required>
-            <div class="invalid-feedback fs-6">Please enter your password confirmation</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        <div class="form-group was-validated col-lg-6 mb-2">
-            <label class="form-label"  for="fullname">Full Name</label>
-            <input  id="fullname" class="form-control" type="text" name="" placeholder="Enter your full name" required>
-            <div class="invalid-feedback fs-6">Please enter your full name</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        <div class="form-group was-validated  col-lg-6 mb-2">
-            <label class="form-label" for="my-address">Address</label>
-            <input id="my-address" class="form-control " type="text" name="" placeholder="Enter your address" required>
-            <div class="invalid-feedback fs-6">Please enter your address</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-        </div>
-        <div class="group-Elements-supervisor col-lg-12 row p-0  m-auto " id="supervisorElement">
-            <div class="form-group col-lg-6 was-validated">
-                <label for="degree-score">Degree Score 100%</label>
-                <input id="degree-score" class="form-control" type="number" name="" required>
-                <div class="invalid-feedback fs-6 ">Please enter your Degree Score</div>
-            <div class="valid-feedback fs-6">Looks Good</div>
-            </div>
-            <div class="form-group was-validated col-lg-6 mb-2">
-                <label class="form-label" for="my-birthdate">Birth date</label>
-                <input id="my-birthdate" class="form-control" type="date" name="" placeholder="Enter your Birth date" required>
-                <div class="invalid-feedback fs-6 ">Please enter your Birth date</div>
-                <div class="valid-feedback fs-6">Looks Good</div>
-            </div>
-        </div>
-        <div class="group-Elements-supervisor col-lg-12 row p-0  m-auto " id="supervisorElement">
-            <div class="form-group col-lg-6 was-validated">
-                <label for="personal-image">Personal Image</label>
-                <input id="personal-image" class="form-control" type="file" name="" required>
-                <div class="invalid-feedback fs-6 ">Please enter your personal image</div>
-                <div class="valid-feedback fs-6">Looks Good</div>
-            </div>
-            <div class="form-group col-lg-6 was-validated">
-                <label for="certifications-documents">Certifications Documents</label>
-                <input id="certifications-documents" class="form-control" type="file" name="" required>
-                <div class="invalid-feedback fs-6 ">Please enter your Certifications Documents</div>
-                <div class="valid-feedback fs-6">Looks Good</div>
-            </div>
-        </div>           
-        <input type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" value="SIGN UP">
-    </form>
+  <form @submit.prevent="submitForm" class="needs-validation row">
+    <div v-for="(field, index) in fields" :key="index" :class="field.width" class="form-group was-validated mb-2">
+      <label class="form-label" :for="field.name">{{ field.label }}</label>
+      <template v-if="field.type === 'text' || field.type === 'email' || field.type === 'password'">
+        <input :id="field.name" class="form-control" :type="field.type" :name="field.name"
+          :placeholder="field.placeholder" v-model="formData[field.name]" :required="field.required"
+          :accept="field.accept">
+      </template>
+      <template v-else-if="field.type === 'file'">
+        <input :id="field.name" class="form-control" :type="field.type" :name="field.name" :accept="field.accept"
+        @change="onFileChange" :required="field.required" ref="fileInput">
+        <img v-if="previewImage" :src="previewImage" class="mt-2" style="max-width: 100%;">
+      </template>
+      <template v-else-if="field.type === 'date'">
+        <input :id="field.name" class="form-control" :type="field.type" :name="field.name"
+          :placeholder="field.placeholder" v-model="formData[field.name]" :required="field.required">
+      </template>
+      <div class="invalid-feedback fs-6">{{ field.validationMessage }}</div>
+      <div class="valid-feedback fs-6">Looks Good</div>
+    </div>
+    <input type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" value="SIGN UP">
+  </form>
 </template>
+<script>
+import axios from 'axios';
+import Cookies from 'js-cookie'
+
+export default {
+  data() {
+    return {
+      fields: [
+        {
+          label: "Student User Name",
+          name: "username",
+          type: "text",
+          width: "col-lg-6",
+          placeholder: "Enter your username",
+          required: true,
+          validationMessage: "Please enter your username"
+        },
+        {
+          label: "Email Address",
+          name: "email",
+          type: "email",
+          width: "col-lg-6",
+          placeholder: "Enter your email address",
+          required: true,
+          validationMessage: "Please enter your email address"
+        },
+        {
+          label: "Password",
+          name: "password",
+          type: "password",
+          width: "col-lg-6",
+          placeholder: "Enter your password",
+          required: true,
+          validationMessage: "Please enter your password"
+        },
+        {
+          label: "Repeat Password",
+          name: "password2",
+          type: "password",
+          width: "col-lg-6",
+          placeholder: "Repeat your password",
+          required: true,
+          validationMessage: "Please repeat your password"
+        },
+        {
+          label: "Student Full Name",
+          name: "fullName",
+          type: "text",
+          width: "col-lg-6",
+          placeholder: "Enter your full name",
+          required: true,
+          validationMessage: "Please enter your full name"
+        },
+        {
+          label: "Studnet Address",
+          name: "address",
+          type: "text",
+          width: "col-lg-6",
+          placeholder: "Enter your address",
+          required: true,
+          validationMessage: "Please enter your address"
+        },
+        {
+          label: "Student Description",
+          name: "userDescription",
+          type: "text",
+          width: "col-lg-12",
+          placeholder: "Enter short description about your self",
+          required: true,
+          validationMessage: "Please enter your description"
+        },
+        {
+          label: "Photo",
+          name: "photo",
+          type: "file",
+          width: "col-lg-6",
+          accept: "image/*",
+          required: true,
+          validationMessage: "Please select a photo"
+        },
+        {
+          label: "Birth Date",
+          name: "birthDate",
+          type: "date",
+          width: "col-lg-6",
+          placeholder: "Enter your birth date",
+          required: true,
+          validationMessage: "Please enter your birth date"
+        }
+      ],
+      formData: {
+        username: '',
+        email: '',
+        password: '',
+        password2: '',
+        fullName: '',
+        address: '',
+        userDescription: '',
+        userType: 'student',
+        picturePath: 'path/will/setup/on/server',
+        birthDate: null,
+        photo: null
+      },
+      previewImage: null,
+    };
+  },
+  methods: {
+    submitForm() {
+      if (this.formData.password != this.formData.password2) {
+        alert("Passwords do not match!");
+        return;
+      }
+      //console.log(this.formData)
+      axios.post('http://localhost:3000/users', this.formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        //console.log(response.data)
+        const userCookies = Cookies.get('userTokens');
+        if (userCookies) {
+          axios.get('http://localhost:3000/auth/profile',{
+            headers: { 'Authorization': `Bearer ${userCookies}` }
+          }).then(res => {
+            console.log(res.data)
+            if (res.data.user.userType == 'admin') {
+
+            }else{
+              router.push('/student');
+            }
+          }).catch(err => {});
+        }else{
+          Cookies.set('userTokens', response.data.tokens);
+          router.push('/student');
+        }
+        //this.$emit('update-users', updatedUsers)
+      }).catch(error => {
+        console.error(error.response.data.message)
+      })
+    },
+    onFileChange(event) {
+      const file = event.target.files[0];
+      const reader = new FileReader();
+
+      reader.onload = event => {
+        this.previewImage = event.target.result;
+      };
+
+      reader.readAsDataURL(file);
+      this.formData.photo = file;
+      //console.log(this.formData.photo);
+    }
+  }
+};
+</script>

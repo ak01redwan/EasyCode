@@ -1,10 +1,15 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, HttpException, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, HttpException, HttpStatus, Put, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import * as fs from 'fs';
+// coder made
 import { UsersService } from './users.service';
+import { AuthService } from 'src/auth/auth.service';
 import { User } from './entities/user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { createUserDtoToUserEntity, updateUserDtoToUserEntity } from './mappers/user.mappers';
-import { AuthService } from 'src/auth/auth.service';
+import { UploadFileToDiskStorage } from 'src/helpers/upload-file'
+
 
 @Controller('users')
 export class UsersController {
@@ -13,9 +18,11 @@ export class UsersController {
     private readonly authService: AuthService
     ) {}
 
-  // not signed up user and admin
   @Post()
-  async create(@Body() createUserDto: CreateUserDto): Promise<any> {
+  @UseInterceptors(FileInterceptor('photo', UploadFileToDiskStorage))
+  async create(@Body() createUserDto: CreateUserDto, @UploadedFile() photo): Promise<any> {
+    // set user photo path
+    createUserDto.picturePath = photo ? `/public/uploads/${photo.filename}` : '/path/to/default/photo';
     // converting createUsetDto to User type
     const user = createUserDtoToUserEntity(createUserDto);
     // creating new datatype to use it inside this function
@@ -23,18 +30,24 @@ export class UsersController {
       user: User;
       tokens: string;
     };
-    // put everything inside try catch if there is an error
+    
     try {
       const userWithTokens: UserWithTokens = {
         user: await this.usersService.create(user),
         tokens: await this.authService.getUserTokens(user)
       };
       return userWithTokens;
-    } catch (error) {
-      if (error.number == '2627') { // 2627 sql error for duplicate value
-        throw new HttpException(`User with this email and username already exists!.`, HttpStatus.CONFLICT);
-      } // for the others errors
-      throw new HttpException(`Internal server error ==== Error Details: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch (err) {
+      console.log(photo.path);
+      if (photo) {
+        try {
+          fs.unlinkSync(photo.path);
+          console.log('File deleted successfully');
+        } catch (error) {
+          console.log('faild to deleted the file');
+        }
+      }
+      throw err;
     }
   }
 
