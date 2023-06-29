@@ -140,22 +140,24 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        //console.log(response.data)
+        // know the user type who dose this opertion using the tokens
         const userCookies = Cookies.get('userTokens');
         if (userCookies) {
           axios.get('http://localhost:3000/auth/profile',{
             headers: { 'Authorization': `Bearer ${userCookies}` }
           }).then(res => {
-            console.log(res.data)
             if (res.data.user.userType == 'admin') {
-
+              this.$router.push('/dashboard'); // go to dashboard
+              return null;
             }else{
-              router.push('/student');
+              this.$router.push('/student'); // go to student
+              return null;
             }
           }).catch(err => {});
         }else{
           Cookies.set('userTokens', response.data.tokens);
-          router.push('/student');
+          this.$router.push('/student'); // go to student
+          return null;
         }
         //this.$emit('update-users', updatedUsers)
       }).catch(error => {
