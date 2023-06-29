@@ -9,7 +9,7 @@
       </template>
       <template v-else-if="field.type === 'file'">
         <input :id="field.name" class="form-control" :type="field.type" :name="field.name" :accept="field.accept"
-        @change="onFileChange" :required="field.required" ref="fileInput">
+          @change="onFileChange" :required="field.required" ref="fileInput">
         <img v-if="previewImage" :src="previewImage" class="mt-2" style="max-width: 100%;">
       </template>
       <template v-else-if="field.type === 'date'">
@@ -25,6 +25,7 @@
 <script>
 import axios from 'axios';
 import Cookies from 'js-cookie'
+import Swal from "sweetalert2";
 
 export default {
   data() {
@@ -143,21 +144,34 @@ export default {
         // know the user type who dose this opertion using the tokens
         const userCookies = Cookies.get('userTokens');
         if (userCookies) {
-          axios.get('http://localhost:3000/auth/profile',{
+          axios.get('http://localhost:3000/auth/profile', {
             headers: { 'Authorization': `Bearer ${userCookies}` }
           }).then(res => {
             if (res.data.user.userType == 'admin') {
               this.$router.push('/dashboard'); // go to dashboard
-              return null;
-            }else{
+              Swal.fire({
+                icon: "success",
+                title: "Done!",
+                text: "New user has been added successfully",
+              });
+            } else {
+              Cookies.set('userTokens', response.data.tokens);
               this.$router.push('/student'); // go to student
-              return null;
+              Swal.fire({
+                icon: "success",
+                title: `Welcome ${response.data.user.fullName}`,
+                text: "Your account has been added successfully",
+              });
             }
-          }).catch(err => {});
-        }else{
+          }).catch(err => { });
+        } else {
           Cookies.set('userTokens', response.data.tokens);
           this.$router.push('/student'); // go to student
-          return null;
+          Swal.fire({
+            icon: "success",
+            title: `Welcome ${response.data.user.fullName}`,
+            text: "Your account has been added successfully",
+          });
         }
         //this.$emit('update-users', updatedUsers)
       }).catch(error => {

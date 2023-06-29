@@ -1,31 +1,149 @@
 <template>
-        <div class="form-container d-flex align-items-center w-100 justify-content-center fs-4">
-        <div class="login m-lg-5 shadow m-3 pb-2 w-auto p-4 ratio-1x1" style="background:#EAEBED">
-            <h2 class="text-center m-5">LOGIN TO ESAY CODE</h2>
-            <form action="" class="needs-validated">
-                <div class="form-group was-validated mb-2 mb-lg-3">
-                    <label class="form-label" for="my-email">Email Address</label>
-                    <input  id="my-email" class="form-control" type="email" name="" 
-                                        placeholder="Enter your email address" required>
-                    <div class="invalid-feedback fs-6 ">Please enter your email address</div>
-                </div>
-                <div class="form-group was-validated mb-2 mb-lg-3">
-                    <label class="form-label" for="my-password">Password</label>
-                    <input id="my-password" class="form-control" type="password" name="" placeholder="Enter your password" required>
-                    <div class="invalid-feedback fs-6">Please enter your password</div>
-                </div>
-                <div class="form-group form-check ms-3">
-                    <input type="checkbox" class="form-check-input" id="btncheck1">
-                    <label class="form-check-label fs-6 mb-3" for="btncheck1">Remember me</label>
-                
-                </div>
-                <input type="submit" class="btn btn-success w-100 mt-3 " value="LOGIN">
-                <ul class="form-options list-unstyled p-0 mt-3 mt-lg-5 fs-6 mb-0"  accesskey="none">
-                    <li><a class="" href="#">Forgot password</a></li>
-                    <router-link to="/signup"><li><a class="">Create New Account</a></li></router-link>
-                </ul>
-                
-             </form>
-        </div> 
+  <div class="container py-5" style="min-height: 90vh">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-6">
+        <h1 class="text-center mb-5">Login</h1>
+        <form
+          @submit.prevent="submitForm"
+          class="needs-validation"
+          novalidate
+          ref="form"
+        >
+          <div class="form-group mb-3">
+            <label for="username">Username or Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="username"
+              name="username"
+              v-model="username"
+              required
+            />
+            <div class="invalid-feedback">
+              Please enter your username or email.
+            </div>
+          </div>
+          <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <input
+              type="password"
+              class="form-control"
+              id="password"
+              name="password"
+              v-model="password"
+              required
+            />
+            <div class="invalid-feedback">Please enter your password.</div>
+          </div>
+          <div class="form-group form-check mb-3">
+            <input
+              type="checkbox"
+              class="form-check-input"
+              id="remember-me"
+              name="remember-me"
+              v-model="rememberMe"
+            />
+            <label class="form-check-label" for="remember-me"
+              >Remember me</label
+            >
+          </div>
+          <button
+            type="submit"
+            class="btn btn-primary w-100"
+            :disabled="isSubmitting"
+          >
+            {{ isSubmitting ? "Logging in..." : "Login" }}
+          </button>
+        </form>
+      </div>
     </div>
+  </div>
 </template>
+
+<script>
+import axios from "axios";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+      rememberMe: false,
+      isSubmitting: false,
+    };
+  },
+  methods: {
+    submitForm() {
+      if (this.$refs.form.checkValidity()) {
+        this.isSubmitting = true;
+        axios
+          .post("http://localhost:3000/auth/login", {
+            username: this.username,
+            password: this.password,
+          })
+          .then((response) => {
+            if (this.rememberMe) {
+              Cookies.set("userTokens", response.data.tokens, { expires: 30 });
+            }
+            const userType = response.data.user.userType;
+            if (userType === "admin") {
+              this.$router.push("/dashboard");
+            } else {
+              this.$router.push("/");
+            }
+            Swal.fire({
+              icon: "success",
+              title: "Welcome back!",
+              text: `You have successfully logged in as ${userType}.`,
+            });
+          })
+          .catch((error) => {
+            console.error(error.response.data.message);
+            Swal.fire({
+              icon: "error",
+              title: "Oops...",
+              text: error.response.data.message,
+            });
+          })
+          .finally(() => {
+            this.isSubmitting = false;
+          });
+      } else {
+        this.$refs.form.classList.add("was-validated");
+      }
+    },
+    getUserProfileUsingStoredTokens() {
+      const userCookies = Cookies.get("userTokens");
+      if (userCookies) {
+        axios
+          .get("http://localhost:3000/auth/profile", {
+            headers: { Authorization: `Bearer ${userCookies}` },
+          })
+          .then((res) => {
+            if (res.data.user.userType == "admin") {
+              this.$router.push("/dashboard"); // go to dashboard
+              Swal.fire({
+                icon: "success",
+                title: "Welcome back!",
+                text: "You have successfully logged in as an Admin.",
+              });
+            } else {
+              this.$router.push("/student"); // go to student
+              Swal.fire({
+                icon: "success",
+                title: "Welcome back!",
+                text: `You have successfully logged in as ${res.data.user.userType}.`,
+              });
+            }
+          })
+          .catch((err) => {});
+      }
+    }
+  },
+  mounted() {
+    this.getUserProfileUsingStoredTokens();
+  },
+};
+</script>
