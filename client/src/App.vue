@@ -151,3 +151,37 @@
 </template>
 
 <style lang="scss"></style>
+
+<script>
+import axios from "axios";
+import Cookies from "js-cookie";
+import Swal from "sweetalert2";
+
+export default {
+  data() {
+    return {
+      user: null,
+    };
+  },
+  methods: {
+    getUserProfileUsingStoredTokens() {
+      const userCookies = Cookies.get("userTokens");
+      if (userCookies) {
+        axios
+          .get("http://localhost:3000/auth/profile", {
+            headers: { Authorization: `Bearer ${userCookies}` },
+          })
+          .then((res) => {
+            if (res.data.user){
+              this.user = res.data.user;
+            }
+          })
+          .catch((err) => {});
+      }
+    }
+  },
+  mounted() {
+    this.getUserProfileUsingStoredTokens();
+  },
+};
+</script>
