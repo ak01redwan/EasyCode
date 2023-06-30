@@ -65,7 +65,17 @@
             </ul>
           </li>
         </ul>
-        <div class="d-flex d-grid gap-1">
+        <div v-if="isAuthenticated" class="d-flex d-grid gap-1">
+          <button @click="logout" class="btn btn-outline-danger">
+            <i class="fa-solid fa-sign-out"></i> Logout
+          </button>
+          <router-link to="/">
+            <button class="btn btn-outline-secondary">
+              <i class="fa-solid fa-user"></i> Profile
+            </button>
+          </router-link>
+        </div>
+        <div v-else class="d-flex d-grid gap-1">
           <router-link to="/login">
             <button class="btn btn-outline-primary">
               <i class="fa-solid fa-right-to-bracket"></i> Login
@@ -161,6 +171,7 @@ export default {
   data() {
     return {
       user: null,
+      isAuthenticated: false,
     };
   },
   methods: {
@@ -174,11 +185,23 @@ export default {
           .then((res) => {
             if (res.data.user){
               this.user = res.data.user;
+              this.isAuthenticated = true;
             }
           })
           .catch((err) => {});
       }
-    }
+    },
+    logout() {
+      Cookies.remove("userTokens");
+      this.isAuthenticated = false;
+      this.user = null;
+      this.$router.push("/");
+      Swal.fire({
+        icon: 'info',
+        title: 'Logout..',
+        text: 'You have logged out!.'
+      })
+    },
   },
   mounted() {
     this.getUserProfileUsingStoredTokens();

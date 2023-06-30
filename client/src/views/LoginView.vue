@@ -85,7 +85,9 @@ export default {
           })
           .then((response) => {
             if (this.rememberMe) {
-              Cookies.set("userTokens", response.data.tokens, { expires: 30 });
+              Cookies.set("userTokens", response.data.access_token, { expires: 30 });
+            }else{
+              Cookies.set("userTokens", response.data.access_token, { expires: 0 });
             }
             const userType = response.data.user.userType;
             if (userType === "admin") {
