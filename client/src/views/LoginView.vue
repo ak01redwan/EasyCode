@@ -84,10 +84,9 @@ export default {
             password: this.password,
           })
           .then((response) => {
+            this.$store.dispatch('login', response.data.user);
             if (this.rememberMe) {
               Cookies.set("userTokens", response.data.access_token, { expires: 30 });
-            }else{
-              Cookies.set("userTokens", response.data.access_token, { expires: 0 });
             }
             const userType = response.data.user.userType;
             if (userType === "admin") {
@@ -124,6 +123,7 @@ export default {
             headers: { Authorization: `Bearer ${userCookies}` },
           })
           .then((res) => {
+            this.$store.dispatch('login', res.data.user);
             if (res.data.user.userType == "admin") {
               this.$router.push("/dashboard"); // go to dashboard
               Swal.fire({

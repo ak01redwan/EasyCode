@@ -65,8 +65,8 @@
             </ul>
           </li>
         </ul>
-        <div v-if="isAuthenticated" class="d-flex d-grid gap-1">
-          <button @click="logout" class="btn btn-outline-danger">
+        <div v-if="auth" class="d-flex d-grid gap-1">
+          <button @click="doLogout" class="btn btn-outline-danger">
             <i class="fa-solid fa-sign-out"></i> Logout
           </button>
           <router-link to="/">
@@ -171,7 +171,6 @@ export default {
   data() {
     return {
       user: null,
-      isAuthenticated: false,
     };
   },
   methods: {
@@ -184,17 +183,15 @@ export default {
           })
           .then((res) => {
             if (res.data.user){
-              this.user = res.data.user;
-              this.isAuthenticated = true;
+              this.$store.dispatch('login', res.data.user);
             }
           })
           .catch((err) => {});
       }
     },
-    logout() {
+    doLogout() {
       Cookies.remove("userTokens");
-      this.isAuthenticated = false;
-      this.user = null;
+      this.$store.dispatch('logout'); // logout from the state as well
       this.$router.push("/");
       Swal.fire({
         icon: 'info',
@@ -202,9 +199,20 @@ export default {
         text: 'You have logged out!.'
       })
     },
+    keepUserUpdated(){
+      this.user = this.$store.state.user;
+    }
   },
   mounted() {
+    this.keepUserUpdated();
     this.getUserProfileUsingStoredTokens();
   },
+  computed:{
+    auth(){
+      this.keepUserUpdated();
+      console.log(this.user);
+      return this.user;
+    }
+  }
 };
 </script>
