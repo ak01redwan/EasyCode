@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import StudentsView from '../views/StudentsView.vue'
 import StudentView from '../views/StudentView.vue'
 import LoginViewVue from '@/views/LoginView.vue'
-import SignupView from '@/views/Signup2View.vue'
+import SignupView from '@/views/SignupView.vue'
 import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
 import DashboardView from "@/views/DashboardView.vue"
