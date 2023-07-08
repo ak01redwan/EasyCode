@@ -215,7 +215,7 @@ export default {
         userType: "student",
         picturePath: "path/will/setup/on/server",
         birthDate: null,
-        files: [null, null]
+        files: [null, null],
       },
       previewImage: null,
       isSubmitting: false,
@@ -246,7 +246,7 @@ export default {
       // add the file data to the FormData object
       formDataInstance.append("files", this.formData.files[0]);
       formDataInstance.append("files", this.formData.files[1]);
-      Object.keys(this.formData).forEach(key => {
+      Object.keys(this.formData).forEach((key) => {
         if (key !== "files") {
           formDataInstance.append(key, this.formData[key]);
         }
@@ -294,14 +294,12 @@ export default {
               text: "Your account has been added successfully",
             });
           }
-          //this.$emit('update-users', updatedUsers)
         })
         .catch((error) => {
           console.error(error.response);
         });
     },
     onFileChange(event) {
-      console.log("aaaaaaaaaaaaaaaaaa");
       const file = event.target.files[0];
       const reader = new FileReader();
 
@@ -310,16 +308,11 @@ export default {
       };
 
       reader.readAsDataURL(file);
-      //this.formData.photo = file;
-      
-        this.formData.files[0] = file;
-      
+      this.formData.files[0] = file;
     },
     onDocFileChange(event) {
       const file = event.target.files[0];
-      //this.formData.certificationsDocs = file;
       this.formData.files[1] = file;
-      //console.log(this.formData.certificationsDocs);
     },
   },
 };
