@@ -16,6 +16,9 @@ export const createUserDtoToUserEntity = (createUserDto: CreateUserDto): User =>
   user.userDescription = createUserDto.userDescription;
   user.currentCourseId = createUserDto.currentCourseId;
   user.certificationsDocsPath = createUserDto.certificationsDocsPath;
+  if (user.userType == 'supervisor') {
+    user.isConfirmed = false;
+  }
   return user;
 };
 

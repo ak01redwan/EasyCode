@@ -215,8 +215,7 @@ export default {
         userType: "student",
         picturePath: "path/will/setup/on/server",
         birthDate: null,
-        photo: null,
-        certificationsDocs: null,
+        files: [null, null]
       },
       previewImage: null,
       isSubmitting: false,
@@ -241,9 +240,20 @@ export default {
         return;
       }
       this.isSubmitting = true;
-      //console.log(this.formData)
+      // get all data inside formDataInstance
+      const formDataInstance = new FormData();
+
+      // add the file data to the FormData object
+      formDataInstance.append("files", this.formData.files[0]);
+      formDataInstance.append("files", this.formData.files[1]);
+      Object.keys(this.formData).forEach(key => {
+        if (key !== "files") {
+          formDataInstance.append(key, this.formData[key]);
+        }
+      });
+
       axios
-        .post("http://localhost:3000/users", this.formData, {
+        .post("http://localhost:3000/users", formDataInstance, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -287,7 +297,7 @@ export default {
           //this.$emit('update-users', updatedUsers)
         })
         .catch((error) => {
-          console.error(error.response.data.message);
+          console.error(error.response);
         });
     },
     onFileChange(event) {
@@ -300,11 +310,15 @@ export default {
       };
 
       reader.readAsDataURL(file);
-      this.formData.photo = file;
+      //this.formData.photo = file;
+      
+        this.formData.files[0] = file;
+      
     },
     onDocFileChange(event) {
       const file = event.target.files[0];
-      this.formData.certificationsDocs = file;
+      //this.formData.certificationsDocs = file;
+      this.formData.files[1] = file;
       //console.log(this.formData.certificationsDocs);
     },
   },

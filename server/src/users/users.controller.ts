@@ -1,5 +1,10 @@
-import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, HttpException, HttpStatus, Put, BadRequestException } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, HttpException, HttpStatus, Put, BadRequestException, UploadedFiles } from '@nestjs/common';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { v4 as uuidv4 } from 'uuid';
+import { Multer } from 'multer';
+
+
 import * as fs from 'fs';
 // coder made
 import { UsersService } from './users.service';
@@ -19,10 +24,14 @@ export class UsersController {
     ) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor('photo', UploadFileToDiskStorage))
-  async create(@Body() createUserDto: CreateUserDto, @UploadedFile() photo): Promise<any> {
-    // set user photo path
+  @UseInterceptors(
+    FilesInterceptor('files', 2, UploadFileToDiskStorage),
+  )
+  async create(@Body() createUserDto: CreateUserDto, @UploadedFiles() files: Multer.File[]): Promise<any> {
+    const [photo, certificationsDocs] = files;
+    // set user files path
     createUserDto.picturePath = photo ? `/public/uploads/${photo.filename}` : '/path/to/default/photo';
+    createUserDto.certificationsDocsPath = certificationsDocs ? `/public/uploads/${certificationsDocs.filename}` : '';
     // converting createUsetDto to User type
     const user = createUserDtoToUserEntity(createUserDto);
     // creating new datatype to use it inside this function
@@ -38,10 +47,12 @@ export class UsersController {
       };
       return userWithTokens;
     } catch (err) {
-      console.log(photo.path);
       if (photo) {
         try {
           fs.unlinkSync(photo.path);
+          if (certificationsDocs) {
+            fs.unlinkSync(certificationsDocs.path);
+          }
           console.log('File deleted successfully');
         } catch (error) {
           console.log('faild to deleted the file');
