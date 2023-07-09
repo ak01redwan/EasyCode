@@ -210,7 +210,6 @@ export default {
   computed:{
     auth(){
       this.keepUserUpdated();
-      console.log(this.user);
       return this.user;
     }
   }

@@ -123,7 +123,7 @@ export default {
     return {
       fields: [
         {
-          label: "Student User Name",
+          label: "User Name",
           name: "username",
           type: "text",
           width: "col-lg-12",
@@ -159,7 +159,7 @@ export default {
           validationMessage: "Please repeat your password",
         },
         {
-          label: "Student Full Name",
+          label: "Full Name",
           name: "fullName",
           type: "text",
           width: "col-lg-12",
@@ -168,7 +168,7 @@ export default {
           validationMessage: "Please enter your full name",
         },
         {
-          label: "Studnet Address",
+          label: "Location/Address",
           name: "address",
           type: "text",
           width: "col-lg-12",
@@ -177,7 +177,7 @@ export default {
           validationMessage: "Please enter your address",
         },
         {
-          label: "Student Description",
+          label: "Short Description",
           name: "userDescription",
           type: "text",
           width: "col-lg-12",
@@ -186,13 +186,13 @@ export default {
           validationMessage: "Please enter your description",
         },
         {
-          label: "Photo",
+          label: "Personal Photo",
           name: "photo",
           type: "file",
           width: "col-lg-12",
           accept: "image/*",
           required: true,
-          validationMessage: "Please select a photo",
+          validationMessage: "Please select a photo for you",
         },
         {
           label: "Birth Date",
@@ -275,6 +275,7 @@ export default {
                     text: "New user has been added successfully",
                   });
                 } else {
+                  this.$store.dispatch('login', response.data.user);
                   Cookies.set("userTokens", response.data.tokens);
                   this.$router.push("/student"); // go to student
                   Swal.fire({
@@ -286,6 +287,7 @@ export default {
               })
               .catch((err) => {});
           } else {
+            this.$store.dispatch('login', response.data.user);
             Cookies.set("userTokens", response.data.tokens);
             this.$router.push("/student"); // go to student
             Swal.fire({
