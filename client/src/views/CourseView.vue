@@ -3,7 +3,7 @@
       <div class="row flex-nowrap">
           <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
             <div class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
-              <router-link to="/student" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+              <router-link to="/user" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
                   <span class="fs-4 m-1"> Course Title </span>
               </router-link>
               <hr>

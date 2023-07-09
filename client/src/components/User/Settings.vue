@@ -104,7 +104,7 @@ import { Options, Vue } from 'vue-class-component';
     Title: String
   }
 })
-export default class CoursesGallery extends Vue {
+export default class Settings extends Vue {
   Title!: string
 }
 </script>

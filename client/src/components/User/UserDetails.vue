@@ -108,13 +108,13 @@ import { Options, Vue } from 'vue-class-component';
 @Options({
     data() {
         return {
-            student: [
+            user: [
                 {fallname:'Ali salim',address:'Mukalla',email:'Mali@gmail.com',username:'A21i0l',parthdate:'2000-9-5',phone:'(239) 816-9029'}
             ]
         }
     },
 })
-export default class StudentDetials extends Vue {
+export default class UserDetials extends Vue {
 [x: string]: any;
 }
 </script>

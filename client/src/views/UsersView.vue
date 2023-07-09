@@ -1,7 +1,7 @@
 <template>
     <nav class="navbar background-color4">
         <div class="container-fluid">
-            <p class="navbar-brand">Search And Filtter Students</p>
+            <p class="navbar-brand">Search And Filtter Users</p>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -27,20 +27,21 @@
         </div>
     </nav>
     <div class="container  background-color1" style="min-height: 600px;">
-        <StudentCard v-for="(student, index) in students" :key="index" :student="student"/>
+        <UserCard v-for="(user, index) in users" :key="index" :user="user"/>
     </div>
 </template>
 
+
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import StudentCard from '@/components/Student/StudentCard.vue';
+import UserCard from '@/components/User/UserCard.vue';
 @Options({
   components: {
-    StudentCard
+    UserCard
   },
   data () {
     return {
-        students: [
+        users: [
             {id:1,name:'Student 1',imgPath:'asscdvdv/asasc/',info:'dfrbtaebtb'},
             {id:1,name:'Student 2',imgPath:'asscdvdv/asasc/',info:'dfrbtaebtb'},
             {id:1,name:'Student 3',imgPath:'asscdvdv/asasc/',info:'dfrbtaebtb'},
@@ -54,7 +55,7 @@ import StudentCard from '@/components/Student/StudentCard.vue';
   methods: {
   }
 })
-export default class StudentsView extends Vue {
-    students!: [any];
+export default class UsersView extends Vue {
+    users!: [any];
 }
 </script>

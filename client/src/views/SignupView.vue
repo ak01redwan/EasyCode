@@ -277,7 +277,7 @@ export default {
                 } else {
                   this.$store.dispatch('login', response.data.user);
                   Cookies.set("userTokens", response.data.tokens);
-                  this.$router.push("/student"); // go to student
+                  this.$router.push("/user"); // go to user page
                   Swal.fire({
                     icon: "success",
                     title: `Welcome ${response.data.user.fullName}`,
@@ -289,7 +289,7 @@ export default {
           } else {
             this.$store.dispatch('login', response.data.user);
             Cookies.set("userTokens", response.data.tokens);
-            this.$router.push("/student"); // go to student
+            this.$router.push("/user"); // go to user personal page
             Swal.fire({
               icon: "success",
               title: `Welcome ${response.data.user.fullName}`,

@@ -132,7 +132,7 @@ export default {
                 text: "You have successfully logged in as an Admin.",
               });
             } else {
-              this.$router.push("/student"); // go to student
+              this.$router.push("/user"); // go to student
               Swal.fire({
                 icon: "success",
                 title: "Welcome back!",

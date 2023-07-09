@@ -8,8 +8,8 @@
             </a>
           </div>
           <div class="card-body">
-            <h5 class="card-title">{{ student.name }}</h5>
-            <p class="card-text">{{ student.info }}</p>
+            <h5 class="card-title">{{ user.name }}</h5>
+            <p class="card-text">{{ user.info }}</p>
             <button class="m-1 btn btn-outline-secondary"><i class="fa fa-circle-info"></i> Details</button>
           </div>
         </div>
@@ -20,10 +20,10 @@ import { Options, Vue } from 'vue-class-component';
 
 @Options({
     props: {
-        student: {id:1,name:'ssdcd',imgPath:'asscdvdv/asasc/',info:'dfrbtaebtb'}
+        user: {id:1,name:'ssdcd',imgPath:'asscdvdv/asasc/',info:'dfrbtaebtb'}
     }
 })
-export default class StudentCard extends Vue {
-    student!: any;
+export default class UserCard extends Vue {
+    user!: any;
 }
 </script>

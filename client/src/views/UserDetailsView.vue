@@ -6,13 +6,13 @@
           class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
         >
           <router-link
-            to="/student"
+            to="/uder"
             class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
           >
-            <div @click="activatedItemContentName = 'StudentDetails'" class="text-center">
+            <div @click="activatedItemContentName = 'UserDetails'" class="text-center">
               <i class="fa-solid fa-user"></i>
               <span class="lead text-secondary" style="font-size: 14px;"> 
-                @Student_UserName 
+                @UserName
               </span>
             </div>
           </router-link>
@@ -33,10 +33,10 @@
         </div>
       </div>
       <div class="col py-3" style="overflow-y: auto; max-height: 720px">
-        <!--Getting Student's Details-->
-        <StudentDetails
+        <!--Getting user's Details-->
+        <UserDetails
           :Title="activatedItemContentName"
-          v-if="activatedItemContentName === 'StudentDetails'"
+          v-if="activatedItemContentName === 'UserDetails'"
         />
         <!-- Getting Current Course Stages -->
         <div class="row" v-else-if="activatedItemContentName === 'CurrentActiveCourseStages'">
@@ -47,22 +47,22 @@
             :isOpen="stage.isOpen"
           />
         </div>
-        <!-- Getting Student's Subscriped Courses -->
+        <!-- Getting User's Subscriped Courses -->
         <CoursesGallery
           :Title="activatedItemContentName"
           v-else-if="activatedItemContentName === 'SubscripedCourses'"
         />
-        <!--Getting Student's Projects-->
+        <!--Getting User's Projects-->
         <ProjectsGallery
           :Title="activatedItemContentName"
           v-else-if="activatedItemContentName === 'Projects'"
         />
-        <!-- Getting Student's Completed Courses -->
+        <!-- Getting User's Completed Courses -->
         <CoursesGallery
           :Title="activatedItemContentName"
           v-if="activatedItemContentName === 'CompletedCourses'"
         />
-        <!-- Getting Student's Settings -->
+        <!-- Getting User's Settings -->
         <Settings
           :Title="activatedItemContentName"
           v-else-if="activatedItemContentName === 'Settings'"
@@ -74,15 +74,15 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Settings from "@/components/Student/Settings.vue";
+import Settings from "@/components/User/Settings.vue";
 import ProjectsGallery from "@/components/Project/ProjectsGallery.vue";
 import CoursesGallery from "@/components/Course/CoursesGallery.vue";
 import CourseStage from "@/components/Course/CourseStage.vue";
-import StudentDetails from "@/components/Student/StudentDetails.vue";
+import UserDetails from "@/components/User/UserDetails.vue";
 
 @Options({
   components: {
-    StudentDetails,
+    UserDetails,
     CourseStage,
     CoursesGallery,
     ProjectsGallery,
@@ -90,9 +90,9 @@ import StudentDetails from "@/components/Student/StudentDetails.vue";
   },
   data() {
     return {
-      activatedItemContentName: "StudentDetails",
+      activatedItemContentName: "UserDetails",
       sidebarItems: [
-        { text: 'Student Details',      icon: 'fa-solid fa-circle-info', content: "StudentDetails"},
+        { text: 'Personal Details',      icon: 'fa-solid fa-circle-info', content: "UserDetails"},
         { text: 'Active Course stages', icon: 'fa fa-certificate', content: "CurrentActiveCourseStages"},
         { text: 'Subscriped Courses',   icon: 'fa-solid fa-video', content: "SubscripedCourses"},
         { text: 'Student Projects',     icon: 'fa-solid fa-diagram-project', content: "Projects"},
@@ -122,7 +122,7 @@ import StudentDetails from "@/components/Student/StudentDetails.vue";
     },
   },
 })
-export default class StudentView extends Vue {
+export default class UserDetailsView extends Vue {
   [x: string]: any;
 }
 </script>

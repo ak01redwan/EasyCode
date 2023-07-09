@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import StudentsView from '../views/StudentsView.vue'
-import StudentView from '../views/StudentView.vue'
+import UsersView from '../views/UsersView.vue'
+import UserDetailsView from '../views/UserDetailsView.vue'
 import LoginViewVue from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
 import CoursesView from '@/views/CoursesView.vue'
@@ -35,15 +35,15 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
   },
   {
-    path: '/students',
-    name: 'students',
-    component: StudentsView
+    path: '/users',
+    name: 'users',
+    component: UsersView
 
   },
   {
-    path: '/student',
-    name: 'student',
-    component: StudentView
+    path: '/user',
+    name: 'user',
+    component: UserDetailsView
 
   },
   {

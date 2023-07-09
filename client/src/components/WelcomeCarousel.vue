@@ -10,7 +10,7 @@
         <div class="carousel-caption position-absolute start-10 font-size-30">
           <h3 class="text-color1">Start Now With EasyCode</h3>
           <p class="text-color1 font-size-26">Start Learning any programming language or frameworke you want right now.</p>
-          <router-link to="/student" >
+          <router-link to="/user" >
             <button type="button" class="btn btn-outline-info font-size-22">Start Now</button>
           </router-link>
         </div>
@@ -20,7 +20,7 @@
         <div class="carousel-caption position-absolute start-10 font-size-30">
           <h3 class="text-color1">CODING IS POER</h3>
           <p class="text-color1 font-size-22">Descover your skills and build your own projects</p>
-          <router-link to="/student" >
+          <router-link to="/user" >
             <button type="button" class="btn btn-outline-info font-size-22">Start Now</button>
           </router-link>
         </div>
