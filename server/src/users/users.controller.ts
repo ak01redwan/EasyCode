@@ -1,11 +1,9 @@
 import { Controller, Get, Post, Body, Param, Delete, UseInterceptors, UploadedFile, HttpException, HttpStatus, Put, BadRequestException, UploadedFiles } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { v4 as uuidv4 } from 'uuid';
 import { Multer } from 'multer';
-
-
 import * as fs from 'fs';
+
+
 // coder made
 import { UsersService } from './users.service';
 import { AuthService } from 'src/auth/auth.service';
@@ -30,8 +28,8 @@ export class UsersController {
   async create(@Body() createUserDto: CreateUserDto, @UploadedFiles() files: Multer.File[]): Promise<any> {
     const [photo, certificationsDocs] = files;
     // set user files path
-    createUserDto.picturePath = photo ? `/public/uploads/${photo.filename}` : '/path/to/default/photo';
-    createUserDto.certificationsDocsPath = certificationsDocs ? `/public/uploads/${certificationsDocs.filename}` : '';
+    createUserDto.picturePath = photo ? `/uploads/${photo.filename}` : '/path/to/default/photo';
+    createUserDto.certificationsDocsPath = certificationsDocs ? `/uploads/${certificationsDocs.filename}` : '';
     // converting createUsetDto to User type
     const user = createUserDtoToUserEntity(createUserDto);
     // creating new datatype to use it inside this function

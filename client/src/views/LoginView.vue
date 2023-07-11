@@ -87,6 +87,8 @@ export default {
             this.$store.dispatch('login', response.data.user);
             if (this.rememberMe) {
               Cookies.set("userTokens", response.data.access_token, { expires: 30 });
+            }else{
+              Cookies.set("userTokens", response.data.access_token, { expires: null });
             }
             const userType = response.data.user.userType;
             if (userType === "admin") {

@@ -6,13 +6,27 @@
           class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100"
         >
           <router-link
-            to="/uder"
+            to="/user"
             class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none"
           >
-            <div @click="activatedItemContentName = 'UserDetails'" class="text-center">
-              <i class="fa-solid fa-user"></i>
-              <span class="lead text-secondary" style="font-size: 14px;"> 
-                @UserName
+            <div
+              @click="activatedItemContentName = 'UserDetails'"
+              class="text-center text-primary w-100"
+            >
+              <i class="fa-solid fa-user fs-1"></i><br />
+              <span
+                class="text-secondary text-nowrap bd-highlight"
+                style="font-size: 14px"
+              >
+                <strong>{{
+                  userData ? userData.fullName : "No Full Name"
+                }}</strong> </span
+              ><br />
+              <span
+                class="lead text-secondary text-decoration-underline"
+                style="font-size: 14px"
+              >
+                @{{ userData ? userData.username : "No UserName" }}
               </span>
             </div>
           </router-link>
@@ -21,10 +35,22 @@
             class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start"
             id="menu"
           >
-            <li v-for="(item,index) in sidebarItems" :key="index" class="nav-item">
-              <button @click="changeTheShowBasedOnThisSidebarContentValue(item.content)" class="nav-link align-middle px-0">
+            <li
+              v-for="(item, index) in sidebarItems"
+              :key="index"
+              class="nav-item"
+            >
+              <button
+                @click="
+                  changeTheShowBasedOnThisSidebarContentValue(item.content)
+                "
+                class="nav-link align-middle px-0"
+              >
                 <i :class="item.icon"></i>
-                <span class="ms-1 d-none d-sm-inline text-secondary"  style="font-size: 14px;">
+                <span
+                  class="ms-1 d-none d-sm-inline text-secondary"
+                  style="font-size: 14px"
+                >
                   {{ item.text }}
                 </span>
               </button>
@@ -35,11 +61,14 @@
       <div class="col py-3" style="overflow-y: auto; max-height: 720px">
         <!--Getting user's Details-->
         <UserDetails
-          :Title="activatedItemContentName"
+          :UserInfo="userData"
           v-if="activatedItemContentName === 'UserDetails'"
         />
         <!-- Getting Current Course Stages -->
-        <div class="row" v-else-if="activatedItemContentName === 'CurrentActiveCourseStages'">
+        <div
+          class="row"
+          v-else-if="activatedItemContentName === 'CurrentActiveCourseStages'"
+        >
           <CourseStage
             v-for="stage in CurrentCourseStages"
             :stageId="stage.stageId"
@@ -90,14 +119,35 @@ import UserDetails from "@/components/User/UserDetails.vue";
   },
   data() {
     return {
+      userInfo: null,
       activatedItemContentName: "UserDetails",
       sidebarItems: [
-        { text: 'Personal Details',      icon: 'fa-solid fa-circle-info', content: "UserDetails"},
-        { text: 'Active Course stages', icon: 'fa fa-certificate', content: "CurrentActiveCourseStages"},
-        { text: 'Subscriped Courses',   icon: 'fa-solid fa-video', content: "SubscripedCourses"},
-        { text: 'Student Projects',     icon: 'fa-solid fa-diagram-project', content: "Projects"},
-        { text: 'Completed Courses',    icon: 'fa-solid fa-video', content: "CompletedCourses"},
-        { text: 'Settings',             icon: 'fa-solid fa-gear', content: "Settings"},
+        {
+          text: "Personal Details",
+          icon: "fa-solid fa-circle-info",
+          content: "UserDetails",
+        },
+        {
+          text: "Active Course stages",
+          icon: "fa fa-certificate",
+          content: "CurrentActiveCourseStages",
+        },
+        {
+          text: "Subscriped Courses",
+          icon: "fa-solid fa-video",
+          content: "SubscripedCourses",
+        },
+        {
+          text: "Student Projects",
+          icon: "fa-solid fa-diagram-project",
+          content: "Projects",
+        },
+        {
+          text: "Completed Courses",
+          icon: "fa-solid fa-video",
+          content: "CompletedCourses",
+        },
+        { text: "Settings", icon: "fa-solid fa-gear", content: "Settings" },
       ],
       CurrentCourseStages: [
         { stageId: 1, stageTitle: "Stage Title 1", isOpen: true },
@@ -111,14 +161,28 @@ import UserDetails from "@/components/User/UserDetails.vue";
     };
   },
   methods: {
+    getUserFromStoredState() {
+      // I will need to remeber to put if statment to check if the user come from props
+      // else
+      this.userInfo = this.$store.state.user;
+    },
     getSidebarItemByContent(content: string) {
-      return this.sidebarItems.filter((sidebarItem: { content: string; }): any => {
+      return this.sidebarItems.filter(
+        (sidebarItem: { content: string }): any => {
           const searchTermLC = content.toLowerCase();
-          return (sidebarItem.content.toLowerCase() == searchTermLC);
-      })[0];
+          return sidebarItem.content.toLowerCase() == searchTermLC;
+        }
+      )[0];
     },
     changeTheShowBasedOnThisSidebarContentValue(content: string) {
-      this.activatedItemContentName = this.getSidebarItemByContent(content).content;
+      this.activatedItemContentName =
+        this.getSidebarItemByContent(content).content;
+    },
+  },
+  computed: {
+    userData() {
+      this.getUserFromStoredState();
+      return this.userInfo;
     },
   },
 })

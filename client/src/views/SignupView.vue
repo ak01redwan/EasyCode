@@ -222,6 +222,32 @@ export default {
     };
   },
   methods: {
+    storeUserCookies(tokens) {
+      return new Promise((resolve) => {
+        Swal.fire({
+          title: "cookies?",
+          text: "clik on Yes to Allow us to store your tokens in your browser so you can enter our website another time without any need to re-enter your login info.",
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonText: "Yes, store my tokens!",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Cookies.set("userTokens", tokens, { expires: 30 });
+            Swal.fire(
+              "Saved!",
+              "Your tokens has been saved on your browser for 30 days.",
+              "success"
+            ).then(() => {
+              resolve();
+            });
+          } else {
+            Cookies.set("userTokens", tokens, { expires: null });
+            resolve();
+          }
+        });
+      });
+    },
     submitForm() {
       if (!this.$refs.form.checkValidity()) {
         Swal.fire({
@@ -258,7 +284,7 @@ export default {
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {
+        .then(async (response) => {
           // know the user type who dose this opertion using the tokens
           const userCookies = Cookies.get("userTokens");
           if (userCookies) {
@@ -266,34 +292,59 @@ export default {
               .get("http://localhost:3000/auth/profile", {
                 headers: { Authorization: `Bearer ${userCookies}` },
               })
-              .then((res) => {
+              .then(async (res) => {
                 if (res.data.user.userType == "admin") {
                   this.$router.push("/dashboard"); // go to dashboard
                   Swal.fire({
+                    position: 'top-end',
                     icon: "success",
                     title: "Done!",
                     text: "New user has been added successfully",
+                    showConfirmButton: false,
+                    timer: 1500
                   });
                 } else {
-                  this.$store.dispatch('login', response.data.user);
-                  Cookies.set("userTokens", response.data.tokens);
+                  this.$store.dispatch("login", response.data.user);
+                  //Cookies.set("userTokens", response.data.access_token, { expires: null });
+                  await this.storeUserCookies(response.data.access_token);
                   this.$router.push("/user"); // go to user page
-                  Swal.fire({
+                  let timerInterval;
+                  await Swal.fire({    
+                    position: 'top-end',
                     icon: "success",
                     title: `Welcome ${response.data.user.fullName}`,
-                    text: "Your account has been added successfully",
+                    showConfirmButton: false,
+                    timer: 1500,
+                    timerProgressBar: true,
+                    didOpen: () => {
+                      Swal.showLoading();
+                    },
+                    willClose: () => {
+                      clearInterval(timerInterval);
+                    },
                   });
                 }
               })
               .catch((err) => {});
           } else {
-            this.$store.dispatch('login', response.data.user);
-            Cookies.set("userTokens", response.data.tokens);
+            this.$store.dispatch("login", response.data.user);
+            await this.storeUserCookies(response.data.tokens);
+            //Cookies.set("userTokens", response.data.tokens);
             this.$router.push("/user"); // go to user personal page
-            Swal.fire({
+            await Swal.fire({    
+              position: 'top-end',
               icon: "success",
               title: `Welcome ${response.data.user.fullName}`,
               text: "Your account has been added successfully",
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true,
+              didOpen: () => {
+                Swal.showLoading();
+              },
+              willClose: () => {
+                clearInterval(timerInterval);
+              },
             });
           }
         })

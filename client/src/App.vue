@@ -39,13 +39,13 @@
             >
             <ul class="dropdown-menu">
               <li>
-                <router-link to="/students" class="dropdown-item"
+                <router-link to="/users" class="dropdown-item"
                   ><i class="fa-solid fa-users"></i> 
                   Students</router-link
                 >
               </li>
               <li>
-                <router-link to="/students" class="dropdown-item"
+                <router-link to="/users" class="dropdown-item"
                   ><i class="fa-solid fa-person-chalkboard"></i>
                   Supervisors</router-link
                 >
@@ -57,7 +57,7 @@
                 >
               </li>
               <li>
-                <router-link to="/students" class="dropdown-item"
+                <router-link to="/users" class="dropdown-item"
                   ><i class="fa-solid fa-diagram-project"></i>
                   Progects</router-link
                 >
@@ -69,7 +69,7 @@
           <button @click="doLogout" class="btn btn-outline-danger">
             <i class="fa-solid fa-sign-out"></i> Logout
           </button>
-          <router-link to="/">
+          <router-link to="/user">
             <button class="btn btn-outline-secondary">
               <i class="fa-solid fa-user"></i> Profile
             </button>
@@ -175,6 +175,7 @@ export default {
   },
   methods: {
     getUserProfileUsingStoredTokens() {
+      if (this.user) { return; }
       const userCookies = Cookies.get("userTokens");
       if (userCookies) {
         axios
