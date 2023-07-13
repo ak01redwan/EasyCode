@@ -39,16 +39,22 @@
             >
             <ul class="dropdown-menu">
               <li>
-                <router-link to="/users" class="dropdown-item"
-                  ><i class="fa-solid fa-users"></i> 
-                  Students</router-link
-                >
+                <router-link :to="{ name: 'users', params: { userType: 'supervisor' } }" class="dropdown-item">
+                  <i class="fa-solid fa-person-chalkboard"></i>
+                  Supervisors
+                </router-link>
               </li>
               <li>
-                <router-link to="/users" class="dropdown-item"
-                  ><i class="fa-solid fa-person-chalkboard"></i>
-                  Supervisors</router-link
-                >
+                <router-link :to="{ name: 'users', params: { userType: 'graduater' } }" class="dropdown-item">
+                  <i class="fa-solid fa-person-chalkboard"></i>
+                  Graduaters
+                </router-link>
+              </li>
+              <li>
+                <router-link :to="{ name: 'users', params: { userType: 'student' } }" class="dropdown-item">
+                  <i class="fa-solid fa-users"></i> 
+                  Students
+                </router-link>
               </li>
               <li>
                 <router-link to="/courses" class="dropdown-item"

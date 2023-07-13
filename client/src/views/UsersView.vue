@@ -76,6 +76,7 @@ import axios from "axios";
 import UserCard from "@/components/User/UserCard.vue";
 
 @Options({
+  name: 'users',
   components: {
     UserCard,
   },
@@ -118,6 +119,14 @@ import UserCard from "@/components/User/UserCard.vue";
     },
   },
   methods: {
+    setDefaultFilter() {
+      // getting filter value if there is
+      const displayThisTypeOfUsers = this.$route.params.userType || '';
+      console.log(displayThisTypeOfUsers);
+      if (displayThisTypeOfUsers) {
+        this.filter = displayThisTypeOfUsers;
+      }
+    },
     setFilterValue(value: string) {
       this.filter = value;
     },
@@ -125,12 +134,16 @@ import UserCard from "@/components/User/UserCard.vue";
       this.page = newPage;
     },
   },
+  mounted() {
+      this.setDefaultFilter();
+  },
 })
 export default class UsersView extends Vue {
   [x: string]: any;
   users: any[] = [];
 
   async created() {
+    // loading data
     try {
       const response = await axios.get("http://localhost:3000/users");
       this.users = response.data;
