@@ -103,6 +103,8 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import Swal from "sweetalert2";
+
 import Settings from "@/components/User/Settings.vue";
 import ProjectsGallery from "@/components/Project/ProjectsGallery.vue";
 import CoursesGallery from "@/components/Course/CoursesGallery.vue";
@@ -184,6 +186,11 @@ import UserDetails from "@/components/User/UserDetails.vue";
       this.getUserFromStoredState();
       return this.userInfo;
     },
+  },
+  created() {
+    if (!this.$store.state.user) {
+      this.$router.push("/login");
+    }
   },
 })
 export default class UserDetailsView extends Vue {
