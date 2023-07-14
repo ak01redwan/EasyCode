@@ -309,19 +309,12 @@ export default {
                   await this.storeUserCookies(response.data.access_token);
                   this.$router.push("/user"); // go to user page
                   let timerInterval;
-                  await Swal.fire({    
-                    position: 'top-end',
+                  await Swal.fire({
                     icon: "success",
                     title: `Welcome ${response.data.user.fullName}`,
                     showConfirmButton: false,
-                    timer: 1500,
+                    timer: 2000,
                     timerProgressBar: true,
-                    didOpen: () => {
-                      Swal.showLoading();
-                    },
-                    willClose: () => {
-                      clearInterval(timerInterval);
-                    },
                   });
                 }
               })
@@ -331,25 +324,23 @@ export default {
             await this.storeUserCookies(response.data.tokens);
             //Cookies.set("userTokens", response.data.tokens);
             this.$router.push("/user"); // go to user personal page
-            await Swal.fire({    
-              position: 'top-end',
+            await Swal.fire({
               icon: "success",
               title: `Welcome ${response.data.user.fullName}`,
               text: "Your account has been added successfully",
               showConfirmButton: false,
-              timer: 1500,
+              timer: 2000,
               timerProgressBar: true,
-              didOpen: () => {
-                Swal.showLoading();
-              },
-              willClose: () => {
-                clearInterval(timerInterval);
-              },
             });
           }
         })
         .catch((error) => {
-          console.error(error.response);
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: error.response.data.message,
+          });
+          this.isSubmitting = false;
         });
     },
     onFileChange(event) {

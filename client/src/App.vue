@@ -38,27 +38,21 @@
               ><i class="fa-solid fa-list"></i> More Things</a
             >
             <ul class="dropdown-menu">
-              <li>
-                <router-link :to="{ name: 'users', params: { userType: 'supervisor' } }" class="dropdown-item">
-                  <i class="fa-solid fa-person-chalkboard"></i>
-                  Supervisors
-                </router-link>
+              <li @click="goToUsersPage('supervisor')" class="dropdown-item btn">
+                Supervisors
               </li>
-              <li>
-                <router-link :to="{ name: 'users', params: { userType: 'graduater' } }" class="dropdown-item">
-                  <i class="fa-solid fa-person-chalkboard"></i>
-                  Graduaters
-                </router-link>
+              <li @click="goToUsersPage('graduator')" class="dropdown-item btn">
+                Graduators
               </li>
-              <li>
-                <router-link :to="{ name: 'users', params: { userType: 'student' } }" class="dropdown-item">
-                  <i class="fa-solid fa-users"></i> 
-                  Students
-                </router-link>
+              <li @click="goToUsersPage('student')" class="dropdown-item btn">
+                Students
+              </li>
+              <li @click="goToUsersPage('')" class="dropdown-item btn">
+                All Users
               </li>
               <li>
                 <router-link to="/courses" class="dropdown-item"
-                  ><i class="fa-solid fa-video"></i> 
+                  ><i class="fa-solid fa-video"></i>
                   Courses</router-link
                 >
               </li>
@@ -180,6 +174,10 @@ export default {
     };
   },
   methods: {
+    goToUsersPage(showUsersWithType) {
+      this.$store.state.showUsersWithType = showUsersWithType;
+      this.$router.push("/users");
+    },
     getUserProfileUsingStoredTokens() {
       if (this.user) { return; }
       const userCookies = Cookies.get("userTokens");

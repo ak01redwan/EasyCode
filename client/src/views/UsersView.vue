@@ -89,6 +89,14 @@ import UserCard from "@/components/User/UserCard.vue";
     };
   },
   computed: {
+    getDefaultFilterValue() {
+      // getting filter value if there is
+      const displayThisTypeOfUsers = this.$store.state.showUsersWithType;
+      if (displayThisTypeOfUsers != this.filter) {
+        this.filter = displayThisTypeOfUsers;
+      }
+      return this.filter;
+    },
     getUsersAfterFilter() {
       return this.users.filter(
         (user: {
@@ -98,7 +106,7 @@ import UserCard from "@/components/User/UserCard.vue";
           userType: string;
         }): any => {
           const searchTermLC = this.search.toLowerCase();
-          const userTypeFilter = this.filter.toLowerCase();
+          const userTypeFilter = this.getDefaultFilterValue.toLowerCase();
           return (
             (user.fullName.toLowerCase().includes(searchTermLC) ||
               user.username.toLowerCase().includes(searchTermLC)) &&
@@ -119,23 +127,15 @@ import UserCard from "@/components/User/UserCard.vue";
     },
   },
   methods: {
-    setDefaultFilter() {
-      // getting filter value if there is
-      const displayThisTypeOfUsers = this.$route.params.userType || '';
-      console.log(displayThisTypeOfUsers);
-      if (displayThisTypeOfUsers) {
-        this.filter = displayThisTypeOfUsers;
-      }
-    },
     setFilterValue(value: string) {
-      this.filter = value;
+      this.$store.state.showUsersWithType = value;
     },
     handlePageClick(newPage: number) {
       this.page = newPage;
     },
   },
   mounted() {
-      this.setDefaultFilter();
+    //this.getDefaultFilterValue();
   },
 })
 export default class UsersView extends Vue {

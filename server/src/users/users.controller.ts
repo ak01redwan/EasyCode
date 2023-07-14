@@ -29,49 +29,68 @@ export class UsersController {
     FilesInterceptor('files', 2, UploadFileToDiskStorage),
   )
   async create(@Body() createUserDto: CreateUserDto, @UploadedFiles() files: Multer.File[]): Promise<any> {
+    // first lets extract the files
     const [photo, certificationsDocs] = files;
-    // set user files path
+
+    // then set user's files path to save the addresses of their places in the database
     createUserDto.picturePath = photo ? `/uploads/${photo.filename}` : '/path/to/default/photo';
     createUserDto.certificationsDocsPath = certificationsDocs ? `/uploads/${certificationsDocs.filename}` : '';
-    // converting createUsetDto to User type
+
+    // converting createUsetDto object to User object type
     const user = createUserDtoToUserEntity(createUserDto);
+    
     // creating new datatype to use it inside this function
     type UserWithTokens = {
       user: User;
       tokens: string;
     };
     
+    // start the user account creation operation
     try {
+
+      //* create user, generate his/her tokens and put them inside one object of type UserWithTokens.
       const userWithTokens: UserWithTokens = {
         user: await this.usersService.create(user),
         tokens: await this.authService.getUserTokens(user)
       };
-      // link it with confirmation object if it is supervisor
+
+      // create new confirmation entity and link it with this new user, if the new user type is supervisor
       if (userWithTokens.user.userType == 'supervisor') {
-        // get the admin to be the default reviewer for this new supervisor certification documents
-        const admin: User = await this.usersService.findAllByType('admin')[0];
-        // create confirmation dto object for validation
+        // get the admin to be the default reviewer for this new supervisor's certification documents
+        const admins = await this.usersService.findAllByType('admin');
+
+        // create confirmation dto object for the validation process with default values
         const confirmation: CreateConfirmationDto = {
           isConfirmed: false, // set it by default on false until the reviewer change it
           reviewerComment: 'Acceptable.', // in case the reviewer didn't have the time to comment
           supervisor: userWithTokens.user,// the new supervisor
-          reviewer: admin// the default reviewer
+          reviewer: admins[0]// the default reviewer
         };
-        // create the confirmation object for this new supervisor
+
+        //* create the confirmation object for this new supervisor
         await this.confirmationsService.create(confirmation);
+        userWithTokens.user = await this.usersService.findOneById_WithTheNecessaryRelations(userWithTokens.user.id);
       }
+
       // everything is done just return the result
       return userWithTokens;
+
     } catch (err) {
+      // if there is an error but the photo file has been already sended which mean It has been stored
       if (photo) {
         try {
+          // inside try because we are deeling with files remove the photo from our disk
           fs.unlinkSync(photo.path);
+
+          // if there is certification file, then delete them as well
           if (certificationsDocs) {
             fs.unlinkSync(certificationsDocs.path);
           }
-          console.log('File deleted successfully');
+
+          //console.log('File deleted successfully');
         } catch (error) {
-          console.log('faild to deleted the file');
+          // inform the developer that error is accurred when we try to delete the files
+          //console.log('the delete opertion faild, Details:'+error);
         }
       }
       throw err;

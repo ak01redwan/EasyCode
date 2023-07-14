@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [TypeOrmModule.forFeature([Confirmation])],
   controllers: [ConfirmationsController],
-  providers: [ConfirmationsService]
+  providers: [ConfirmationsService],
+  exports: [ConfirmationsService],
 })
 export class ConfirmationsModule {}

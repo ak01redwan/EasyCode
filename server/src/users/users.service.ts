@@ -20,8 +20,7 @@ export class UsersService {
       throw new HttpException('User with this email or username already exists!.', HttpStatus.BAD_REQUEST);
     }
     user.password = await this.bcryptService.hash(user.password, 10);
-    const userData: User = await this.usersRepository.save(user);
-    return await this.findOneById_WithTheNecessaryRelations(userData.id);
+    return await this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
