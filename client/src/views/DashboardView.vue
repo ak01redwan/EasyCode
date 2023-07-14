@@ -19,7 +19,7 @@
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
                     <ShowCourses v-else-if="currentDisplayedContent === 'ShowCourses'" />
-                    <ShowStages v-else-if="currentDisplayedContent === 'ShowStages'" />
+                    <ConfirmeSuprvisors v-else-if="currentDisplayedContent === 'ConfirmeSuprvisors'" />
                 </div>
             </div>
         </div>
@@ -31,19 +31,22 @@ import ShowUsers from '@/components/Dashboard/ShowUsers.vue';
 import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
 import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
 import ShowStages from '@/components/Dashboard/ShowStages.vue'
+import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
 
 @Options({
   components: {
     ShowUsers,
     ShowCategories,
     ShowCourses,
-    ShowStages
+    ShowStages,
+    ConfirmeSuprvisors
   },
   data () {
     return {
         currentDisplayedContent: 'ShowUsers',
         sidebarItems:[ // those are the sidebar items
             {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
+            {text: 'Confirmations', icon: 'fas fa-users me-2',            content: 'ConfirmeSuprvisors'},
             {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
             {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
             {text: 'Stages',     icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},

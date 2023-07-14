@@ -4,20 +4,7 @@
       <form class="d-flex me-auto" @submit.prevent="onSubmit">
         <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
         <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
-      </form>
-      
-      <div class="dropdown me-3">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          Filter: {{ filter }}
-        </button>
-        <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
-          <li><a class="dropdown-item btn" @click="changeFilterValue('')">All Users</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Admin Supervisor')">Admin Supervisor</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Normal Supervisor')">Normal Supervisor</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Student')">Student</a></li>
-        </ul>
-      </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User <i class="fas fa-plus"></i></button>
+      </form>      
     </div>
   </nav>
   <div class="container">
@@ -31,10 +18,8 @@
           <span class="fw-bold">{{ user.fullName }}</span>
           <span class="text-muted">@{{user.username}}</span>
           <div class="btn-group float-end">
-            <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
-            <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
-            <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
-            <button @click="deleteUser(user)" class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+            <button class="btn btn-outline-primary" title="View Certification Document (PDF)"><i class="fas fa-file-pdf"></i></button>
+            <button class="btn btn-outline-primary" title="Confirme This Supervisor"><i class="fas fa-check-circle"></i></button>
           </div>
         </div>
       </div>
@@ -53,6 +38,11 @@
       border-radius: 50%;
       margin-right: 10px;
     }
+    .form-check-input[type="checkbox"] {
+        width: 39px;
+        height: 39px;
+        
+    }
     .user-card .btn {
       margin-right: 5px;
     }
@@ -63,50 +53,16 @@
 </style>
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import AddNewUser from '@/components/Dashboard/AddNewUser.vue'
 import axios from 'axios';
-import Swal from "sweetalert2";
 
 @Options({
     components:{
-      AddNewUser,
     },
     methods:{
-      changeFilterValue(value: String) { this.filter = value; }/*for change the filter parameter value*/,
       async getAllUsers() {
         try {
           const response = await axios.get('http://localhost:3000/users');
           this.users = response.data;
-        } catch (error) {
-          alert(error);
-        }
-      },
-      async deleteUser(user: any) {
-        Swal.fire({
-          title: "Delete?",
-          text: `Are you sure. you went to delete ${ user.fullName }.`,
-          icon: "question",
-          showCancelButton: true,
-          confirmButtonColor: '#ff0101',
-          cancelButtonColor: '#22aa22',
-          confirmButtonText: "Yes, Delete",
-          cancelButtonText: "No",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.deleteUserById(user.id);
-            Swal.fire(
-              "Deleted!",
-              "User deleted successfully.",
-              "success"
-            );
-          }
-        });
-      },
-      async deleteUserById(userId: number) {
-        try {
-          console.log(userId);
-          await axios.delete(`http://localhost:3000/users/${userId}`);
-          await this.getAllUsers(); // fetch users from the db
         } catch (error) {
           alert(error);
         }
