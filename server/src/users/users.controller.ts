@@ -12,13 +12,16 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { createUserDtoToUserEntity, updateUserDtoToUserEntity } from './mappers/user.mappers';
 import { UploadFileToDiskStorage } from 'src/helpers/upload-file'
+import { ConfirmationsService } from 'src/confirmations/confirmations.service';
+import { CreateConfirmationDto } from 'src/confirmations/dto/create-confirmation.dto';
 
 
 @Controller('users')
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly confirmationsService: ConfirmationsService
     ) {}
 
   @Post()
@@ -43,6 +46,21 @@ export class UsersController {
         user: await this.usersService.create(user),
         tokens: await this.authService.getUserTokens(user)
       };
+      // link it with confirmation object if it is supervisor
+      if (userWithTokens.user.userType == 'supervisor') {
+        // get the admin to be the default reviewer for this new supervisor certification documents
+        const admin: User = await this.usersService.findAllByType('admin')[0];
+        // create confirmation dto object for validation
+        const confirmation: CreateConfirmationDto = {
+          isConfirmed: false, // set it by default on false until the reviewer change it
+          reviewerComment: 'Acceptable.', // in case the reviewer didn't have the time to comment
+          supervisor: userWithTokens.user,// the new supervisor
+          reviewer: admin// the default reviewer
+        };
+        // create the confirmation object for this new supervisor
+        await this.confirmationsService.create(confirmation);
+      }
+      // everything is done just return the result
       return userWithTokens;
     } catch (err) {
       if (photo) {

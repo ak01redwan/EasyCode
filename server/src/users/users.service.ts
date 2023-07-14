@@ -20,15 +20,32 @@ export class UsersService {
       throw new HttpException('User with this email or username already exists!.', HttpStatus.BAD_REQUEST);
     }
     user.password = await this.bcryptService.hash(user.password, 10);
-    return await this.usersRepository.save(user);
+    const userData: User = await this.usersRepository.save(user);
+    return await this.findOneById_WithTheNecessaryRelations(userData.id);
   }
 
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find({ where: { isDeleted: false}});
   }
 
+  async findAllByType(userType: string): Promise<User[]> {
+    return await this.usersRepository.find({ where: { userType: userType, isDeleted: false}});
+  }
+
   async findOne(id: number): Promise<User> {
     return await this.usersRepository.findOne({ where: { id: id, isDeleted: false}});
+  }
+
+  async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
+  }
+
+  async findOneById_WithThisRelations(id:number, relations: []): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false}, relations: relations });
   }
 
   async findByUsername(username: string): Promise<User> {

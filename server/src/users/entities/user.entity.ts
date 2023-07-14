@@ -3,6 +3,7 @@ import { Message } from 'src/messages/entities/message.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
+import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -64,4 +65,11 @@ export class User {
 
   @OneToMany(() => Comment, comment => comment.user)
   comments: Comment[];
+
+  @OneToMany(() => Confirmation, confirmation => confirmation.supervisor)
+  supervisorConfirmation: Confirmation;
+
+  @OneToMany(() => Confirmation, confirmation => confirmation.reviewer)
+  reviewerConfirmations: Confirmation[];
+
 }

@@ -19,6 +19,7 @@ import { ExamsModule } from './exams/exams.module';
 import { MessagesModule } from './messages/messages.module';
 import { StageAskedProjectModule } from './stage-asked-project/stage-asked-project.module';
 import { CommentsModule } from './comments/comments.module';
+import { ConfirmationsModule } from './confirmations/confirmations.module';
 
 // entities
 import { User } from './users/entities/user.entity';
@@ -33,6 +34,7 @@ import { Exam } from './exams/entities/exam.entity';
 import { Message } from './messages/entities/message.entity';
 import { StageAskedProject } from './stage-asked-project/entities/stage-asked-project.entity';
 import { Comment } from './comments/entities/comment.entity';
+import { Confirmation } from './confirmations/entities/confirmation.entity';
 
 @Module({
   imports: [
@@ -50,7 +52,21 @@ import { Comment } from './comments/entities/comment.entity';
       options: {
         encrypt: false
       },
-      entities: [User, Category, Course, Stage, Like, Project, Subscription, Lesson, Exam, Message, StageAskedProject, Comment],
+      entities: [
+        User, 
+        Category, 
+        Course, 
+        Stage, 
+        Like, 
+        Project, 
+        Subscription, 
+        Lesson, 
+        Exam, 
+        Message, 
+        StageAskedProject, 
+        Comment, 
+        Confirmation
+      ],
       synchronize: true,
     }),
     UsersModule,
@@ -66,6 +82,7 @@ import { Comment } from './comments/entities/comment.entity';
     MessagesModule,
     StageAskedProjectModule,
     CommentsModule,
+    ConfirmationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
