@@ -62,7 +62,7 @@
         <!--Getting user's Details-->
         <UserDetails
           :UserInfo="userData"
-          v-if="activatedItemContentName === 'UserDetails'"
+          v-if="activatedItemContentName === 'UserDetails' && userData"
         />
         <!-- Getting Current Course Stages -->
         <div
@@ -162,11 +162,18 @@ import UserDetails from "@/components/User/UserDetails.vue";
       ],
     };
   },
+  
   methods: {
     getUserFromStoredState() {
-      // I will need to remeber to put if statment to check if the user come from props
-      // else
-      this.userInfo = this.$store.state.user;
+      const currentUser = this.$store.state.userInUserDetailsPage;
+      if (currentUser) {
+        this.userInfo = currentUser;
+      } else {
+        this.userInfo = this.$store.state.user;
+      }
+      if (!this.$store.state.user) {
+        this.$router.push("/login");
+      }
     },
     getSidebarItemByContent(content: string) {
       return this.sidebarItems.filter(
@@ -186,12 +193,7 @@ import UserDetails from "@/components/User/UserDetails.vue";
       this.getUserFromStoredState();
       return this.userInfo;
     },
-  },
-  created() {
-    if (!this.$store.state.user) {
-      this.$router.push("/login");
-    }
-  },
+  }
 })
 export default class UserDetailsView extends Vue {
   [x: string]: any;

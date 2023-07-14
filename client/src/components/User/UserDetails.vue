@@ -14,7 +14,7 @@
         </div>
         <div class="card mb-3">
           <div class="card-body">
-            <div v-for="(user,index) in getUserProperties()" :key="index">
+            <div v-for="(user,index) in getUserProperties" :key="index">
                 <div class="row">
                     <div class="col-sm-3">
                         <h6 class="mb-0">{{ user.propertyLabel }}</h6>
@@ -122,20 +122,23 @@ import Swal from "sweetalert2";
   },
   data() {
     return {
-        userProperties: []
+      userProperties: []
     }
   },
-  methods: {
+  computed:{
     getUserProperties() {
-        this.userProperties.push({propertyLabel: 'Full Name', propertyValue: this.UserInfo.fullName});
-        this.userProperties.push({propertyLabel: 'User Name', propertyValue: this.UserInfo.username});
-        this.userProperties.push({propertyLabel: 'User Email', propertyValue: this.UserInfo.email});
-        this.userProperties.push({propertyLabel: 'User Type', propertyValue: this.UserInfo.userType});
-        this.userProperties.push({propertyLabel: 'User Address', propertyValue: this.UserInfo.address});
-        this.userProperties.push({propertyLabel: 'Birth Date', propertyValue: this.UserInfo.birthDate});
-        this.userProperties.push({propertyLabel: 'Short Description', propertyValue: this.UserInfo.userDescription});
-        return this.userProperties;
+      this.userProperties = [];
+      this.userProperties.push({propertyLabel: 'Full Name', propertyValue: this.UserInfo.fullName});
+      this.userProperties.push({propertyLabel: 'User Name', propertyValue: this.UserInfo.username});
+      this.userProperties.push({propertyLabel: 'User Email', propertyValue: this.UserInfo.email});
+      this.userProperties.push({propertyLabel: 'User Type', propertyValue: this.UserInfo.userType});
+      this.userProperties.push({propertyLabel: 'User Address', propertyValue: this.UserInfo.address});
+      this.userProperties.push({propertyLabel: 'Birth Date', propertyValue: this.UserInfo.birthDate});
+      this.userProperties.push({propertyLabel: 'Short Description', propertyValue: this.UserInfo.userDescription});
+      return this.userProperties;
     },
+  },
+  methods: {
     expindUserImage() {
       Swal.fire({
         title: "<strong>User Photo</strong>",
@@ -151,5 +154,7 @@ export default class UserDetials extends Vue {
   UserInfo!: any;
   expindUserImage: ((payload: MouseEvent) => void) | undefined;
   getUserProperties: any;
+  keepRefreshed: any;
+displayUserData: any;
 }
 </script>

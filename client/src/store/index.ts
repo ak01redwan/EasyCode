@@ -4,6 +4,7 @@ export default createStore({
   state: {
     user: null,
     showUsersWithType: '',
+    userInUserDetailsPage: null,
   },
   getters: {
     isAuthenticated(state) {
@@ -13,7 +14,7 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       state.user = user
-    }
+    },
   },
   actions: {
     login({ commit }, user) {

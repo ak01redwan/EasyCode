@@ -70,7 +70,7 @@
             <i class="fa-solid fa-sign-out"></i> Logout
           </button>
           <router-link to="/user">
-            <button class="btn btn-outline-secondary">
+            <button @click="$store.state.userInUserDetailsPage = null" class="btn btn-outline-secondary">
               <i class="fa-solid fa-user"></i> Profile
             </button>
           </router-link>
