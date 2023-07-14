@@ -105,7 +105,7 @@
             class="btn btn-primary w-100"
             :disabled="isSubmitting"
           >
-            {{ isSubmitting ? "Signing up..." : "Sign Up" }}
+            {{ isSubmitting ? addUser ? "Adding User ..." : "Signing Up ..." : addUser ? "Add New User" : "Sign Up" }}
           </button>
         </form>
       </div>
@@ -119,6 +119,9 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
 export default {
+  props: {
+    addUser: Boolean,
+  },
   data() {
     return {
       fields: [
@@ -294,6 +297,7 @@ export default {
               })
               .then(async (res) => {
                 if (res.data.user.userType == "admin") {
+                  this.$emit('done');
                   this.$router.push("/dashboard"); // go to dashboard
                   Swal.fire({
                     position: 'top-end',

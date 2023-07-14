@@ -7,10 +7,10 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <SignupView />
+                        <SignupView @done="done" :addUser="true" />
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button id="cancelButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     </div>
             </div>
         </div>
@@ -25,9 +25,17 @@ import SignupView from '@/views/SignupView.vue'
     SignupView
   },
   data () {
-    return { }
+    return {}
   },
-  methods: {}
+  computed: {
+  },
+  methods: {
+    done() {
+        // Close the modal when the done event is emitted
+        const cancelButton = document.getElementById('cancelButton');
+        (cancelButton as any).click();
+    }
+  }
 })
 export default class AddNewUser extends Vue {
 [x: string]: any;

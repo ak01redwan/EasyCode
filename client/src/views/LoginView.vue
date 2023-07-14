@@ -103,7 +103,6 @@ export default {
             });
           })
           .catch((error) => {
-            console.error(error.response.data.message);
             Swal.fire({
               icon: "error",
               title: "Oops...",
