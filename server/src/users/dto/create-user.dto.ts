@@ -34,8 +34,4 @@ export class CreateUserDto {
   @IsEmpty()
   @IsOptional()
   currentCourseId: string;
-
-  @IsEmpty()
-  @IsOptional()
-  certificationsDocsPath: string;
 }

@@ -15,10 +15,6 @@ export const createUserDtoToUserEntity = (createUserDto: CreateUserDto): User =>
   user.password = createUserDto.password;
   user.userDescription = createUserDto.userDescription;
   user.currentCourseId = createUserDto.currentCourseId;
-  user.certificationsDocsPath = createUserDto.certificationsDocsPath;
-  if (user.userType == 'supervisor') {
-    user.isConfirmed = false;
-  }
   return user;
 };
 
@@ -35,8 +31,6 @@ export const updateUserDtoToUserEntity = (updateUserDto: UpdateUserDto): User =>
   user.password = updateUserDto.password;
   user.userDescription = updateUserDto.userDescription;
   user.currentCourseId = updateUserDto.currentCourseId;
-  user.certificationsDocsPath = updateUserDto.certificationsDocsPath;
-  user.isConfirmed = updateUserDto.isConfirmed;
   user.isDeleted = updateUserDto.isDeleted;
   return user;
 };

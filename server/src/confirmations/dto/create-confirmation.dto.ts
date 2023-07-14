@@ -10,6 +10,9 @@ export class CreateConfirmationDto {
     @IsOptional()
     reviewerComment: string;
 
+    @IsNotEmpty()
+    certificationsDocsPath: string;
+    
     @IsObject()
     @IsNotEmpty()
     supervisor: User;

@@ -32,9 +32,8 @@ export class UsersController {
     // first lets extract the files
     const [photo, certificationsDocs] = files;
 
-    // then set user's files path to save the addresses of their places in the database
+    // then set user's photo path
     createUserDto.picturePath = photo ? `/uploads/${photo.filename}` : '/path/to/default/photo';
-    createUserDto.certificationsDocsPath = certificationsDocs ? `/uploads/${certificationsDocs.filename}` : '';
 
     // converting createUsetDto object to User object type
     const user = createUserDtoToUserEntity(createUserDto);
@@ -64,7 +63,8 @@ export class UsersController {
           isConfirmed: false, // set it by default on false until the reviewer change it
           reviewerComment: 'Acceptable.', // in case the reviewer didn't have the time to comment
           supervisor: userWithTokens.user,// the new supervisor
-          reviewer: admins[0]// the default reviewer
+          reviewer: admins[0],// the default reviewer
+          certificationsDocsPath: certificationsDocs ? `/uploads/${certificationsDocs.filename}` : '',// certification docs path
         };
 
         //* create the confirmation object for this new supervisor

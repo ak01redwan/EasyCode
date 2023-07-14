@@ -32,7 +32,7 @@
           <span class="text-muted">@{{user.username}}</span>
           <div class="btn-group float-end">
             <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
-            <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
+            <button @click="goToUserDateilsPage(user)" class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
             <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
             <button @click="deleteUser(user)" class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
           </div>
@@ -72,6 +72,10 @@ import Swal from "sweetalert2";
       AddNewUser,
     },
     methods:{
+      goToUserDateilsPage(user: any) {
+        this.$store.state.userInUserDetailsPage = user;
+        this.$router.push("/user");
+      },
       changeFilterValue(value: String) { this.filter = value; }/*for change the filter parameter value*/,
       async getAllUsers() {
         try {

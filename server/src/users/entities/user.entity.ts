@@ -44,12 +44,6 @@ export class User {
   @Column({ nullable: true })
   currentCourseId: string;
 
-  @Column({ nullable: true })
-  certificationsDocsPath: string;
-
-  @Column({ default: true })
-  isConfirmed: boolean;
-
   @Column({ default: false })
   isDeleted: boolean;
 

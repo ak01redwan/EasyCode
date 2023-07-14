@@ -12,6 +12,9 @@ export class Confirmation {
     @Column()
     reviewerComment: string;
 
+    @Column()
+    certificationsDocsPath: string;
+
     // relations
     @ManyToOne(() => User, user => user.supervisorConfirmation)
     supervisor: User;
