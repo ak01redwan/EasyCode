@@ -103,6 +103,11 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @Get('supervisors')
+  async getSupervisors(): Promise<User[]> {
+    return await this.usersService.findAllByType('supervisor');
+  }
+
   // for admin
   @Get(':id')
   async findOne(@Param() params): Promise<User> {

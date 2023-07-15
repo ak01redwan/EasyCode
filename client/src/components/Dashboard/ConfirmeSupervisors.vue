@@ -14,9 +14,13 @@
                                 overflow-y: scroll;
                                 margin: 0;">
         <div v-for="(user,index) in searchResults" :key="index" class="user-card">
-          <img src="https://via.placeholder.com/50" alt="User Avatar">
-          <span class="fw-bold">{{ user.fullName }}</span>
-          <span class="text-muted">@{{user.username}}</span>
+          <div @click="goToUserDateilsPage(user)">
+            <img 
+              :src="`http://localhost:3000${user.picturePath}`" 
+              alt="User Avatar">
+            <span class="fw-bold">{{ user.fullName }}</span>
+            <span class="text-muted">@{{user.username}}</span>
+          </div>
           <div class="btn-group float-end">
             <button class="btn btn-outline-primary" title="View Certification Document (PDF)"><i class="fas fa-file-pdf"></i></button>
             <button class="btn btn-outline-primary" title="Confirme This Supervisor"><i class="fas fa-check-circle"></i></button>
@@ -61,12 +65,16 @@ import axios from 'axios';
     methods:{
       async getAllUsers() {
         try {
-          const response = await axios.get('http://localhost:3000/users');
+          const response = await axios.get('http://localhost:3000/users/supervisors');
           this.users = response.data;
         } catch (error) {
           alert(error);
         }
-      }
+      },
+      goToUserDateilsPage(user: any) {
+        this.$store.state.userInUserDetailsPage = user;
+        this.$router.push("/user");
+      },
     },
     async created() {
       await this.getAllUsers();
