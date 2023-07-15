@@ -47,7 +47,7 @@ import { Confirmation } from './confirmations/entities/confirmation.entity';
       host: 'localhost',
       port: 1433,
       username: 'sa',
-      password: 'abdu123',
+      password: 'salem123',
       database: 'easycode',
       options: {
         encrypt: false
