@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, IsNull } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  IsNull,
+} from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Course } from 'src/courses/entities/course.entity';
 
@@ -16,9 +22,9 @@ export class Message {
   @Column()
   DateAndTime: Date;
 
-  @ManyToOne(() => User, user => user.messages)
+  @ManyToOne(() => User, (user) => user.messages)
   sender: User;
 
-  @ManyToOne(() => Course, course => course.messages)
+  @ManyToOne(() => Course, (course) => course.messages)
   course: Course;
 }

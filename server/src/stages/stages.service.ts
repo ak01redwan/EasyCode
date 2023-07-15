@@ -7,8 +7,8 @@ import { Stage } from './entities/stage.entity';
 export class StagesService {
   constructor(
     @InjectRepository(Stage)
-    private readonly stageRepository: Repository<Stage>
-    ) {}
+    private readonly stageRepository: Repository<Stage>,
+  ) {}
 
   async findAll(): Promise<Stage[]> {
     return await this.stageRepository.find({ relations: ['course'] });
@@ -22,9 +22,11 @@ export class StagesService {
   }
 
   async create(stage: Stage): Promise<any> {
-    const existStage = await this.stageRepository.find({ where: { title: stage.title }});
+    const existStage = await this.stageRepository.find({
+      where: { title: stage.title },
+    });
     if (existStage.length > 0)
-      return {message: `${stage.title} title is already exist!.`};
+      return { message: `${stage.title} title is already exist!.` };
     return await this.stageRepository.save(stage);
   }
 

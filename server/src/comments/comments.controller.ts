@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, ForbiddenException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  ForbiddenException,
+} from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { Comment } from './entities/comment.entity';
 import { CreateCommentDTO } from './dto/create-comment.dto';
@@ -12,10 +21,12 @@ export class CommentsController {
   @Post()
   async createComment(@Body() commentDTO: CreateCommentDTO): Promise<Comment> {
     const comment = plainToClass(Comment, commentDTO);
-    if ((comment.course || comment.project) && comment.user){
+    if ((comment.course || comment.project) && comment.user) {
       return await this.commentsService.createComment(comment);
-    }else{
-      throw new ForbiddenException('you must include the user and the course or the project that the user comment on');
+    } else {
+      throw new ForbiddenException(
+        'you must include the user and the course or the project that the user comment on',
+      );
     }
   }
 
@@ -30,12 +41,17 @@ export class CommentsController {
   }
 
   @Put(':id')
-  async updateComment(@Param('id') id: number, @Body() commentDTO: UpdateCommentDto): Promise<Comment> {
+  async updateComment(
+    @Param('id') id: number,
+    @Body() commentDTO: UpdateCommentDto,
+  ): Promise<Comment> {
     const comment = plainToClass(Comment, { id, ...commentDTO });
-    if ((comment.course || comment.project) && comment.user){
+    if ((comment.course || comment.project) && comment.user) {
       return await this.commentsService.updateComment(comment);
-    }else{
-      throw new ForbiddenException('you must include the user and the course or the project that the user comment on');
+    } else {
+      throw new ForbiddenException(
+        'you must include the user and the course or the project that the user comment on',
+      );
     }
   }
 
@@ -45,12 +61,16 @@ export class CommentsController {
   }
 
   @Get('course/:id')
-  async getCommentsByCourseId(@Param('id') courseId: number): Promise<Comment[]> {
+  async getCommentsByCourseId(
+    @Param('id') courseId: number,
+  ): Promise<Comment[]> {
     return await this.commentsService.getCommentsByCourseId(courseId);
   }
 
   @Get('project/:id')
-  async getCommentsByProjectId(@Param('id') projectId: number): Promise<Comment[]> {
+  async getCommentsByProjectId(
+    @Param('id') projectId: number,
+  ): Promise<Comment[]> {
     return await this.commentsService.getCommentsByProjectId(projectId);
   }
 }

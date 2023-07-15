@@ -15,7 +15,7 @@ export class ProjectsService {
   }
 
   async findById(id: number): Promise<Project> {
-    return this.projectRepository.findOne({ where: { id: id}});
+    return this.projectRepository.findOne({ where: { id: id } });
   }
 
   async create(projectData: Project): Promise<Project> {
@@ -24,7 +24,9 @@ export class ProjectsService {
   }
 
   async update(id: number, projectData: Partial<Project>): Promise<Project> {
-    const projectToUpdate = await this.projectRepository.findOne({ where: { id: id}});
+    const projectToUpdate = await this.projectRepository.findOne({
+      where: { id: id },
+    });
     this.projectRepository.merge(projectToUpdate, projectData);
     return this.projectRepository.save(projectToUpdate);
   }

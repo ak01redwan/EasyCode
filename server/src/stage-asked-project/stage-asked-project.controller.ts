@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { StageAskedProjectService } from './stage-asked-project.service';
 import { CreateStageAskedProjectDto } from './dto/create-stage-asked-project.dto';
 import { UpdateStageAskedProjectDto } from './dto/update-stage-asked-project.dto';
@@ -7,11 +15,18 @@ import { StageAskedProject } from './entities/stage-asked-project.entity';
 
 @Controller('stage-asked-project')
 export class StageAskedProjectController {
-  constructor(private readonly stageAskedProjectService: StageAskedProjectService) {}
+  constructor(
+    private readonly stageAskedProjectService: StageAskedProjectService,
+  ) {}
 
   @Post()
-  async create(@Body() createStageAskedProjectDto: CreateStageAskedProjectDto): Promise<StageAskedProject> {
-    const stageAskedProject = plainToClass(StageAskedProject, createStageAskedProjectDto);
+  async create(
+    @Body() createStageAskedProjectDto: CreateStageAskedProjectDto,
+  ): Promise<StageAskedProject> {
+    const stageAskedProject = plainToClass(
+      StageAskedProject,
+      createStageAskedProjectDto,
+    );
     return await this.stageAskedProjectService.create(stageAskedProject);
   }
 
@@ -26,13 +41,19 @@ export class StageAskedProjectController {
   }
 
   @Get('/stage/:id')
-  async findByStageId(@Param('id') id: string): Promise<StageAskedProject>{
+  async findByStageId(@Param('id') id: string): Promise<StageAskedProject> {
     return await this.stageAskedProjectService.findByStageId(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateStageAskedProjectDto: UpdateStageAskedProjectDto) {
-    const stageAskedProject = plainToClass(StageAskedProject, updateStageAskedProjectDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateStageAskedProjectDto: UpdateStageAskedProjectDto,
+  ) {
+    const stageAskedProject = plainToClass(
+      StageAskedProject,
+      updateStageAskedProjectDto,
+    );
     return this.stageAskedProjectService.update(stageAskedProject);
   }
 

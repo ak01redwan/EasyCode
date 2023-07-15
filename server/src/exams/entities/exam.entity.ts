@@ -1,5 +1,11 @@
 import { Stage } from 'src/stages/entities/stage.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 
 @Entity()
 export class Exam {
@@ -15,6 +21,6 @@ export class Exam {
   @Column()
   rightAnswer: string;
 
-  @ManyToOne(() => Stage, stage => stage.exams)
+  @ManyToOne(() => Stage, (stage) => stage.exams)
   stage: Stage;
 }

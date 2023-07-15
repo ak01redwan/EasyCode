@@ -12,14 +12,22 @@ export class StageAskedProjectService {
     @InjectRepository(StageAskedProject)
     private readonly stageAskedProjectRepository: Repository<StageAskedProject>,
     @InjectRepository(Stage)
-    private readonly stagesServicesRepository: Repository<Stage>
-    ) {}
+    private readonly stagesServicesRepository: Repository<Stage>,
+  ) {}
 
-  async create(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
-    if (await this.stagesServicesRepository.findOne({ where: { id: stageAskedProject.stage.id }})) {
+  async create(
+    stageAskedProject: StageAskedProject,
+  ): Promise<StageAskedProject> {
+    if (
+      await this.stagesServicesRepository.findOne({
+        where: { id: stageAskedProject.stage.id },
+      })
+    ) {
       return await this.stageAskedProjectRepository.save(stageAskedProject);
-    }else{
-      throw new NotFoundException(`we don't found the stage that you want to add this asked project under it. (${stageAskedProject.stage.title})`);
+    } else {
+      throw new NotFoundException(
+        `we don't found the stage that you want to add this asked project under it. (${stageAskedProject.stage.title})`,
+      );
     }
   }
 
@@ -28,15 +36,20 @@ export class StageAskedProjectService {
   }
 
   async findOne(id: number): Promise<StageAskedProject> {
-    return await this.stageAskedProjectRepository.findOne({ where: { id: id }});
+    return await this.stageAskedProjectRepository.findOne({
+      where: { id: id },
+    });
   }
 
-  
-  async findByStageId(stageId: number): Promise<StageAskedProject>{
-    return this.stageAskedProjectRepository.findOne({ where: { stage: { id: stageId }}});
+  async findByStageId(stageId: number): Promise<StageAskedProject> {
+    return this.stageAskedProjectRepository.findOne({
+      where: { stage: { id: stageId } },
+    });
   }
 
-  async update(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
+  async update(
+    stageAskedProject: StageAskedProject,
+  ): Promise<StageAskedProject> {
     return await this.stageAskedProjectRepository.save(stageAskedProject);
   }
 

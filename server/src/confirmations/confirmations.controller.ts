@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { ConfirmationsService } from './confirmations.service';
 import { CreateConfirmationDto } from './dto/create-confirmation.dto';
 import { UpdateConfirmationDto } from './dto/update-confirmation.dto';
@@ -8,22 +16,20 @@ export class ConfirmationsController {
   constructor(private readonly confirmationsService: ConfirmationsService) {}
 
   @Post()
-  create(@Body() createConfirmationDto: CreateConfirmationDto) {
-  }
+  create(@Body() createConfirmationDto: CreateConfirmationDto) {}
 
   @Get()
-  findAll() {
-  }
+  findAll() {}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-  }
+  findOne(@Param('id') id: string) {}
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConfirmationDto: UpdateConfirmationDto) {
-  }
+  update(
+    @Param('id') id: string,
+    @Body() updateConfirmationDto: UpdateConfirmationDto,
+  ) {}
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-  }
+  remove(@Param('id') id: string) {}
 }

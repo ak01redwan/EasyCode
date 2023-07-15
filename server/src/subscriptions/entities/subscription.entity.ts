@@ -1,4 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, ManyToMany, JoinTable } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  ManyToMany,
+  JoinTable,
+} from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Course } from '../../courses/entities/course.entity';
 import { Stage } from 'src/stages/entities/stage.entity';
@@ -15,12 +23,12 @@ export class Subscription {
   scores: number;
 
   // relations
-  @ManyToOne(() => User, user => user.subscriptions)
+  @ManyToOne(() => User, (user) => user.subscriptions)
   user: User;
 
-  @ManyToOne(() => Course, course => course.subscriptions)
+  @ManyToOne(() => Course, (course) => course.subscriptions)
   course: Course;
 
-  @ManyToOne(() => Stage, currentStage => currentStage.subscriptions)
+  @ManyToOne(() => Stage, (currentStage) => currentStage.subscriptions)
   currentStage: Stage;
 }

@@ -11,18 +11,22 @@ import { plainToClass } from 'class-transformer';
 export class ConfirmationsService {
   constructor(
     @InjectRepository(Confirmation)
-    private confirmationsRepository: Repository<Confirmation>
+    private confirmationsRepository: Repository<Confirmation>,
   ) {}
 
-  async create(createConfirmationDto: CreateConfirmationDto): Promise<Confirmation> {
+  async create(
+    createConfirmationDto: CreateConfirmationDto,
+  ): Promise<Confirmation> {
     const confirmation = plainToClass(Confirmation, createConfirmationDto);
     return await this.confirmationsRepository.save(confirmation);
   }
 
-  async update(id: number, updateConfirmationDto: UpdateConfirmationDto): Promise<Confirmation> {
+  async update(
+    id: number,
+    updateConfirmationDto: UpdateConfirmationDto,
+  ): Promise<Confirmation> {
     const confirmation = plainToClass(Confirmation, updateConfirmationDto);
     await this.confirmationsRepository.update(id, confirmation);
-    return await this.confirmationsRepository.findOne({ where: { id: id}});
+    return await this.confirmationsRepository.findOne({ where: { id: id } });
   }
-
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { StagesService } from './stages.service';
 import { CreateStageDto } from './dto/create-stage.dto';
 import { UpdateStageDto } from './dto/update-stage.dto';
@@ -26,7 +34,10 @@ export class StagesController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: number, @Body() updateStageDto: UpdateStageDto): Promise<Stage> {
+  async update(
+    @Param('id') id: number,
+    @Body() updateStageDto: UpdateStageDto,
+  ): Promise<Stage> {
     const stage = plainToClass(Stage, updateStageDto);
     stage.id = id;
     return await this.stagesService.update(id, stage);

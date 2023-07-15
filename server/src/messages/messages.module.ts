@@ -7,8 +7,8 @@ import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message,Subscription])],
+  imports: [TypeOrmModule.forFeature([Message, Subscription])],
   controllers: [MessagesController],
-  providers: [MessagesService, SubscriptionsService]
+  providers: [MessagesService, SubscriptionsService],
 })
 export class MessagesModule {}

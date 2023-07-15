@@ -15,12 +15,12 @@ export class Comment {
   createdDate: Date;
 
   // relations
-  @ManyToOne(() => User, user => user.comments)
+  @ManyToOne(() => User, (user) => user.comments)
   user: User;
 
-  @ManyToOne(() => Course, course => course.comments)
+  @ManyToOne(() => Course, (course) => course.comments)
   course: Course;
 
-  @ManyToOne(() => Project, project => project.comments)
+  @ManyToOne(() => Project, (project) => project.comments)
   project: Project;
 }

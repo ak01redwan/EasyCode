@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Course } from '../../courses/entities/course.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Lesson } from 'src/lessons/entities/lesson.entity';
@@ -20,15 +26,18 @@ export class Stage {
   @ManyToOne(() => Course, (course) => course.stages)
   course: Course;
 
-  @OneToMany(() => Subscription, subscriptions => subscriptions.currentStage)
+  @OneToMany(() => Subscription, (subscriptions) => subscriptions.currentStage)
   subscriptions: Subscription[];
 
-  @OneToMany(() => Lesson, lesson => lesson.stage)
+  @OneToMany(() => Lesson, (lesson) => lesson.stage)
   lessons: Lesson[];
 
-  @OneToMany(() => Exam, exam => exam.stage)
+  @OneToMany(() => Exam, (exam) => exam.stage)
   exams: Exam[];
 
-  @OneToMany(() => StageAskedProject, stageAskedProject => stageAskedProject.stage)
+  @OneToMany(
+    () => StageAskedProject,
+    (stageAskedProject) => stageAskedProject.stage,
+  )
   stageAskedProjects: StageAskedProject[];
 }

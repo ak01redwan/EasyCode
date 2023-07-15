@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Put, Delete, Body, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 import { Subscription } from './entities/subscription.entity';
 import { CreateSubscriptionDto } from './dto/create-subscription.dto';
@@ -26,19 +34,27 @@ export class SubscriptionsController {
   }
 
   @Get('by-user/:userId/by-course/:courseId')
-  async findByUserAndCourse(@Param('userId') userId: number,@Param('courseId') courseId: number): Promise<Subscription> {
-    return await this.subscriptionsService.findByUserAndCourse(userId,courseId);
+  async findByUserAndCourse(
+    @Param('userId') userId: number,
+    @Param('courseId') courseId: number,
+  ): Promise<Subscription> {
+    return await this.subscriptionsService.findByUserAndCourse(
+      userId,
+      courseId,
+    );
   }
 
-
-
   @Get('by-course/:courseId')
-  async findByCourse(@Param('courseId') courseId: number): Promise<Subscription[]> {
+  async findByCourse(
+    @Param('courseId') courseId: number,
+  ): Promise<Subscription[]> {
     return await this.subscriptionsService.findByCourse(courseId);
   }
 
   @Post()
-  async create(@Body() createSubscriptionDto: CreateSubscriptionDto): Promise<Subscription> {
+  async create(
+    @Body() createSubscriptionDto: CreateSubscriptionDto,
+  ): Promise<Subscription> {
     const subscription = plainToClass(Subscription, createSubscriptionDto);
     const errors = await validate(subscription);
     if (errors.length > 0) {

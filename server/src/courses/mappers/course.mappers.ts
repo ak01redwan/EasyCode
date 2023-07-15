@@ -15,7 +15,9 @@ export class CourseMapper {
     return course;
   }
 
-  static toEntityWithModificationDate(updateCourseDto: UpdateCourseDto): Course {
+  static toEntityWithModificationDate(
+    updateCourseDto: UpdateCourseDto,
+  ): Course {
     const course = new Course();
     course.imagePath = updateCourseDto.imagePath;
     course.name = updateCourseDto.name;

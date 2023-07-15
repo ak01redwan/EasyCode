@@ -13,51 +13,74 @@ export class UsersService {
   ) {}
 
   async create(user: User): Promise<User> {
-    if ( // checking if the user exist or not
-      await this.usersRepository.findOne({ where: { email: user.email}}) ||
-      await this.usersRepository.findOne({ where: { username: user.username}})
+    if (
+      // checking if the user exist or not
+      (await this.usersRepository.findOne({ where: { email: user.email } })) ||
+      (await this.usersRepository.findOne({
+        where: { username: user.username },
+      }))
     ) {
-      throw new HttpException('User with this email or username already exists!.', HttpStatus.BAD_REQUEST);
+      throw new HttpException(
+        'User with this email or username already exists!.',
+        HttpStatus.BAD_REQUEST,
+      );
     }
     user.password = await this.bcryptService.hash(user.password, 10);
     return await this.usersRepository.save(user);
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find({ where: { isDeleted: false}});
+    return await this.usersRepository.find({ where: { isDeleted: false } });
   }
 
   async findAllByType(userType: string): Promise<User[]> {
-    return await this.usersRepository.find({ where: { userType: userType, isDeleted: false}});
-  }
-
-  async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id: id, isDeleted: false}});
-  }
-
-  async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
-    return await this.usersRepository.findOne({ 
-      where: { id: id, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    return await this.usersRepository.find({
+      where: { userType: userType, isDeleted: false },
     });
   }
 
-  async findOneById_WithThisRelations(id:number, relations: []): Promise<User> {
-    return await this.usersRepository.findOne({ 
-      where: { id: id, isDeleted: false}, relations: relations });
+  async findOne(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id: id, isDeleted: false },
+    });
+  }
+
+  async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id: id, isDeleted: false },
+      relations: [
+        'supervisorConfirmation',
+        'reviewerConfirmations',
+        'subscriptions',
+      ],
+    });
+  }
+
+  async findOneById_WithThisRelations(
+    id: number,
+    relations: [],
+  ): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { id: id, isDeleted: false },
+      relations: relations,
+    });
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { username: username, isDeleted: false}});
+    return await this.usersRepository.findOne({
+      where: { username: username, isDeleted: false },
+    });
   }
 
-  async findByUserEmail (email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email: email, isDeleted: false}});
+  async findByUserEmail(email: string): Promise<User> {
+    return await this.usersRepository.findOne({
+      where: { email: email, isDeleted: false },
+    });
   }
 
   async update(id: number, user: User): Promise<User> {
     await this.usersRepository.update(id, user);
-    return await this.usersRepository.findOne({ where: { id: id}});
+    return await this.usersRepository.findOne({ where: { id: id } });
   }
 
   async remove(id: number): Promise<void> {

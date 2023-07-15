@@ -35,6 +35,6 @@ export class Project {
   @OneToMany(() => Like, (like) => like.project)
   likes: Like[];
 
-  @OneToMany(() => Comment, comment => comment.project)
+  @OneToMany(() => Comment, (comment) => comment.project)
   comments: Comment[];
 }

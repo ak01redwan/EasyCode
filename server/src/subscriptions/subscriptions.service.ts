@@ -8,7 +8,7 @@ import { Stage } from 'src/stages/entities/stage.entity';
 export class SubscriptionsService {
   constructor(
     @InjectRepository(Subscription)
-    private readonly subscriptionsRepository: Repository<Subscription>
+    private readonly subscriptionsRepository: Repository<Subscription>,
   ) {}
 
   async findAll(): Promise<Subscription[]> {
@@ -19,29 +19,32 @@ export class SubscriptionsService {
 
   async findById(id: number): Promise<Subscription> {
     return this.subscriptionsRepository.findOne({
-        where: { id },
-        relations: ['user', 'course'],
+      where: { id },
+      relations: ['user', 'course'],
     });
   }
 
   async findByUser(userId: number): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
-        where: { user: { id: userId } },
-        relations: ['user', 'course'],
+      where: { user: { id: userId } },
+      relations: ['user', 'course'],
     });
   }
 
   async findByCourse(courseId: number): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
-        where: { course: { id: courseId } },
-        relations: ['user', 'course'],
+      where: { course: { id: courseId } },
+      relations: ['user', 'course'],
     });
   }
 
-  async findByUserAndCourse(courseId: number, userId: number): Promise<Subscription>{
+  async findByUserAndCourse(
+    courseId: number,
+    userId: number,
+  ): Promise<Subscription> {
     return this.subscriptionsRepository.findOne({
-        where: { course: { id: courseId }, user: { id: userId}},
-        relations: ['user', 'course'],
+      where: { course: { id: courseId }, user: { id: userId } },
+      relations: ['user', 'course'],
     });
   }
 
@@ -51,12 +54,12 @@ export class SubscriptionsService {
 
   async update(id: number, subscription: Subscription): Promise<Subscription> {
     await this.subscriptionsRepository.update(id, subscription);
-   return this.findById(id);
+    return this.findById(id);
   }
 
   async delete(id: number): Promise<any> {
     await this.subscriptionsRepository.delete(id);
-    return {message: 'deleted'};
+    return { message: 'deleted' };
   }
 
   async getCurrentStage(subscriptionId: number): Promise<Stage> {
@@ -64,7 +67,7 @@ export class SubscriptionsService {
       where: { id: subscriptionId },
       relations: ['currentStage'],
     });
-    
+
     if (!subscription) {
       throw new Error(`Subscription with id ${subscriptionId} not found`);
     }

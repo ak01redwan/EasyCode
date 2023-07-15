@@ -7,9 +7,9 @@ import { Repository } from 'typeorm';
 export class LessonsService {
   constructor(
     @InjectRepository(Lesson)
-    private readonly lessonsRepository: Repository<Lesson>
-    ) {}
-  
+    private readonly lessonsRepository: Repository<Lesson>,
+  ) {}
+
   async create(lessons: Lesson[]) {
     return await this.lessonsRepository.save(lessons);
   }
@@ -19,11 +19,11 @@ export class LessonsService {
   }
 
   async findOne(id: number) {
-    return await this.lessonsRepository.find({ where: { id: id }});
+    return await this.lessonsRepository.find({ where: { id: id } });
   }
 
   async findStageLessons(id: number) {
-    return await this.lessonsRepository.find({ where: { stage: { id: id }}});
+    return await this.lessonsRepository.find({ where: { stage: { id: id } } });
   }
 
   async update(lessons: Lesson[]) {
@@ -34,10 +34,8 @@ export class LessonsService {
     await this.lessonsRepository.delete(id);
   }
 
-  async removeStageLessons(id: number){
+  async removeStageLessons(id: number) {
     const lessons = await this.findStageLessons(id);
     await this.lessonsRepository.remove(lessons);
   }
-
-  
 }

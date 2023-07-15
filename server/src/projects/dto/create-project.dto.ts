@@ -1,10 +1,16 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import {
+  IsBoolean,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateProjectDto {
-
   @MinLength(4)
   title: string;
-  
+
   @IsString()
   @IsNotEmpty()
   documentPath: string;
