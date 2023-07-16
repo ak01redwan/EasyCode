@@ -24,18 +24,24 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.usersRepository.find({ where: { isDeleted: false}});
+    return await this.usersRepository.find({ 
+      where: { isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
   }
 
   async findAllByType(userType: string): Promise<User[]> {
     return await this.usersRepository.find({ 
       where: { userType: userType, isDeleted: false},
-      relations: ['supervisorConfirmation']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
     });
   }
 
   async findOne(id: number): Promise<User> {
-    return await this.usersRepository.findOne({ where: { id: id, isDeleted: false}});
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
   }
 
   async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
@@ -51,11 +57,17 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { username: username, isDeleted: false}});
+    return await this.usersRepository.findOne({ 
+      where: { username: username, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
   }
 
   async findByUserEmail (email: string): Promise<User> {
-    return await this.usersRepository.findOne({ where: { email: email, isDeleted: false}});
+    return await this.usersRepository.findOne({ 
+      where: { email: email, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
   }
 
   async update(id: number, user: User): Promise<User> {

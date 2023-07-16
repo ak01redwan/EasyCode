@@ -17,9 +17,8 @@ export class AuthService {
     if (!user || !await this.bcryptService.compare(pass, user.password)) {
       throw new UnauthorizedException();
     }
-    const { id, ...userWithoutId} = user;
     return {
-      user: userWithoutId,
+      user: user,
       access_token: await this.getUserTokens(user),
     };
   }

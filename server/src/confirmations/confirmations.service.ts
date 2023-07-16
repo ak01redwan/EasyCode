@@ -24,4 +24,15 @@ export class ConfirmationsService {
     return await this.confirmationsRepository.save(confirmation);
   }
 
+  async updateEntity(confirmation: Confirmation): Promise<Confirmation> {
+    return await this.confirmationsRepository.save(confirmation);
+  }
+
+  async getById(id: number): Promise<Confirmation> {
+    return await this.confirmationsRepository.findOne({
+      where: { id: id},
+      relations: ['supervisor','reviewer']
+    });
+  }
+
 }

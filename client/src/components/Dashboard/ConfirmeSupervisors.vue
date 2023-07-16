@@ -52,29 +52,7 @@
   <!--Adding New User Modal-->
   <AddNewUser />
 </template>
-<style scoped>
-    .user-card {
-      margin-bottom: 20px;
-    }
-    .user-card img {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      margin-right: 10px;
-    }
-    .form-check-input[type="checkbox"] {
-        width: 39px;
-        height: 39px;
-        
-    }
-    .user-card .btn {
-      margin-right: 5px;
-    }
-    .user-card:hover {
-        background-color: #F5F5F5;
-        cursor: pointer;
-    }
-</style>
+
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import axios from "axios";
@@ -206,7 +184,31 @@ import Swal from "sweetalert2";
         }
     },
 })
-export default class ShowUsers extends Vue {
+export default class ConfirmeSupervisors extends Vue {
 [x: string]: any;
 }
 </script>
+
+<style scoped>
+    .user-card {
+      margin-bottom: 20px;
+    }
+    .user-card img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+    .form-check-input[type="checkbox"] {
+        width: 39px;
+        height: 39px;
+        
+    }
+    .user-card .btn {
+      margin-right: 5px;
+    }
+    .user-card:hover {
+        background-color: #F5F5F5;
+        cursor: pointer;
+    }
+</style>
