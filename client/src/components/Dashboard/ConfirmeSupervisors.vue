@@ -4,7 +4,17 @@
       <form class="d-flex me-auto" @submit.prevent="onSubmit">
         <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
         <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
-      </form>      
+      </form>
+    </div>
+    <div class="dropdown me-3">
+      <button class="btn btn-secondary dropdown-toggle" type="button" id="filter-dropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Filter and display {{ filter ? filter : 'all' }} users
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
+        <li><a class="dropdown-item btn" @click="filter = ''">All Users</a></li>
+        <li><a class="dropdown-item btn" @click="filter = 'confirmed'">Confirmed</a></li>
+        <li><a class="dropdown-item btn" @click="filter = 'unconfirmed'">Unconfirmed</a></li>
+      </ul>
     </div>
   </nav>
   <div class="container">
@@ -170,11 +180,21 @@ import Swal from "sweetalert2";
     },
     computed:{
       searchResults() {
-        return this.users.filter((user: { id: number; fullName: string; username: string; userType: string;}): any => {
+        return this.users.filter((user: any): any => {
           const searchTermLC = this.searchTerm.toLowerCase();
-          const userTypeFilter = this.filter.toLowerCase();
-          return (user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC)) 
-            && user.userType.toLowerCase().includes(userTypeFilter);
+          switch (this.filter){
+            case '':
+              return (user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC));
+              break;
+            case 'confirmed':
+              return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
+                && user.supervisorConfirmation.isConfirmed);
+              break;
+            case 'unconfirmed':
+              return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
+                && !user.supervisorConfirmation.isConfirmed);
+              break;
+          }
         });
       }
     },
