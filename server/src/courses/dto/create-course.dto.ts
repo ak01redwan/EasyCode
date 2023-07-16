@@ -14,8 +14,5 @@ export class CreateCourseDto {
   description: string;
 
   @IsNotEmpty()
-  isPublished: boolean;
-
-  @IsNotEmpty()
   category: Category;
 }

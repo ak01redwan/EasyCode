@@ -30,7 +30,9 @@
                     <h6 class="mb-0">Certifications</h6>
                 </div>
                 <div class="col-sm-9">
-                    <a class="btn btn-info" target="__blank" :href="`http://localhost:3000${UserInfo.supervisorConfirmation[0].certificationsDocsPath}`">Show Certification Documents</a>
+                    <a class="btn btn-info" target="__blank" :href="`http://localhost:3000${UserInfo.supervisorConfirmation[0].certificationsDocsPath}`">
+                      Show Certification Documents
+                    </a>
                 </div>
             </div>
             <hr v-if="UserInfo.userType == 'supervisor'"/>
