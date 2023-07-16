@@ -9,6 +9,7 @@ export class ConfirmationsController {
 
   @Post()
   create(@Body() createConfirmationDto: CreateConfirmationDto) {
+    //this.confirmationsService.create(createConfirmationDto);
   }
 
   @Get()
@@ -20,7 +21,8 @@ export class ConfirmationsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConfirmationDto: UpdateConfirmationDto) {
+  async update(@Param('id') id: string, @Body() updateConfirmationDto: UpdateConfirmationDto) {
+    return await this.confirmationsService.update(+id, updateConfirmationDto);
   }
 
   @Delete(':id')

@@ -28,7 +28,10 @@ export class UsersService {
   }
 
   async findAllByType(userType: string): Promise<User[]> {
-    return await this.usersRepository.find({ where: { userType: userType, isDeleted: false}});
+    return await this.usersRepository.find({ 
+      where: { userType: userType, isDeleted: false},
+      relations: ['supervisorConfirmation']
+    });
   }
 
   async findOne(id: number): Promise<User> {
