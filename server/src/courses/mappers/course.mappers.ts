@@ -10,8 +10,7 @@ export class CourseMapper {
     course.imagePath = createCourseDto.imagePath;
     course.name = createCourseDto.name;
     course.description = createCourseDto.description;
-    course.isPublished = createCourseDto.isPublished;
-    course.category = createCourseDto.category;
+    course.category = JSON.parse(`${createCourseDto.category}`);
     return course;
   }
 
@@ -23,8 +22,8 @@ export class CourseMapper {
     course.name = updateCourseDto.name;
     course.description = updateCourseDto.description;
     course.isPublished = updateCourseDto.isPublished;
-    course.category = updateCourseDto.category;
     course.modificationDate = new Date();
+    course.category = JSON.parse(`${updateCourseDto.category}`);
     return course;
   }
 }

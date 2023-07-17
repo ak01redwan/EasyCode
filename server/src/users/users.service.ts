@@ -30,12 +30,39 @@ export class UsersService {
   }
 
   async findAll(): Promise<User[]> {
+<<<<<<< HEAD
     return await this.usersRepository.find({ where: { isDeleted: false } });
   }
 
   async findAllByType(userType: string): Promise<User[]> {
     return await this.usersRepository.find({
       where: { userType: userType, isDeleted: false },
+=======
+    return await this.usersRepository.find({ 
+      where: { isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
+  }
+
+  async findAllByType(userType: string): Promise<User[]> {
+    return await this.usersRepository.find({ 
+      where: { userType: userType, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
+  }
+
+  async findOne(id: number): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
+  }
+
+  async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+>>>>>>> main
     });
   }
 
@@ -67,6 +94,7 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User> {
+<<<<<<< HEAD
     return await this.usersRepository.findOne({
       where: { username: username, isDeleted: false },
     });
@@ -75,6 +103,18 @@ export class UsersService {
   async findByUserEmail(email: string): Promise<User> {
     return await this.usersRepository.findOne({
       where: { email: email, isDeleted: false },
+=======
+    return await this.usersRepository.findOne({ 
+      where: { username: username, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+    });
+  }
+
+  async findByUserEmail (email: string): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { email: email, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+>>>>>>> main
     });
   }
 

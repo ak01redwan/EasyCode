@@ -25,22 +25,22 @@
                                 overflow-y: scroll;
                                 margin: 0;">
         <div v-for="(course,index) in searchResults" :key="index" class="user-card">
-          <img src="https://via.placeholder.com/50" alt="User Avatar">
+          <img :src="`http://localhost:3000${course.imagePath}`" alt="User Avatar">
           <span class="fw-bold">{{ course.name }}</span>
-          <span class="text-muted">@{{course.category}}</span>
+          <span class="text-muted">@{{course.category.name}}</span>
           <div class="btn-group float-end">
-            <button v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
-            <button v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
-            <router-link to="/course" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></router-link>
-            <button class="btn btn-outline-warning" title="Edit User"><i class="fas fa-edit"></i></button>
-            <button class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+            <button @click="toggleCoursePublished(course.id)" v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
+            <button @click="toggleCoursePublished(course.id)" v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
+            <button @click="viewCourseDetails(course)" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></button>
+            <button class="btn btn-outline-warning" title="Edit This Course"><i class="fas fa-edit"></i></button>
+            <button @click="deleteThisCourse(course)" class="btn btn-outline-danger" title="Delete This Course"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       </div>
     </div>
   </div>
   <!--Adding New User Modal-->
-  <AddNewCourse />
+  <AddNewCourse @done="getAllCourses"/>
 </template>
 <style scoped>
     .user-card {
@@ -63,12 +63,85 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import AddNewCourse from '@/components/Dashboard/AddNewCourse.vue';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 @Options({
     components:{
       AddNewCourse,
     },
+    mounted() {
+      this.getAllCourses();
+    },
     methods:{
+      viewCourseDetails(course: any){
+        this.$store.state.courseInCourseDatailsPage = course;
+        this.$router.push('/course');
+      },
+      deleteThisCourse(course: any) {
+        Swal.fire({
+          title: "Delete?",
+          text: `Are you sure. you went to delete ${ course.name }.`,
+          icon: "question",
+          showCancelButton: true,
+          confirmButtonColor: '#ff0101',
+          cancelButtonColor: '#22aa22',
+          confirmButtonText: "Yes, Delete",
+          cancelButtonText: "No",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.deleteCourseById(course.id);
+            Swal.fire(
+              "Deleted!",
+              "Course deleted successfully.",
+              "success"
+            );
+          }
+        });
+      },
+      async toggleCoursePublished(courseId: number) {
+        try {
+          const response = await axios.post('http://localhost:3000/courses/toggleCoursePublished/'+courseId);
+          Swal.fire({
+            icon: "success",
+            title: `${response.data.isPublished?'Published':'Unpublished'}!`,
+            text: `course ${response.data.name} has been ${response.data.isPublished?'published':'unPublished'} successfully.`,
+            showConfirmButton: false,
+            timer: 2500
+          });
+          await this.getAllCourses();
+        } catch (error) {
+          Swal.fire(
+            "oOps!",
+            "Network Error.",
+            "error"
+          );
+        }
+      },
+      async deleteCourseById(id: number) {
+        try {
+          const response = await axios.delete('http://localhost:3000/courses/'+id);
+          await this.getAllCourses();
+        } catch (error) {
+          Swal.fire(
+            "oOps!",
+            "Network Error.",
+            "error"
+          );
+        }
+      },
+      async getAllCourses() {
+        try {
+          const response = await axios.get('http://localhost:3000/courses');
+          this.courses = response.data;
+        } catch (error) {
+          Swal.fire(
+            "oOps!",
+            "Network Error.",
+            "error"
+          );
+        }
+      },
       changeFilterValue(value: string){ this.filter = value; },
     },
     computed:{
@@ -95,15 +168,7 @@ import AddNewCourse from '@/components/Dashboard/AddNewCourse.vue';
         return {
             searchTerm: '',
             filter: '',
-            courses: [
-                {id: 1, name: 'Java',       isPublished: true,  category: 'Web'},
-                {id: 1, name: 'Javascript', isPublished: true,  category: 'Web'},
-                {id: 1, name: 'C#',         isPublished: true,  category: 'Andoid'},
-                {id: 1, name: 'C++',        isPublished: true,  category: 'Andoid'},
-                {id: 1, name: 'Python',     isPublished: true,  category: 'Desktop'},
-                {id: 1, name: 'R',          isPublished: false, category: 'Desktop'},
-                {id: 1, name: 'Cotlen',     isPublished: false, category: 'Web'},
-            ]
+            courses: []
         }
     }
 })

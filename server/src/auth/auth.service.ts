@@ -21,7 +21,7 @@ export class AuthService {
     }
     const { id, ...userWithoutId } = user;
     return {
-      user: userWithoutId,
+      user: user,
       access_token: await this.getUserTokens(user),
     };
   }

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Body,
   Controller,
@@ -9,23 +10,35 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
+=======
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
+>>>>>>> main
 import { Course } from './entities/course.entity';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { CourseMapper } from './mappers/course.mappers';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
+import { Multer } from 'multer';
+import * as fs from 'fs';
 
 @Controller('courses')
 export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
-  // for admin
   @Post()
-  async create(@Body() createCourseDto: CreateCourseDto): Promise<Course> {
+  @UseInterceptors(
+    FilesInterceptor('files', 1, UploadFileToDiskStorage),
+  )
+  async create(@Body() createCourseDto: CreateCourseDto, @UploadedFiles() files: Multer.File[]): Promise<Course> {
+    const [image] = files;
     try {
       const course = CourseMapper.toEntity(createCourseDto);
+      course.imagePath = `/uploads/${image.filename}`;
       return await this.coursesService.create(course);
     } catch (error) {
+<<<<<<< HEAD
       if (error.number == '2627') {
         // 2627 sql error for duplicate value
         throw new HttpException(
@@ -37,7 +50,21 @@ export class CoursesController {
         `Internal server error: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+=======
+      if (image) {
+        try{fs.unlinkSync(image.path);}catch(error){};
+      }
+      if (error.number == '2627') { // 2627 sql error for duplicate value
+        throw new HttpException(`course with name '${createCourseDto.name}' already exists.`, HttpStatus.CONFLICT);
+      }
+      throw new HttpException(`Internal server error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+>>>>>>> main
     }
+  }
+
+  @Post('toggleCoursePublished/:id')
+  async toggleCoursePublished(@Param('id') id: string): Promise<Course> {
+    return await this.coursesService.toggleCoursePublished(+id);
   }
 
   // all actors student, admin, supervisor, course admin
