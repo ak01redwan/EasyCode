@@ -300,7 +300,6 @@ export default {
                   this.$emit('done');
                   this.$router.push("/dashboard"); // go to dashboard
                   Swal.fire({
-                    position: 'top-end',
                     icon: "success",
                     title: "Done!",
                     text: "New user has been added successfully",

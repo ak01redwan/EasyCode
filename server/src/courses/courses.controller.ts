@@ -34,6 +34,11 @@ export class CoursesController {
     }
   }
 
+  @Post('toggleCoursePublished/:id')
+  async toggleCoursePublished(@Param('id') id: string): Promise<Course> {
+    return await this.coursesService.toggleCoursePublished(+id);
+  }
+
   // all actors student, admin, supervisor, course admin
   @Get()
   async findAll(): Promise<Course[]> {

@@ -1,4 +1,5 @@
 <template>
+  <h1>{{ course }}</h1>
     <div class="container-fluid">
       <div class="row flex-nowrap">
           <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
@@ -19,12 +20,12 @@
         <!--Content-->
         <div class="col m-0 " style="overflow-y: auto;">
           <!--Getting Course Details-->
-          <CourseDetails v-if="currentOption === listOptions[0]" />
+          <CourseDetails :course="course" v-if="currentOption === listOptions[0]" />
           <!--Getting Course ChatRoom-->
           <ChatRoom v-if="currentOption === listOptions[4]" />
           <!--Getting Course Stages-->
           <div v-if="currentOption === listOptions[1]" class="row">
-            <CourseStage v-for="stage in CourseStages" 
+            <CourseStage v-for="stage in course.stages"
               :stageId="stage.stageId" 
               :stageTitle="stage.stageTitle"
               :isOpen="stage.isOpen"
@@ -122,7 +123,7 @@
           {fullname: 'New Person Name', username:'AK01REDWAN'},
           {fullname: 'Another Person Name', username:'AK01REDWAN'},
         ],
-        Supervisers: [        
+        Supervisers: [     
           {fullname: 'ali', username:'AK01REDWAN'},
           {fullname: 'Another Person Name', username:'AK01REDWAN'},
           {fullname: 'Another Person Name', username:'AK01REDWAN'},
@@ -131,7 +132,7 @@
           {fullname: 'Another Person Name', username:'AK01REDWAN'}
         ],
         searchTerm: "",
-
+        course: null
       }
     },
     methods: {
@@ -152,6 +153,9 @@
                 return (superviser.fullname.toLowerCase().includes(searchTerm) || superviser.username.toLowerCase().includes(searchTerm));
             });
         }
+    },
+    created() {
+      this.course = this.$store.state.courseInCourseDatailsPage;
     },
   })
   export default class CourseView extends Vue {

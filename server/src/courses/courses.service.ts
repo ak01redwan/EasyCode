@@ -13,8 +13,21 @@ export class CoursesService {
     return await this.coursesRepository.save(course);
   }
 
+  async toggleCoursePublished(id: number) {
+    const course = await this.coursesRepository.findOne({ where: { id }});
+    course.isPublished = !course.isPublished;
+    return await this.coursesRepository.save(course);
+  }
+
   async findAll(): Promise<Course[]> {
-    return await this.coursesRepository.find({ relations: ['category'] });
+    return await this.coursesRepository.find({ 
+      relations: [
+        'category',
+        'subscriptions',
+        'stages',
+        'likes'
+      ]
+    });
   }
 
   async findOne(id: number): Promise<Course> {

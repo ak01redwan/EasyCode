@@ -35,7 +35,7 @@
                                         <div class="invalid-feedback fs-6 ">Please enter the course image</div>
                                         <div class="valid-feedback fs-6">Looks Good</div>
                                     </div>           
-                                    <input :disabled="isSubmitting" type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" value="SUBMIT">
+                                    <input :disabled="isSubmitting" type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" :value="`${isSubmitting?'Saving...':'Save'}`">
                                 </form>
                             </div>
                         </div>
@@ -89,8 +89,11 @@ import Swal from 'sweetalert2';
                     timer: 2000,
                     timerProgressBar: true,
                 });
+                this.name = '',
+                this.isSubmitting = false;
                 const cancelButton = document.getElementById("cancelButton");
                 (cancelButton as any).click();
+                this.$emit('done');
             }).catch((error) => {
                 console.log(error);
                 Swal.fire({
