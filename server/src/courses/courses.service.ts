@@ -31,7 +31,15 @@ export class CoursesService {
   }
 
   async findOne(id: number): Promise<Course> {
-    return await this.coursesRepository.findOne({ where: { id }, relations: ['category'] });
+    return await this.coursesRepository.findOne({ 
+      where: { id },
+      relations: [
+        'category',
+        'subscriptions',
+        'stages',
+        'likes'
+      ] 
+    });
   }
 
   async update(id: number, updateCourseDto: UpdateCourseDto): Promise<Course> {

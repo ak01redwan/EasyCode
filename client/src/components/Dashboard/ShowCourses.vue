@@ -74,8 +74,8 @@ import Swal from 'sweetalert2';
       this.getAllCourses();
     },
     methods:{
-      viewCourseDetails(course: any){
-        this.$store.state.courseInCourseDatailsPage = course;
+      async viewCourseDetails(course: any){
+        this.$store.state.courseInCourseDatailsPage = await course;
         this.$router.push('/course');
       },
       deleteThisCourse(course: any) {

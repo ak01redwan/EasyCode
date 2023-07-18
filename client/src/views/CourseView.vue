@@ -87,6 +87,7 @@
   import CourseStage from '@/components/Course/CourseStage.vue';
   import CourseDetails from '@/components/Course/CourseDetails.vue'
   import ChatRoom from '@/components/Course/ChatRoom.vue';
+import Swal from 'sweetalert2';
   
   @Options({
     components: {
@@ -136,6 +137,22 @@
       }
     },
     methods: {
+      async getCourseData() {
+        const user = await this.$store.state.user;
+        if (!user) {
+          Swal.fire({
+              icon: "error",
+              title: "Oops!",
+              text: "You need to signin first.",
+          });
+          return;
+        }
+        this.course = await this.$store.state.courseInCourseDatailsPage;
+        if (!this.course) {
+          this.$router.push('/courses');
+          return;
+        }
+      },
       ShowOption(optionNumber: number){
         this.currentOption = this.listOptions[optionNumber];
       }
@@ -155,7 +172,7 @@
         }
     },
     created() {
-      this.course = this.$store.state.courseInCourseDatailsPage;
+      this.getCourseData();
     },
   })
   export default class CourseView extends Vue {
