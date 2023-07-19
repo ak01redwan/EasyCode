@@ -91,6 +91,7 @@
     </div>
   </nav>
   <router-view />
+ 
   <footer class="text-center text-white" style="background-color: #6e5dcf">
     <!-- Start social media icons container -->
     <div class="container p-4 pb-0">
@@ -166,12 +167,10 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
-
 export default {
   data() {
     return {
       user: null,
-      usersType:null,
       showDashboardLink: false,
       showSupervisorLink:false,
       showGraduatorLink:false,
@@ -182,27 +181,39 @@ export default {
     };
   },
   methods: { 
-    makeUsersHomePage(){
-      if(this.usersType ==='student'){
-        this.showDashboardLink=true;
-      }
+   async makeUsersHomePage(){
+    if ( this.user.userType == 'admin') {
+    this.showDashboardLink = true;
+    this.showSupervisorLink = true;
+    this.showGraduatorLink = true;
+    this.showStudentLink = true;
+    this.showAllUsersLink = true;
+   
+    }else if (this.user.userType == 'courseAdmin') {
+      this.showDashboardLink = true;
+      this.showSupervisorLink = true;
+      this.showGraduatorLink = true;
+      this.showStudentLink = true;
+      this.showCoursesLink = true;
+      this.showProgectsLink = true;
+    }
+    else if (this.user.userType == 'student') {
+      this.showCoursesLink = true;
+      this.showProgectsLink = true;
+    }
+    else if (this.user.userType == 'supervisor') {
+      this.showCoursesLink = true;
+      this.showProgectsLink = true;
+    }
     },
-    async fetchUserData() {
-      try {
-        const response = await fetch('http://localhost:3000/users', {
-          credentials: 'include'
-        });
-        if (response.ok) {
-          const data = await response.json();
-          this.user = data.user;
-          this.usersType = data.user.userType;
-        } else {
-          throw new Error('Failed to fetch user data');
-        }
-      } catch (error) {
-        console.error(error);
-        // Show an error message to the user
-      }
+    async laodUsers() {
+           try {
+            const response = await axios.get("http://localhost:3000/users");
+            this.user = response.data;
+          } catch (error) {
+             alert(error);
+         // Show an error message to the user
+       }
     },
     goToUsersPage(showUsersWithType) {
       this.$store.state.showUsersWithType = showUsersWithType;
@@ -233,21 +244,33 @@ export default {
         title: 'Logout..',
         text: 'You have logged out!.'
       })
+    this.showDashboardLink = false;
+    this.showSupervisorLink = false;
+    this.showGraduatorLink = false;
+    this.showStudentLink = false;
+    this.showAllUsersLink = false;
+    this.showCoursesLink = false;
+    this.showProgectsLink = false;
     },
     keepUserUpdated(){
       this.user = this.$store.state.user;
     }
   },
-  async mounted() {
-    this.keepUserUpdated();
-    this.getUserProfileUsingStoredTokens();
-   await this.fetchUserData();
+   mounted() { 
+   this.keepUserUpdated();
+   this.getUserProfileUsingStoredTokens();
+   this.laodUsers();
+   this.makeUsersHomePage();
   },
   computed:{
     auth(){
       this.keepUserUpdated();
       return this.user;
     }
+  },
+  updated(){
+    this.laodUsers(); 
+    this.makeUsersHomePage();
   }
 };
 </script>

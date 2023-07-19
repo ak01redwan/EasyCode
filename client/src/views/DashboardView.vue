@@ -32,6 +32,7 @@ import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
 import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
 import ShowStages from '@/components/Dashboard/ShowStages.vue'
 import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
+import axios from 'axios';
 
 @Options({
   components: {
@@ -43,6 +44,7 @@ import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
   },
   data () {
     return {
+        user:null,
         currentDisplayedContent: 'ShowUsers',
         sidebarItems:[ // those are the sidebar items
             {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
@@ -58,7 +60,33 @@ import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
   },
   methods: {
     changeCurrentDisplayedContent(newContent: string){ this.currentDisplayedContent = newContent; },
-  }
+    async laodUsers() {
+      try {
+        const response = await axios.get("http://localhost:3000/users");
+        this.user= response.data;
+      } catch (error) {
+        console.error(error);
+      }
+    }, 
+    async chcktypeToHidesidebar(){
+        if ( this.user.userType == 'admin'){
+           this.sidebarItems=[ // those are the sidebar items,
+            {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
+            {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
+            {text: 'Stages',     icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
+            {text: 'Analytics',  icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
+            {text: 'Messages',   icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
+            {text: 'Settings',   icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
+        ]
+        }
+    }
+  },
+  mounted() {
+      this.laodUsers();
+  }, 
+  updated() {
+      this.laodUsers();
+  },
 })
 export default class DashboardView extends Vue {
     [x: string]: any;
