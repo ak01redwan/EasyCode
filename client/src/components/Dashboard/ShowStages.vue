@@ -91,6 +91,7 @@ import { Options, Vue } from "vue-class-component";
 import AddNewStage from "@/components/Dashboard/AddNewStage.vue";
 import AddNewStageAskedProject from "@/components/Dashboard/AddNewStageAskedProject.vue";
 import axios from "axios";
+import Swal from "sweetalert2";
 
 @Options({
   components: {
@@ -128,11 +129,28 @@ import axios from "axios";
     };
   },
   created() {
-      this.loadStages();
+    this.loadStages();
   },
   methods: {
     deleteThisStage(stage: any) {
-
+      Swal.fire({
+        title: "Delete?",
+        text: `Are you sure. you went to delete ${ stage.title }.`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: '#ff0101',
+        cancelButtonColor: '#22aa22',
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "No",
+      }).then(async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            const deleteStagesLessons = await axios.delete(`http://localhost:3000/lessons/all-in-stage/${stage.id}`);
+            const deleteStage = await axios.delete(`http://localhost:3000/stages/${stage.id}`);
+            this.loadStages();
+          } catch (error) {}
+        }
+      });
     },
     async loadStages() {
       try {
