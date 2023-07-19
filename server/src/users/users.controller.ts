@@ -78,19 +78,12 @@ export class UsersController {
         // create confirmation dto object for the validation process with default values
         const confirmation: CreateConfirmationDto = {
           isConfirmed: false, // set it by default on false until the reviewer change it
-<<<<<<< HEAD
-          reviewerComment: 'Acceptable.', // in case the reviewer didn't have the time to comment
+          reviewerComment: 'Wait for confirmation or refuse.', // in case the reviewer didn't have the time to comment
           supervisor: userWithTokens.user, // the new supervisor
           reviewer: admins[0], // the default reviewer
           certificationsDocsPath: certificationsDocs
             ? `/uploads/${certificationsDocs.filename}`
             : '', // certification docs path
-=======
-          reviewerComment: 'Wait for confirmation or refuse.', // in case the reviewer didn't have the time to comment
-          supervisor: userWithTokens.user,// the new supervisor
-          reviewer: admins[0],// the default reviewer
-          certificationsDocsPath: certificationsDocs ? `/uploads/${certificationsDocs.filename}` : '',// certification docs path
->>>>>>> main
         };
 
         //* create the confirmation object for this new supervisor

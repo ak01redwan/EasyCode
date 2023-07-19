@@ -24,7 +24,7 @@
               ><i class="fa-solid fa-circle-info"></i> About</router-link
             >
           </li>
-          <li class="nav-item">
+          <li v-if="showDashboardLink" class="nav-item">
             <router-link to="/dashboard" class="nav-link"
               ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
             >
@@ -38,25 +38,25 @@
               ><i class="fa-solid fa-list"></i> More Things</a
             >
             <ul class="dropdown-menu">
-              <li @click="goToUsersPage('supervisor')" class="dropdown-item btn">
+              <li v-if="showSupervisorLink" @click="goToUsersPage('supervisor')" class="dropdown-item btn">
                 Supervisors
               </li>
-              <li @click="goToUsersPage('graduator')" class="dropdown-item btn">
+              <li v-if="showGraduatorLink" @click="goToUsersPage('graduator')" class="dropdown-item btn">
                 Graduators
               </li>
-              <li @click="goToUsersPage('student')" class="dropdown-item btn">
+              <li v-if="showStudentLink" @click="goToUsersPage('student')" class="dropdown-item btn">
                 Students
               </li>
-              <li @click="goToUsersPage('')" class="dropdown-item btn">
+              <li v-if="showAllUsersLink" @click="goToUsersPage('')" class="dropdown-item btn">
                 All Users
               </li>
-              <li>
+              <li v-if="showCoursesLink">
                 <router-link to="/courses" class="dropdown-item"
                   ><i class="fa-solid fa-video"></i>
                   Courses</router-link
                 >
               </li>
-              <li>
+              <li v-if="showProgectsLink">
                 <router-link to="/users" class="dropdown-item"
                   ><i class="fa-solid fa-diagram-project"></i>
                   Progects</router-link
@@ -171,9 +171,39 @@ export default {
   data() {
     return {
       user: null,
+      usersType:null,
+      showDashboardLink: false,
+      showSupervisorLink:false,
+      showGraduatorLink:false,
+      showStudentLink:false,
+      showAllUsersLink:false,
+      showCoursesLink:false,
+      showProgectsLink:false,
     };
   },
-  methods: {
+  methods: { 
+    makeUsersHomePage(){
+      if(this.usersType ==='student'){
+        this.showDashboardLink=true;
+      }
+    },
+    async fetchUserData() {
+      try {
+        const response = await fetch('http://localhost:3000/users', {
+          credentials: 'include'
+        });
+        if (response.ok) {
+          const data = await response.json();
+          this.user = data.user;
+          this.usersType = data.user.userType;
+        } else {
+          throw new Error('Failed to fetch user data');
+        }
+      } catch (error) {
+        console.error(error);
+        // Show an error message to the user
+      }
+    },
     goToUsersPage(showUsersWithType) {
       this.$store.state.showUsersWithType = showUsersWithType;
       this.$router.push("/users");
@@ -208,9 +238,10 @@ export default {
       this.user = this.$store.state.user;
     }
   },
-  mounted() {
+  async mounted() {
     this.keepUserUpdated();
     this.getUserProfileUsingStoredTokens();
+   await this.fetchUserData();
   },
   computed:{
     auth(){
