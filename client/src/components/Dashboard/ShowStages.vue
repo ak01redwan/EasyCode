@@ -44,6 +44,7 @@
             <div class="btn-group float-end">
               <button
                 v-if="stage.hasProject"
+                @click="currentStageForCreateAskedProject = stage"
                 data-bs-toggle="modal"
                 data-bs-target="#addNewtageAskedProject"
                 class="btn btn-outline-primary"
@@ -52,24 +53,17 @@
                 <i class="fa-solid fa-upload"></i
                 ><i class="fas fa-clipboard-list"></i>
               </button>
-              <router-link
-                to="/exam"
+              <button
                 v-else-if="!stage.hasProject"
+                @click="goToStageExam(stage)"
                 class="btn btn-outline-primary"
                 title="Create Stage's Exam"
                 ><i class="fa-solid fa-upload"></i
-                ><i class="fas fa-clipboard-list"></i
-              ></router-link>
-              <router-link
-
-
-                to="/stage"
-
-
-                class="btn btn-outline-info"
-                title="View Stage Details"
-                ><i class="fas fa-info-circle"></i
-              ></router-link>
+                ><i class="fas fa-clipboard-list"></i>
+                </button>
+              <button @click="goToStagesLessons(stage)" class="btn btn-outline-info" title="View Stage Details">
+                <i class="fas fa-info-circle"></i
+              ></button>
               <button @click="deleteThisStage(stage)" class="btn btn-outline-danger" title="Delete Stage">
                 <i class="fas fa-trash"></i>
               </button>
@@ -79,10 +73,10 @@
       </div>
     </div>
     <!--Adding New Stage Modal-->
-    <AddNewStage @stage-created="saveTheCreatedStage" />
+    <AddNewStage @stage-created="loadStages" />
 
     <!--Adding New Stage Asked Project Modal-->
-    <AddNewStageAskedProject />
+    <AddNewStageAskedProject :currentStageForCreateAskedProject="currentStageForCreateAskedProject"/>
   </div>
 </template>
 
@@ -104,7 +98,7 @@ import Swal from "sweetalert2";
         (stage: {
           title: string;
           hasProject: boolean;
-          courseTitle: string;
+          course: any;
         }): any => {
           const searchTermLC = this.searchTerm.toLowerCase();
           if (searchTermLC == "projects" || searchTermLC == "project") {
@@ -114,8 +108,7 @@ import Swal from "sweetalert2";
           } else {
             return (
               stage.title.toLowerCase().includes(searchTermLC) ||
-              (stage.courseTitle &&
-                stage.courseTitle.toLowerCase().includes(searchTermLC))
+              stage.course.name.toLowerCase().includes(searchTermLC)
             );
           }
         }
@@ -126,12 +119,21 @@ import Swal from "sweetalert2";
     return {
       searchTerm: "",
       stages: [],
+      currentStageForCreateAskedProject: null
     };
   },
   created() {
     this.loadStages();
   },
   methods: {
+    async goToStagesLessons(stage: any) {
+      this.$store.state.stageInLessonPage = await stage;
+      this.$router.push('/stage');
+    },
+    async goToStageExam(stage: any) {
+      this.$store.state.stageInExamPage = await stage;
+      this.$router.push('/exam');
+    },
     deleteThisStage(stage: any) {
       Swal.fire({
         title: "Delete?",
@@ -146,9 +148,16 @@ import Swal from "sweetalert2";
         if (result.isConfirmed) {
           try {
             const deleteStagesLessons = await axios.delete(`http://localhost:3000/lessons/all-in-stage/${stage.id}`);
+            const deleteStagesExams = await axios.delete(`http://localhost:3000/exams/all-in-stage/${stage.id}`);
             const deleteStage = await axios.delete(`http://localhost:3000/stages/${stage.id}`);
             this.loadStages();
-          } catch (error) {}
+          } catch (error: any) {
+            Swal.fire({
+              icon: "error",
+              title: "Network Error",
+              text: error.message,
+            });
+          }
         }
       });
     },
@@ -157,9 +166,6 @@ import Swal from "sweetalert2";
         const respons = await axios.get('http://localhost:3000/stages');
         this.stages = respons.data;
       } catch (error) {}
-    },
-    saveTheCreatedStage(unSavedStage: any) {
-      this.stages.push(unSavedStage);
     },
   },
 })

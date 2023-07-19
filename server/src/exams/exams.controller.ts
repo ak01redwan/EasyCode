@@ -40,6 +40,11 @@ export class ExamsController {
     await this.examsService.remove(id);
   }
 
+  @Delete('/all-in-stage/:id')
+  async removeAllExamsUnderThisStageId(@Param('id') id: string) {
+    await this.examsService.removeStageExams(+id);
+  }
+
   @Get('/stage/:stageId')
   async findByStage(@Param('stageId') stageId: number): Promise<Exam[]> {
     return this.examsService.findByStage(stageId);

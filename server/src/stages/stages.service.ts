@@ -11,18 +11,20 @@ export class StagesService {
     ) {}
 
   async findAll(): Promise<Stage[]> {
-    return await this.stageRepository.find({ relations: ['course'] });
+    return await this.stageRepository.find({ 
+      relations: ['course','lessons','exams'] 
+    });
   }
 
   async findOne(id: number): Promise<Stage> {
     return await this.stageRepository.findOne({
       where: { id },
-      relations: ['course'],
+      relations: ['course','lessons','exams'],
     });
   }
 
   async create(stage: Stage): Promise<any> {
-    const existStage = await this.stageRepository.find({ where: { title: stage.title }});
+    const existStage = await this.stageRepository.find({ where: { title: stage.title, course:{id:stage.course.id} }});
     if (existStage.length > 0)
       return {message: `${stage.title} title is already exist!.`};
     return await this.stageRepository.save(stage);

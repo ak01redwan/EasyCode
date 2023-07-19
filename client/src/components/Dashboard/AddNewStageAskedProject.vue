@@ -29,7 +29,7 @@
               class="form-border w-100 p-4 ratio-1x1 rounded"
               style="background: #eaebed"
             >
-              <form @submit.prevent="" class="needs-validated">
+              <form @submit.prevent="createStageAskedProject" class="needs-validated">
                 <!-- Project name input -->
                 <div class="mb-3 was-validated">
                   <label for="projectName" class="form-label"
@@ -83,10 +83,25 @@
 </template>
 
 <script lang="ts">
-export default {
-  data() {
-    return {};
+import { Options, Vue } from 'vue-class-component';
+
+@Options({
+  props: {
+    currentStageForCreateAskedProject: null
   },
-  methods: {},
-};
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    createStageAskedProject() {
+      console.log(this.currentStageForCreateAskedProject);
+    }
+  },
+})
+export default class ShowSAddNewStageAskedProjecttages extends Vue {
+  [x: string]: any;
+}
+
 </script>

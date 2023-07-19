@@ -146,14 +146,13 @@ import Swal from "sweetalert2";
       } catch (error) {}
     },
     async loadLessonsDataFromYoutube(stageId: number) {
-      const descriptionP1 = 'Clean Code English Programming Video for learn ' + this.stage.course.name;
-      const description = descriptionP1 + ' ' + this.stage.title+ ' ' + new Date().getFullYear() + ' ' +new Date().toDateString();
+      const description = `using ${this.stage.course.name} to explain ${this.stage.title} how to do ${this.stage.title} on ${this.stage.course.name}`;
       const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=100&q=${encodeURIComponent(description)}&key=${MY_YOUTUBE_DEV_API_KEY}&type=video`;
       try {
         const response = await axios.get(url);
         return response.data.items.filter((item: any) => item.id.kind === 'youtube#video')
               .slice(0, 10).map((item: any) => ({
-                url: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+                url: item.id.videoId,
                 stage: {id: stageId}
               }));
       } catch (error) {

@@ -10,6 +10,7 @@ import DashboardView from "@/views/DashboardView.vue"
 import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 import ExamView from '@/views/ExamView.vue'
 import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
+import LessonView from '@/views/LessonView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -60,6 +61,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/course',
     name: 'course',
     component: CourseView
+  },
+  {
+    path: '/stage',
+    name: 'stage',
+    component: LessonView
   },
   {
     path: '/login',

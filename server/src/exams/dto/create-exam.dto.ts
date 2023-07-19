@@ -15,5 +15,5 @@ export class CreateExamDto {
   rightAnswer: string;
 
   @IsNotEmpty()
-  stageId: Stage;
+  stage: Stage;
 }
