@@ -40,7 +40,7 @@
               Has Project
             </span>
             <span v-if="!stage.hasProject" class="text-muted"> Has Exam </span>
-            <span class="text-muted">@_{{ stage.courseTitle }}_course</span>
+            <span class="text-muted">@{{ stage.course.name }}</span>
             <div class="btn-group float-end">
               <button
                 v-if="stage.hasProject"
@@ -70,10 +70,7 @@
                 title="View Stage Details"
                 ><i class="fas fa-info-circle"></i
               ></router-link>
-              <button class="btn btn-outline-warning" title="Edit Stage">
-                <i class="fas fa-edit"></i>
-              </button>
-              <button class="btn btn-outline-danger" title="Delete Stage">
+              <button @click="deleteThisStage(stage)" class="btn btn-outline-danger" title="Delete Stage">
                 <i class="fas fa-trash"></i>
               </button>
             </div>
@@ -89,23 +86,11 @@
   </div>
 </template>
 
-<style scoped>
-.stage-card {
-  margin-bottom: 20px;
-}
-.stage-card .btn {
-  margin-right: 5px;
-}
-.stage-card:hover {
-  background-color: #f5f5f5;
-  cursor: pointer;
-}
-</style>
-
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import AddNewStage from "@/components/Dashboard/AddNewStage.vue";
 import AddNewStageAskedProject from "@/components/Dashboard/AddNewStageAskedProject.vue";
+import axios from "axios";
 
 @Options({
   components: {
@@ -139,41 +124,24 @@ import AddNewStageAskedProject from "@/components/Dashboard/AddNewStageAskedProj
   data() {
     return {
       searchTerm: "",
-      stages: [
-        {
-          title: "Variables",
-          hasProject: false,
-          courseTitle: "Web Development",
-        },
-        {
-          title: "Condetions",
-          hasProject: false,
-          courseTitle: "Mobile App Development",
-        },
-        {
-          title: "Loops",
-          hasProject: true,
-          courseTitle: "Database Administration",
-        },
-        {
-          title: "Functions",
-          hasProject: false,
-          courseTitle: "Database Administration",
-        },
-        {
-          title: "Classes",
-          hasProject: true,
-          courseTitle: "Database Administration",
-        },
-      ],
+      stages: [],
     };
   },
+  created() {
+      this.loadStages();
+  },
   methods: {
-    onSubmit() {
-      // handle search form submit
+    deleteThisStage(stage: any) {
+
+    },
+    async loadStages() {
+      try {
+        const respons = await axios.get('http://localhost:3000/stages');
+        this.stages = respons.data;
+      } catch (error) {}
     },
     saveTheCreatedStage(unSavedStage: any) {
-        this.stages.push(unSavedStage);
+      this.stages.push(unSavedStage);
     },
   },
 })
@@ -181,3 +149,16 @@ export default class ShowStages extends Vue {
   [x: string]: any;
 }
 </script>
+
+<style scoped>
+.stage-card {
+  margin-bottom: 20px;
+}
+.stage-card .btn {
+  margin-right: 5px;
+}
+.stage-card:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+</style>

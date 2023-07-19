@@ -17,9 +17,10 @@
             <div class="col-md-9 col-lg-10 bg-white" style="height: 500px;">
                 <div id="page-content">
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
+                    <ConfirmeSuprvisors v-else-if="currentDisplayedContent === 'ConfirmeSuprvisors'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
                     <ShowCourses v-else-if="currentDisplayedContent === 'ShowCourses'" />
-                    <ConfirmeSuprvisors v-else-if="currentDisplayedContent === 'ConfirmeSuprvisors'" />
+                    <ShowStages v-else-if="currentDisplayedContent =='ShowStages'" />
                 </div>
             </div>
         </div>
