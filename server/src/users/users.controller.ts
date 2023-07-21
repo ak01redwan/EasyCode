@@ -107,6 +107,11 @@ export class UsersController {
     return await this.usersService.findAllByType('supervisor');
   }
 
+  @Get('students')
+  async getStudents(): Promise<User[]> {
+    return await this.usersService.findAllByType('student');
+  }
+
   // for admin
   @Get(':id')
   async findOne(@Param() params): Promise<User> {

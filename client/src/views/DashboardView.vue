@@ -18,6 +18,7 @@
                 <div id="page-content">
                     <ShowUsers v-if="currentDisplayedContent === 'ShowUsers'" />
                     <ConfirmeSuprvisors v-else-if="currentDisplayedContent === 'ConfirmeSuprvisors'" />
+                    <ConfirmingProjects v-else-if="currentDisplayedContent == 'ConfirmingProjects'" />
                     <ShowCategories v-else-if="currentDisplayedContent === 'ShowCategories'" />
                     <ShowCourses v-else-if="currentDisplayedContent === 'ShowCourses'" />
                     <ShowStages v-else-if="currentDisplayedContent =='ShowStages'" />
@@ -33,6 +34,7 @@ import ShowCategories from '@/components/Dashboard/ShowCategories.vue'
 import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
 import ShowStages from '@/components/Dashboard/ShowStages.vue'
 import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
+import ConfirmingProjects from '@/components/Dashboard/ConfirmingProjects.vue'
 
 @Options({
   components: {
@@ -40,20 +42,22 @@ import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
     ShowCategories,
     ShowCourses,
     ShowStages,
-    ConfirmeSuprvisors
+    ConfirmeSuprvisors,
+    ConfirmingProjects
   },
   data () {
     return {
         currentDisplayedContent: 'ShowUsers',
         sidebarItems:[ // those are the sidebar items
-            {text: 'Show Users', icon: 'fas fa-users me-2',            content: 'ShowUsers'},
+            {text: 'Show Users',    icon: 'fas fa-users me-2',            content: 'ShowUsers'},
             {text: 'Confirmations', icon: 'fas fa-users me-2',            content: 'ConfirmeSuprvisors'},
-            {text: 'Categories', icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
-            {text: 'Courses',    icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
-            {text: 'Stages',     icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
-            {text: 'Analytics',  icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
-            {text: 'Messages',   icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
-            {text: 'Settings',   icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
+            {text: 'student Projects', icon: 'fas fa-users me-2',            content: 'ConfirmingProjects'},
+            {text: 'Categories',    icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
+            {text: 'Courses',       icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
+            {text: 'Stages',        icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
+            {text: 'Analytics',     icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
+            {text: 'Messages',      icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
+            {text: 'Settings',      icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
         ]
     }
   },

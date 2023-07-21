@@ -33,8 +33,22 @@ export class ProjectsController {
 
   @UseGuards(AuthGuard)
   @Get('/unacceptedProjects/:stageId')
-  async getUnacceptedProjects(@Param('stageId') stageId: string, @Request() req) {
+  async getUnacceptedProjectsByStageId(@Param('stageId') stageId: string, @Request() req) {
     return await this.projectsService.getUnacceptedProjectsOfUserId(req.authData.user.id, +stageId);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('/allProjectsWithStatus/:projectStatus')
+  async getAllProjectsWithStatus(@Param('projectStatus') projectStatus: string, @Request() req) {
+    if (req.authData.user.userType != 'student') {
+      if (projectStatus == 'accepted') {
+        return await this.projectsService.getAcceptedProjects();
+      } else {
+        return await this.projectsService.getUnacceptedProjects();
+      }
+    } else {
+      return [];
+    }
   }
   
   @Post()
@@ -64,9 +78,24 @@ export class ProjectsController {
     }
   }
 
+  @UseGuards(AuthGuard)
   @Put(':id')
-  async update(@Param('id') id: number, @Body() updateProjectDto: UpdateProjectDto): Promise<Project> {
-    const project = plainToClass(Project, updateProjectDto);
+  async update(@Request() req, @Param('id') id: number, @Body() updateProjectDto: {
+    id: number,
+    reviewerComment: string,
+    accepted: boolean
+  }): Promise<Project> {
+    if (req.authData.user.userType == 'student') {
+      return;
+    }
+    const project = await this.findById(id);
+    project.supervisorComment = updateProjectDto.reviewerComment;
+    project.isAcceptedAndDone = updateProjectDto.accepted;
+    project.supervisor = req.authData.user;
+    if (!project.isAcceptedAndDone) {
+      project.refusedTimes++;
+      project.isSubmitted = false;
+    }
     return this.projectsService.update(id, project);
   }
 

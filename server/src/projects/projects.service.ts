@@ -38,6 +38,20 @@ export class ProjectsService {
     });
   }
 
+  async getUnacceptedProjects(): Promise<Project[]> {
+    return await this.projectRepository.find({
+      where: { isAcceptedAndDone: false, isSubmitted:true },
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
+  }
+
+  async getAcceptedProjects(): Promise<Project[]> {
+    return await this.projectRepository.find({
+      where: { isAcceptedAndDone: true },
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
+  }
+
   async create(projectData: Project): Promise<Project> {
     const newProject = this.projectRepository.create(projectData);
     return this.projectRepository.save(newProject);

@@ -26,28 +26,28 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return await this.usersRepository.find({ 
       where: { isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
   async findAllByType(userType: string): Promise<User[]> {
     return await this.usersRepository.find({ 
       where: { userType: userType, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
   async findOne(id: number): Promise<User> {
     return await this.usersRepository.findOne({ 
       where: { id: id, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
   async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
     return await this.usersRepository.findOne({ 
       where: { id: id, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
@@ -59,7 +59,7 @@ export class UsersService {
   async findByUsername(username: string): Promise<User> {
     return await this.usersRepository.findOne({ 
       where: { username: username, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
