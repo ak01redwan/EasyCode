@@ -9,7 +9,7 @@
     <li class="list-group-item" @click="likeThisCourse">
       <i class="fas fa-thumbs-up"></i>
       Likes: {{ numberOfLikes }}
-      <button class="btn btn-outline-primary btn-sm float-end"><i class="fas fa-thumbs-up"></i> Like</button>
+      <button class="btn btn-outline-primary btn-sm float-end"><i :class="`fas fa-thumbs-${liked ? 'up' : 'down'}`"></i> Like</button>
     </li>
   </ul>
   <div class="card-footer">
@@ -30,14 +30,13 @@ import { Options, Vue } from 'vue-class-component';
     Description: String,
     Type: String,
     LikesNo: Number,
-    LikeStatus: Boolean,
   },
   mounted() {
   },
   data() {
     return {
       numberOfLikes: this.LikesNo,
-      likeStatus: this.LikeStatus,
+      liked: true
     }
   },
   methods: {
@@ -51,7 +50,7 @@ import { Options, Vue } from 'vue-class-component';
             user: user,
             course: course
           });
-          console.log(likeResponse.data.like);
+          likeResponse.data.like.course ? this.liked = false : this.liked = true;
           likeResponse.data.like.course ? this.numberOfLikes++ : this.numberOfLikes--;
         }
       } catch (error) {
@@ -81,5 +80,6 @@ export default class CoursesGallery extends Vue {
   likeThisCourse: ((payload: MouseEvent) => void) | undefined;
   goToCourseDetails: ((payload: MouseEvent) => void) | undefined;
   numberOfLikes: any;
+liked: any;
 }
 </script>

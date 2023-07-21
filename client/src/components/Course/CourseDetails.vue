@@ -52,10 +52,10 @@
                   data-bs-parent="#stage-accordion"
                 >
                   <div
-                    v-for="coursestage in course.stages"
+                    v-for="(coursestage,index) in course.stages" :key="index"
                     class="accordion-body list-group-item substage"
                   >
-                    {{ coursestage.name }}
+                    * {{ coursestage.title }}
                   </div>
                 </div>
               </div>

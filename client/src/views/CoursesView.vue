@@ -73,7 +73,6 @@
             :Description="course.description"
             :Type="course.category.name"
             :LikesNo="course.likes.length"
-            :LikeStatus="getLikeStatus(course.likes)"
           />
         </div>
       </main>
@@ -100,16 +99,7 @@ import axios from "axios";
     };
   },
   methods: {
-    getLikeStatus(likes: any) {
-      const user = this.$store.state.user;
-      console.log(user);
-      return true;
-      const found = likes.filter((like: any) => { 
-        return like.user.id == 0
-      })[0];
-      console.log(found);
-      return true;
-    },
+    
     async getAllCourses() {
       try {
         const response = await axios.get("http://localhost:3000/courses");

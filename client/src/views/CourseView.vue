@@ -14,6 +14,12 @@
                         <i class="fa-solid" :class="item.itemIconClass"></i> <span class="ms-1 d-none d-sm-inline text-secondary">{{ item.itemName }}</span>
                       </button>
                   </li>
+                  <li>
+                    <button  @click="subscribe()" class="btn btn-primary w-100">
+                      <i class="fa-solid fa-square-check"></i> 
+                      <strong>{{ subscriped ? ' unsubscripe' : ' subscripe' }}</strong>
+                    </button>
+                  </li>
               </ul>
             </div>
         </div>
@@ -22,12 +28,12 @@
           <!--Getting Course Details-->
           <CourseDetails :course="course" v-if="currentOption === listOptions[0]" />
           <!--Getting Course ChatRoom-->
-          <ChatRoom v-if="currentOption === listOptions[4]" />
+          <ChatRoom :currentCourse="course" v-if="currentOption === listOptions[4]" />
           <!--Getting Course Stages-->
           <div v-if="currentOption === listOptions[1]" class="row">
-            <CourseStage v-for="stage in course.stages"
-              :stageId="stage.stageId" 
-              :stageTitle="stage.stageTitle"
+            <CourseStage v-for="(stage,index) in course.stages" :key="index"
+              :stageId="(index+1)"
+              :stageTitle="stage.title"
               :isOpen="stage.isOpen"
             /> 
           </div>
@@ -82,12 +88,13 @@
     </div>
   </template>
   
-  <script lang="ts">
-  import { Options, Vue } from 'vue-class-component';
-  import CourseStage from '@/components/Course/CourseStage.vue';
-  import CourseDetails from '@/components/Course/CourseDetails.vue'
-  import ChatRoom from '@/components/Course/ChatRoom.vue';
+<script lang="ts">
+import { Options, Vue } from 'vue-class-component';
+import CourseStage from '@/components/Course/CourseStage.vue';
+import CourseDetails from '@/components/Course/CourseDetails.vue'
+import ChatRoom from '@/components/Course/ChatRoom.vue';
 import Swal from 'sweetalert2';
+import axios from 'axios';
   
   @Options({
     components: {
@@ -107,36 +114,31 @@ import Swal from 'sweetalert2';
             {itemName: 'Chatting Room', itemIconClass: 'fa-comments'},
             {itemName: 'Settings', itemIconClass: 'fa-gear'},
         ],
-        CourseStages: [
-          {stageId: 1, stageTitle: 'Stage Title 1',isOpen: true},
-          {stageId: 2, stageTitle: 'Stage Title 2',isOpen: true},
-          {stageId: 3, stageTitle: 'Stage Title 3',isOpen: false},
-          {stageId: 4, stageTitle: 'Stage Title 4',isOpen: false},
-          {stageId: 5, stageTitle: 'Stage Title 5',isOpen: false},
-          {stageId: 6, stageTitle: 'Stage Title 6',isOpen: false},
-          {stageId: 7, stageTitle: 'Stage Title 7',isOpen: false},
-        ],
-        students: [
-          {fullname: 'Salem Nagy Khasem', username:'5488'},
-          {fullname: 'Ahmed Mohammed', username:'AK01REDWAN'},
-          {fullname: 'Weas Humza', username:'AK01REDWAN'},
-          {fullname: 'Abdurhman Khald', username:'AK01REDWAN'},
-          {fullname: 'New Person Name', username:'AK01REDWAN'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN'},
-        ],
-        Supervisers: [     
-          {fullname: 'ali', username:'AK01REDWAN'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN'},
-          {fullname: 'Person Name', username:'AK01REDWAN'},
-          {fullname: 'Person Name', username:'AK01REDWAN'},
-          {fullname: 'Another Person Name', username:'AK01REDWAN'}
-        ],
         searchTerm: "",
-        course: null
+        course: null,
+        subscriped: false,
       }
     },
     methods: {
+      async subscribe() {
+        try {
+          const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
+            headers: {
+              'Authorization': 'Bearer ' + this.$store.state.userTokens,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (response.data) {
+            this.subscriped = true;
+            Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
+          } else {
+            Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
+            this.subscriped = false;
+          }
+        } catch (error) {
+          Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
+        }
+      },
       async getCourseData() {
         const user = await this.$store.state.user;
         if (!user) {
@@ -152,6 +154,8 @@ import Swal from 'sweetalert2';
           this.$router.push('/courses');
           return;
         }
+        //const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.$store.state.user}/by-course/${this.course.id}`);
+        //console.log(response);
       },
       ShowOption(optionNumber: number){
         this.currentOption = this.listOptions[optionNumber];

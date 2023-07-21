@@ -241,10 +241,10 @@ import { Options, Vue } from "vue-class-component";
     async loadProject() {
         try {
             const response = await axios.get('http://localhost:3000/projects/unacceptedProjects/'+this.stage.id,{
-                headers: {
-                    'Authorization': 'Bearer ' + this.$store.state.userTokens,
-                    'Content-Type': 'application/json'
-                }
+              headers: {
+                'Authorization': 'Bearer ' + this.$store.state.userTokens,
+                'Content-Type': 'application/json'
+              }
             });
             this.project = response.data;
             if (!this.project) {
