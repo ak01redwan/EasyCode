@@ -82,12 +82,6 @@ import Swal from "sweetalert2";
         });
       }
       // reset the state value
-    },
-    startTiming(minutes: number) {
-      const milliseconds = minutes * 60 * 1000;
-      setTimeout(() => {
-        alert(`Time finished after ${minutes} minutes.`);
-      }, milliseconds);
     }
   },
   computed: {

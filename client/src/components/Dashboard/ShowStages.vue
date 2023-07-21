@@ -43,24 +43,34 @@
             <span class="text-muted">@{{ stage.course.name }}</span>
             <div class="btn-group float-end">
               <button
-                v-if="stage.hasProject"
+                v-if="stage.hasProject && (stage.stageAskedProjects.length == 0)"
                 @click="currentStageForCreateAskedProject = stage"
                 data-bs-toggle="modal"
                 data-bs-target="#addNewtageAskedProject"
                 class="btn btn-outline-primary"
                 title="Create Stage's Asked Project"
               >
-                <i class="fa-solid fa-upload"></i
-                ><i class="fas fa-clipboard-list"></i>
+                <i class="fa-solid fa-upload"></i> <i class="fas fa-clipboard-list"></i>
               </button>
               <button
-                v-else-if="!stage.hasProject"
-                @click="goToStageExam(stage)"
+                v-if="stage.hasProject && (stage.stageAskedProjects.length >= 1)"
+                @click="goToShowAskedProjectPage(stage)"
                 class="btn btn-outline-primary"
-                title="Create Stage's Exam"
-                ><i class="fa-solid fa-upload"></i
-                ><i class="fas fa-clipboard-list"></i>
-                </button>
+                title="Show This Stage's Asked Project Details"
+              >
+                <i class="fa-solid fa-eye"></i> <i class="fas fa-clipboard-list"></i>
+              </button>
+              <button
+                v-if="stage.hasProject && (stage.stageAskedProjects.length >= 1)"
+                @click="deleteThisStagesAskedProject(stage)"
+                class="btn btn-outline-danger"
+                title="Delete this stage's asked project."
+              >
+                <i class="fas fa-trash"></i> <i class="fas fa-clipboard-list"></i>
+              </button>
+              <button v-else-if="!stage.hasProject" @click="goToStageExam(stage)" class="btn btn-outline-primary" title="Create Stage's Exam">
+                <i class="fa-solid fa-upload"></i> <i class="fas fa-clipboard-list"></i>
+              </button>
               <button @click="goToStagesLessons(stage)" class="btn btn-outline-info" title="View Stage Details">
                 <i class="fas fa-info-circle"></i
               ></button>
@@ -76,7 +86,7 @@
     <AddNewStage @stage-created="loadStages" />
 
     <!--Adding New Stage Asked Project Modal-->
-    <AddNewStageAskedProject :currentStageForCreateAskedProject="currentStageForCreateAskedProject"/>
+    <AddNewStageAskedProject @done="done" :currentStageForCreateAskedProject="currentStageForCreateAskedProject"/>
   </div>
 </template>
 
@@ -119,13 +129,21 @@ import Swal from "sweetalert2";
     return {
       searchTerm: "",
       stages: [],
-      currentStageForCreateAskedProject: null
+      currentStageForCreateAskedProject: null,
+      showAddProject: false,
     };
   },
   created() {
     this.loadStages();
   },
   methods: {
+    done() {
+      this.loadStages();
+    },
+    async goToShowAskedProjectPage(stage: any) {
+      this.$store.state.stageInShowAskedProjectPage = await stage;
+      this.$router.push('/submit-project');
+    },
     async goToStagesLessons(stage: any) {
       this.$store.state.stageInLessonPage = await stage;
       this.$router.push('/stage');
@@ -134,10 +152,10 @@ import Swal from "sweetalert2";
       this.$store.state.stageInExamPage = await stage;
       this.$router.push('/exam');
     },
-    deleteThisStage(stage: any) {
+    deleteThisStagesAskedProject(stage: any) {
       Swal.fire({
-        title: "Delete?",
-        text: `Are you sure. you went to delete ${ stage.title }.`,
+        title: "Delete!..",
+        text: `Are you sure. you went to delete ${ stage.title }'s asked project?`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: '#ff0101',
@@ -147,11 +165,44 @@ import Swal from "sweetalert2";
       }).then(async (result: any) => {
         if (result.isConfirmed) {
           try {
+            if (stage.stageAskedProjects.length >= 1) {
+              const deleteAskedProject = await axios.delete(`http://localhost:3000/stage-asked-project/${stage.stageAskedProjects[0].id}`);
+            }
+            this.loadStages();
+          } catch (error: any) {
+            console.log(error);
+            Swal.fire({
+              icon: "error",
+              title: "Network Error",
+              text: error.message,
+            });
+          }
+        }
+      });
+    },
+    deleteThisStage(stage: any) {
+      Swal.fire({
+        title: "Delete?",
+        text: `Are you sure. you went to delete ${ stage.title }?`,
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: '#ff0101',
+        cancelButtonColor: '#22aa22',
+        confirmButtonText: "Yes, Delete",
+        cancelButtonText: "No",
+      }).then(async (result: any) => {
+        if (result.isConfirmed) {
+          try {
+            if (stage.stageAskedProjects.length >= 1) {
+              const deleteAskedProject = await axios.delete(`http://localhost:3000/stage-asked-project/${stage.stageAskedProjects[0].id}`);
+            }else {
+              const deleteStagesExams = await axios.delete(`http://localhost:3000/exams/all-in-stage/${stage.id}`);
+            }
             const deleteStagesLessons = await axios.delete(`http://localhost:3000/lessons/all-in-stage/${stage.id}`);
-            const deleteStagesExams = await axios.delete(`http://localhost:3000/exams/all-in-stage/${stage.id}`);
             const deleteStage = await axios.delete(`http://localhost:3000/stages/${stage.id}`);
             this.loadStages();
           } catch (error: any) {
+            console.log(error);
             Swal.fire({
               icon: "error",
               title: "Network Error",

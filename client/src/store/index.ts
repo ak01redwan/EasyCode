@@ -7,7 +7,8 @@ export default createStore({
     userInUserDetailsPage: null,
     courseInCourseDatailsPage: null,
     stageInLessonPage: null,
-    stageInExamPage: null
+    stageInExamPage: null,
+    stageInShowAskedProjectPage: null
   },
   getters: {
     isAuthenticated(state) {

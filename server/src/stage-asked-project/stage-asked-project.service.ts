@@ -16,11 +16,7 @@ export class StageAskedProjectService {
     ) {}
 
   async create(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
-    if (await this.stagesServicesRepository.findOne({ where: { id: stageAskedProject.stage.id }})) {
-      return await this.stageAskedProjectRepository.save(stageAskedProject);
-    }else{
-      throw new NotFoundException(`we don't found the stage that you want to add this asked project under it. (${stageAskedProject.stage.title})`);
-    }
+    return await this.stageAskedProjectRepository.save(stageAskedProject);
   }
 
   async findAll(): Promise<StageAskedProject[]> {

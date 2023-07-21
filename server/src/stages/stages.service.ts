@@ -12,14 +12,14 @@ export class StagesService {
 
   async findAll(): Promise<Stage[]> {
     return await this.stageRepository.find({ 
-      relations: ['course','lessons','exams'] 
+      relations: ['course','lessons','exams','stageAskedProjects'] 
     });
   }
 
   async findOne(id: number): Promise<Stage> {
     return await this.stageRepository.findOne({
       where: { id },
-      relations: ['course','lessons','exams'],
+      relations: ['course','lessons','exams','stageAskedProjects'],
     });
   }
 
