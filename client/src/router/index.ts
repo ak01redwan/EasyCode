@@ -11,6 +11,7 @@ import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 import ExamView from '@/views/ExamView.vue'
 import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
 import LessonView from '@/views/LessonView.vue'
+import WaitingProjectConfirmationViewVue from '@/views/WaitingProjectConfirmationView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -51,6 +52,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/confirmation',
     name: 'confirmation',
     component: WaitingConfirmationView
+  },
+  {
+    path: '/projectConfirmation',
+    name: 'projectConfirmation',
+    component: WaitingProjectConfirmationViewVue,
   },
   {
     path: '/courses',

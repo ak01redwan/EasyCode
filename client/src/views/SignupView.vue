@@ -226,6 +226,9 @@ export default {
   },
   methods: {
     storeUserCookies(tokens) {
+      // first store them in the store state userTokens
+      this.$store.state.userTokens = tokens;
+      // then store them in the browser cookies
       return new Promise((resolve) => {
         Swal.fire({
           title: "cookies?",

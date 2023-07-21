@@ -85,6 +85,7 @@ export default {
           })
           .then((response) => {
             this.$store.dispatch('login', response.data.user);
+            this.$store.state.userTokens = response.data.access_token;
             if (this.rememberMe) {
               Cookies.set("userTokens", response.data.access_token, { expires: 30 });
             }else{
@@ -125,6 +126,7 @@ export default {
           })
           .then((res) => {
             this.$store.dispatch('login', res.data.user);
+            this.$store.state.userTokens = userCookies;
             if (res.data.user.userType == "admin") {
               this.$router.push("/dashboard"); // go to dashboard
               Swal.fire({

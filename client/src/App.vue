@@ -189,6 +189,7 @@ export default {
           .then((res) => {
             if (res.data.user){
               this.$store.dispatch('login', res.data.user);
+              this.$store.state.userTokens = userCookies;
             }
           })
           .catch((err) => {});

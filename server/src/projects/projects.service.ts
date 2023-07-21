@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
+import { promises } from 'dns';
 
 @Injectable()
 export class ProjectsService {
@@ -11,11 +12,30 @@ export class ProjectsService {
   ) {}
 
   async findAll(): Promise<Project[]> {
-    return this.projectRepository.find();
+    return this.projectRepository.find({
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
   }
 
   async findById(id: number): Promise<Project> {
-    return this.projectRepository.findOne({ where: { id: id}});
+    return this.projectRepository.findOne({
+      where: { id: id},
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
+  }
+
+  async getByStageAskedProjectId(askedProjectId: number, studentId: number): Promise<any> {
+    return await this.projectRepository.findOne({
+      where: { askedProject: { id: askedProjectId }, student: { id: studentId}},
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
+  }
+
+  async getUnacceptedProjectsOfUserId(userId: number, stageId: number): Promise<any> {
+    return await this.projectRepository.findOne({
+      where: { askedProject:{ stage: { id: stageId}}, student: { id: userId}, isAcceptedAndDone: false},
+      relations: ['likes','comments','askedProject','student','supervisor']
+    });
   }
 
   async create(projectData: Project): Promise<Project> {

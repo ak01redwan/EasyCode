@@ -4,6 +4,7 @@ import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
+import { Project } from 'src/projects/entities/project.entity';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -65,5 +66,8 @@ export class User {
 
   @OneToMany(() => Confirmation, confirmation => confirmation.reviewer)
   reviewerConfirmations: Confirmation[];
+
+  @OneToMany(() => Project, project => project.student)
+  projects: Project[];
 
 }

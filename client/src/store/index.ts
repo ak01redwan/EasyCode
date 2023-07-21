@@ -3,6 +3,7 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: null,
+    userTokens: null,
     showUsersWithType: '',
     userInUserDetailsPage: null,
     courseInCourseDatailsPage: null,
@@ -18,6 +19,15 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       state.user = user
+      if (!user) {
+        state.userTokens = null;
+        state.showUsersWithType = '';
+        state.userInUserDetailsPage = null;
+        state.courseInCourseDatailsPage = null;
+        state.stageInLessonPage = null;
+        state.stageInExamPage = null;
+        state.stageInShowAskedProjectPage = null;
+      }
     },
   },
   actions: {

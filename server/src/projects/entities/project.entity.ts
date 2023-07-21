@@ -1,6 +1,8 @@
 import { Like } from 'src/likes/entities/like.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import { StageAskedProject } from 'src/stage-asked-project/entities/stage-asked-project.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Project {
@@ -37,4 +39,14 @@ export class Project {
 
   @OneToMany(() => Comment, comment => comment.project)
   comments: Comment[];
+
+  @ManyToOne(() => StageAskedProject, askedProject => askedProject.projects)
+  askedProject: StageAskedProject;
+
+  @ManyToOne(() => User, student => student.projects)
+  student: User;
+
+  @ManyToOne(() => User, student => student.projects)
+  supervisor: User;
+
 }

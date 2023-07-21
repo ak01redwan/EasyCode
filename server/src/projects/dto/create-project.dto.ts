@@ -1,31 +1,15 @@
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import { IsBoolean, IsNotEmpty, IsOptional } from "class-validator";
+import { StageAskedProject } from "src/stage-asked-project/entities/stage-asked-project.entity";
+import { User } from "src/users/entities/user.entity";
 
 export class CreateProjectDto {
 
-  @MinLength(4)
+  @IsNotEmpty()
   title: string;
-  
-  @IsString()
+
   @IsNotEmpty()
-  documentPath: string;
+  askedProject: StageAskedProject
 
-  @IsString()
   @IsNotEmpty()
-  imagePath: string;
-
-  @IsString()
-  @IsOptional()
-  supervisorComment?: string;
-
-  @IsInt()
-  @IsOptional()
-  refusedTimes?: number;
-
-  @IsBoolean()
-  @IsOptional()
-  isSubmitted?: boolean;
-
-  @IsBoolean()
-  @IsOptional()
-  isAcceptedAndDone?: boolean;
+  student: User;
 }

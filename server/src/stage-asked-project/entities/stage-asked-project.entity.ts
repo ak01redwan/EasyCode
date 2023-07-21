@@ -1,5 +1,6 @@
+import { Project } from "src/projects/entities/project.entity";
 import { Stage } from "src/stages/entities/stage.entity";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class StageAskedProject {
@@ -15,4 +16,7 @@ export class StageAskedProject {
     // relations
     @ManyToOne(() => Stage, (stage) => stage.stageAskedProjects)
     stage: Stage;
+
+    @OneToMany(() => Project, project => project.askedProject)
+    projects: Project[];
 }
