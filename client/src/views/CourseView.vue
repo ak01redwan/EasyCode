@@ -1,5 +1,4 @@
 <template>
-  <h1>{{ course }}</h1>
     <div class="container-fluid">
       <div class="row flex-nowrap">
           <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
@@ -15,7 +14,7 @@
                       </button>
                   </li>
                   <li>
-                    <button  @click="subscribe()" class="btn btn-primary w-100">
+                    <button v-if="user" @click="subscribe()" class="btn btn-primary w-100">
                       <i class="fa-solid fa-square-check"></i> 
                       <strong>{{ subscriped ? ' unsubscripe' : ' subscripe' }}</strong>
                     </button>
@@ -117,42 +116,45 @@ import axios from 'axios';
         searchTerm: "",
         course: null,
         subscriped: false,
+        user: null
       }
     },
     methods: {
       async subscribe() {
-        try {
-          const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
-            headers: {
-              'Authorization': 'Bearer ' + this.$store.state.userTokens,
-              'Content-Type': 'application/json'
-            }
-          });
-          if (response.data) {
-            this.subscriped = true;
-            Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
-          } else {
-            Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
-            this.subscriped = false;
+        if (this.user.userType == 'supervisor') {
+          if (!this.user.supervisorConfirmation[0].isConfirmed) {
+            Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: "Your certification documents as a supervisor are not confirmed yet",
+            });
+            this.$router.push('/confirmation');
           }
-        } catch (error) {
-          Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
+        } else {
+          try {
+            const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
+              headers: {
+                'Authorization': 'Bearer ' + this.$store.state.userTokens,
+                'Content-Type': 'application/json'
+              }
+            });
+            if (response.data) {
+              this.subscriped = true;
+              Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
+            } else {
+              Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
+              this.subscriped = false;
+            }
+          } catch (error) {
+            Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
+          }
         }
       },
       async getCourseData() {
-        const user = await this.$store.state.user;
-        if (!user) {
-          Swal.fire({
-              icon: "error",
-              title: "Oops!",
-              text: "You need to signin first.",
-          });
-          return;
-        }
+        this.user = await this.$store.state.user;
         this.course = await this.$store.state.courseInCourseDatailsPage;
         if (!this.course) {
           this.$router.push('/courses');
-          return;
         }
         //const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.$store.state.user}/by-course/${this.course.id}`);
         //console.log(response);

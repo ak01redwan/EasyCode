@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="userInfo">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg">
         <div
@@ -19,14 +19,14 @@
                 style="font-size: 14px"
               >
                 <strong>{{
-                  userData ? userData.fullName : "No Full Name"
+                  userInfo.fullName
                 }}</strong> </span
               ><br />
               <span
                 class="lead text-secondary text-decoration-underline"
                 style="font-size: 14px"
               >
-                @{{ userData ? userData.username : "No UserName" }}
+                @{{ userInfo.username }}
               </span>
             </div>
           </router-link>
@@ -61,8 +61,8 @@
       <div class="col py-3" style="overflow-y: auto; max-height: 720px">
         <!--Getting user's Details-->
         <UserDetails
-          :UserInfo="userData"
-          v-if="activatedItemContentName === 'UserDetails' && userData"
+          :UserInfo="userInfo"
+          v-if="activatedItemContentName === 'UserDetails'"
         />
         <!-- Getting Current Course Stages -->
         <div
@@ -165,15 +165,17 @@ import UserDetails from "@/components/User/UserDetails.vue";
   
   methods: {
     getUserFromStoredState() {
-      const currentUser = this.$store.state.userInUserDetailsPage;
-      if (currentUser) {
-        this.userInfo = currentUser;
-      } else {
-        this.userInfo = this.$store.state.user;
-      }
       if (!this.$store.state.user) {
         this.$router.push("/login");
+      }else{
+        const currentUser = this.$store.state.userInUserDetailsPage;
+        if (currentUser) {
+          this.userInfo = currentUser;
+        } else {
+          this.userInfo = this.$store.state.user;
+        }
       }
+      //console.log(this.userInfo);
     },
     getSidebarItemByContent(content: string) {
       return this.sidebarItems.filter(
@@ -188,11 +190,8 @@ import UserDetails from "@/components/User/UserDetails.vue";
         this.getSidebarItemByContent(content).content;
     },
   },
-  computed: {
-    userData() {
-      this.getUserFromStoredState();
-      return this.userInfo;
-    },
+  created() {
+    this.getUserFromStoredState();
   }
 })
 export default class UserDetailsView extends Vue {

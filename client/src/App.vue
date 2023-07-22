@@ -179,17 +179,24 @@ export default {
       this.$router.push("/users");
     },
     getUserProfileUsingStoredTokens() {
-      if (this.user) { return; }
       const userCookies = Cookies.get("userTokens");
       if (userCookies) {
         axios
           .get("http://localhost:3000/auth/profile", {
-            headers: { Authorization: `Bearer ${userCookies}` },
+            headers: {
+              'Authorization': 'Bearer ' + userCookies,
+              'Content-Type': 'application/json'
+            }
           })
           .then((res) => {
-            if (res.data.user){
-              this.$store.dispatch('login', res.data.user);
+            if (res.data){
+              this.$store.dispatch('login', res.data);
               this.$store.state.userTokens = userCookies;
+              if (res.data.userType == 'supervisor') {
+                if (!res.user.supervisorConfirmation[0].isConfirmed) {
+                  this.$router.push("/confirmation");
+                }
+              }
             }
           })
           .catch((err) => {});
@@ -205,17 +212,13 @@ export default {
         text: 'You have logged out!.'
       })
     },
-    keepUserUpdated(){
-      this.user = this.$store.state.user;
-    }
   },
-  mounted() {
-    this.keepUserUpdated();
+  created() {
     this.getUserProfileUsingStoredTokens();
   },
-  computed:{
-    auth(){
-      this.keepUserUpdated();
+  computed: {
+    auth() {
+      this.user = this.$store.state.userTokens;
       return this.user;
     }
   }

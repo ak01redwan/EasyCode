@@ -35,6 +35,7 @@ import ShowCourses from '@/components/Dashboard/ShowCourses.vue'
 import ShowStages from '@/components/Dashboard/ShowStages.vue'
 import ConfirmeSuprvisors from '@/components/Dashboard/ConfirmeSupervisors.vue'
 import ConfirmingProjects from '@/components/Dashboard/ConfirmingProjects.vue'
+import Swal from 'sweetalert2';
 
 @Options({
   components: {
@@ -61,7 +62,28 @@ import ConfirmingProjects from '@/components/Dashboard/ConfirmingProjects.vue'
         ]
     }
   },
+  created() {
+    this.verifySupervisorIsConfirmed();
+  },
   methods: {
+    verifySupervisorIsConfirmed() {
+        if (this.$store.state.user) {
+            if (this.$store.state.user.userType == 'supervisor') {
+                if (!this.$store.state.user.supervisorConfirmation[0].isConfirmed) {
+                    this.$router.push("/confirmation");
+                }
+            } else if (this.$store.state.user.userType == 'student') {
+                Swal.fire({
+                    icon: "error",
+                    title: "No Authrization!",
+                    text: "You do not have the previlage to enter this place.!",
+                });
+                this.$router.push("/login");
+            }
+        }else{
+            this.$router.push("/login");
+        }
+    },
     changeCurrentDisplayedContent(newContent: string){ this.currentDisplayedContent = newContent; },
   }
 })

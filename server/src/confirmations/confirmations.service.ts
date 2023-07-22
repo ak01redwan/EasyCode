@@ -19,9 +19,9 @@ export class ConfirmationsService {
     return await this.confirmationsRepository.save(confirmation);
   }
 
-  async update(id: number, updateConfirmationDto: UpdateConfirmationDto): Promise<Confirmation> {
-    const confirmation = plainToClass(Confirmation, updateConfirmationDto);
-    return await this.confirmationsRepository.save(confirmation);
+  async update(id: number, confirmation: Confirmation): Promise<Confirmation> {
+    await this.confirmationsRepository.update(id, confirmation);
+    return await this.confirmationsRepository.findOne({ where: { id: id}})
   }
 
   async updateEntity(confirmation: Confirmation): Promise<Confirmation> {

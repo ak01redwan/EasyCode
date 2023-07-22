@@ -14,6 +14,7 @@ import { createUserDtoToUserEntity, updateUserDtoToUserEntity } from './mappers/
 import { UploadFileToDiskStorage } from 'src/helpers/upload-file'
 import { ConfirmationsService } from 'src/confirmations/confirmations.service';
 import { CreateConfirmationDto } from 'src/confirmations/dto/create-confirmation.dto';
+import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
 
 
 @Controller('users')
@@ -96,7 +97,6 @@ export class UsersController {
     }
   }
 
-  // for admin
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
@@ -112,20 +112,60 @@ export class UsersController {
     return await this.usersService.findAllByType('student');
   }
 
-  // for admin
+  
   @Get(':id')
   async findOne(@Param() params): Promise<User> {
     return await this.usersService.findOne(params.id);
   }
 
-  // for admin or the account owner
+  
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto): Promise<User> {
-    const user = updateUserDtoToUserEntity(updateUserDto);
-    return await this.usersService.update(+id, user);
+  @UseInterceptors(
+    FilesInterceptor('files', 2, UploadFileToDiskStorage),
+  )
+  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto, @UploadedFiles() files: Multer.File[]): Promise<any> {
+    // first lets extract the files
+    let [photo, certificationsDocs] = [null,null];
+    if (updateUserDto.isCertificationsDocsChanged && updateUserDto.isPhotoChanged) {
+      [photo, certificationsDocs] = files;
+    } else if (updateUserDto.isCertificationsDocsChanged) {
+      certificationsDocs = files[0];
+    } else if (updateUserDto.isPhotoChanged) {
+      photo = files[0];
+    }
+
+    // then getting the user entity from the db and update it
+    const existUser = await this.usersService.findOne(+id)
+    const user: User = updateUserDtoToUserEntity(updateUserDto, existUser);
+    //remove the olds files if there any are new
+    if (photo) {
+      try { fs.unlinkSync(`/public${user.picturePath}`); } catch (error) { console.log(error)}
+      // then update user's photo path
+      user.picturePath = `/uploads/${photo.filename}`;
+    }
+    // update user
+    const updatedUser = await this.usersService.update(+id, user);
+    // update user confirmation if it is supervisor
+    if (updateUserDto.userType == 'supervisor' && certificationsDocs) {
+      try { fs.unlinkSync(`/public${updatedUser.supervisorConfirmation[0].certificationsDocsPath}`); } catch (error) { console.log(error)}
+      const confirmation = new Confirmation();
+      confirmation.certificationsDocsPath = `/uploads/${certificationsDocs.filename}`;
+      updatedUser.supervisorConfirmation[0] = this.confirmationsService.update(updatedUser.supervisorConfirmation[0].id,confirmation);
+    }
+    // create new type as we do in create function
+    type UserWithTokens = {
+      user: User;
+      tokens: string;
+    };
+    // create an object from this new type to be returned
+    const updatedUserWithNewTokens: UserWithTokens = {
+      user: updatedUser,
+      tokens: await this.authService.getUserTokens(updatedUser)
+    };
+    return updatedUser;
   }
 
-  // for admin or the account owner
+  
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
     await this.usersService.remove(+id);

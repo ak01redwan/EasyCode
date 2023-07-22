@@ -49,8 +49,6 @@
       </div>
     </div>
   </div>
-  <!--Adding New User Modal-->
-  <AddNewUser />
 </template>
 
 <script lang="ts">
@@ -128,10 +126,11 @@ import Swal from "sweetalert2";
       },
       async updateSupervisorConfirmation(confirmationNewData: any) {
         try {
-          await axios.patch(
+          const response = await axios.patch(
             `http://localhost:3000/confirmations/${confirmationNewData.id}`,
             confirmationNewData
           );
+          await this.getAllUsers();
         } catch (error:any) {
           Swal.fire({
             title: "oOPs...!",
@@ -166,11 +165,11 @@ import Swal from "sweetalert2";
               break;
             case 'confirmed':
               return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
-                && user.supervisorConfirmation.isConfirmed);
+                && user.supervisorConfirmation[0].isConfirmed);
               break;
             case 'unconfirmed':
               return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
-                && !user.supervisorConfirmation.isConfirmed);
+                && !user.supervisorConfirmation[0].isConfirmed);
               break;
           }
         });

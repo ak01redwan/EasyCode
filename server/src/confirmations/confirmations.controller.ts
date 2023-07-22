@@ -7,6 +7,7 @@ import { ConfirmationsService } from './confirmations.service';
 import { CreateConfirmationDto } from './dto/create-confirmation.dto';
 import { UpdateConfirmationDto } from './dto/update-confirmation.dto';
 import { Confirmation } from './entities/confirmation.entity';
+import { plainToClass } from 'class-transformer';
 
 @Controller('confirmations')
 export class ConfirmationsController {
@@ -40,7 +41,8 @@ export class ConfirmationsController {
 
   @Patch(':id')
   async update(@Param('id') id: string, @Body() updateConfirmationDto: UpdateConfirmationDto) {
-    return await this.confirmationsService.update(+id, updateConfirmationDto);
+    const confirmation = plainToClass(Confirmation, updateConfirmationDto);
+    return await this.confirmationsService.update(+id, confirmation);
   }
 
   @Delete(':id')

@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
+
+import ExamView from '@/views/ExamView.vue'
 import HomeView from '../views/HomeView.vue'
 import UsersView from '../views/UsersView.vue'
-import UserDetailsView from '../views/UserDetailsView.vue'
-import LoginViewVue from '@/views/LoginView.vue'
 import SignupView from '@/views/SignupView.vue'
-import CoursesView from '@/views/CoursesView.vue'
 import CourseView from '@/views/CourseView.vue'
-import DashboardView from "@/views/DashboardView.vue"
-import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
-import ExamView from '@/views/ExamView.vue'
-import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
 import LessonView from '@/views/LessonView.vue'
+import CoursesView from '@/views/CoursesView.vue'
+import LoginViewVue from '@/views/LoginView.vue'
+import EditUserView from '@/views/EditUserView.vue';
+import DashboardView from "@/views/DashboardView.vue"
+import UserDetailsView from '../views/UserDetailsView.vue'
+import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
+import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
 import WaitingProjectConfirmationViewVue from '@/views/WaitingProjectConfirmationView.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -82,6 +84,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/signup',
     name: 'signup',
     component: SignupView    
+  },
+  {
+    path: '/edituser',
+    name: 'edituser',
+    component: EditUserView    
   },
   {
     path: '/submit-project',

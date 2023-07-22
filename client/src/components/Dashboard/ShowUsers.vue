@@ -12,9 +12,9 @@
         </button>
         <ul class="dropdown-menu" aria-labelledby="filter-dropdown">
           <li><a class="dropdown-item btn" @click="changeFilterValue('')">All Users</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Admin Supervisor')">Admin Supervisor</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Normal Supervisor')">Normal Supervisor</a></li>
-          <li><a class="dropdown-item btn" @click="changeFilterValue('Student')">Student</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('supervisor')">Supervisors</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('Student')">Students</a></li>
+          <li><a class="dropdown-item btn" @click="changeFilterValue('admin')">Admins</a></li>
         </ul>
       </div>
       <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Add New User <i class="fas fa-plus"></i></button>
@@ -31,9 +31,8 @@
           <span class="fw-bold">{{ user.fullName }}</span>
           <span class="text-muted">@{{user.username}}</span>
           <div class="btn-group float-end">
-            <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
             <button @click="goToUserDateilsPage(user)" class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
-            <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
+            <button @click="goToEditUserPage(user)" class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
             <button @click="deleteUser(user)" class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
           </div>
         </div>
@@ -72,6 +71,10 @@ import Swal from "sweetalert2";
       AddNewUser,
     },
     methods:{
+      goToEditUserPage(user: any) {
+        this.$store.state.userInEditUserPage = user;
+        this.$router.push("/edituser");
+      },
       goToUserDateilsPage(user: any) {
         this.$store.state.userInUserDetailsPage = user;
         this.$router.push("/user");
@@ -86,6 +89,14 @@ import Swal from "sweetalert2";
         }
       },
       async deleteUser(user: any) {
+        if (user.userType == 'admin') {
+          Swal.fire({
+            title: "ADMIN?",
+            text: `You can not delete the admin ${ user.fullName }.`,
+            icon: "error",
+          });
+          return;
+        }
         Swal.fire({
           title: "Delete?",
           text: `Are you sure. you went to delete ${ user.fullName }.`,

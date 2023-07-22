@@ -31,9 +31,9 @@ import SignupView from '@/views/SignupView.vue'
   },
   methods: {
     done() {
-        // Close the modal when the done event is emitted
-        const cancelButton = document.getElementById('cancelButton');
-        (cancelButton as any).click();
+      //console.log("done");
+      const cancelButton = document.getElementById('cancelButton');
+      (cancelButton as any).click();
     }
   }
 })

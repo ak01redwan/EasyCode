@@ -20,7 +20,8 @@ export class UsersService {
       throw new HttpException('User with this email or username already exists!.', HttpStatus.BAD_REQUEST);
     }
     user.password = await this.bcryptService.hash(user.password, 10);
-    return await this.usersRepository.save(user);
+    const createdUser =  await this.usersRepository.save(user);
+    return await this.usersRepository.findOne({ where: { id: createdUser.id}});
   }
 
   async findAll(): Promise<User[]> {
@@ -66,13 +67,16 @@ export class UsersService {
   async findByUserEmail (email: string): Promise<User> {
     return await this.usersRepository.findOne({ 
       where: { email: email, isDeleted: false},
-      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions']
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
 
   async update(id: number, user: User): Promise<User> {
     await this.usersRepository.update(id, user);
-    return await this.usersRepository.findOne({ where: { id: id}});
+    return await this.usersRepository.findOne({
+      where: { id: id},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+    });
   }
 
   async remove(id: number): Promise<void> {
