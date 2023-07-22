@@ -10,7 +10,8 @@ export default createStore({
     stageInLessonPage: null,
     stageInExamPage: null,
     stageInShowAskedProjectPage: null,
-    userInEditUserPage: null
+    userInEditUserPage: null,
+    currentDashboardDisplayedContent: "ShowUsers",
   },
   getters: {
     isAuthenticated(state) {

@@ -5,7 +5,7 @@
             <div class="col-md-3 col-lg-2 bg-dark text-white" style="height: 500px;">
                 <ul class="nav flex-column">
                     <li v-for="(item, index) in sidebarItems" :key="index" class="nav-item">
-                        <a class="nav-link active sidebarItemButton" 
+                        <a :class="`nav-link sidebarItemButton ${(currentDisplayedContent == item.content) ? 'fw-lighter fw-bolder text-info' : ''} `" 
                         @click="changeCurrentDisplayedContent(item.content)">
                             <i :class="item.icon"></i>
                             {{ item.text }}
@@ -64,6 +64,7 @@ import Swal from 'sweetalert2';
   },
   created() {
     this.verifySupervisorIsConfirmed();
+    this.currentDisplayedContent = this.$store.state.currentDashboardDisplayedContent;
   },
   methods: {
     verifySupervisorIsConfirmed() {
@@ -84,7 +85,10 @@ import Swal from 'sweetalert2';
             this.$router.push("/login");
         }
     },
-    changeCurrentDisplayedContent(newContent: string){ this.currentDisplayedContent = newContent; },
+    changeCurrentDisplayedContent(newContent: string){ 
+        this.currentDisplayedContent = newContent; 
+        this.$store.state.currentDashboardDisplayedContent = newContent;
+    },
   }
 })
 export default class DashboardView extends Vue {

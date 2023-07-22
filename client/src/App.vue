@@ -14,24 +14,25 @@
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <router-link to="/" class="nav-link"
+          <li class="nav-item" @click="currentPage = 'Home'">
+            <router-link to="/" :class="`nav-link ${(currentPage == 'Home') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-house"></i> Home</router-link
             >
           </li>
-          <li class="nav-item">
-            <router-link to="/about" class="nav-link"
+          <li class="nav-item" @click="currentPage = 'About'">
+            <router-link to="/about" :class="`nav-link ${(currentPage == 'About') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-circle-info"></i> About</router-link
             >
           </li>
-          <li class="nav-item">
-            <router-link to="/dashboard" class="nav-link"
+          <li class="nav-item" @click="currentPage = 'Dashboard'">
+            <router-link to="/dashboard" :class="`nav-link ${(currentPage == 'Dashboard') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
             >
           </li>
           <li class="nav-item dropdown">
             <a
-              class="nav-link dropdown-toggle"
+              @click="currentPage = 'more'"
+              :class="`nav-link dropdown-toggle ${(currentPage == 'more') ? 'fw-lighter fw-bolder' : ''}`"
               href="#"
               role="button"
               data-bs-toggle="dropdown"
@@ -171,6 +172,7 @@ export default {
   data() {
     return {
       user: null,
+      currentPage: 'Home'
     };
   },
   methods: {
