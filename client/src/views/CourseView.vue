@@ -157,25 +157,25 @@ import axios from 'axios';
                 text: "Your certification documents as a supervisor are not confirmed yet",
             });
             this.$router.push('/confirmation');
+            return;
           }
-        } else {
-          try {
-            const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
-              headers: {
-                'Authorization': 'Bearer ' + this.$store.state.userTokens,
-                'Content-Type': 'application/json'
-              }
-            });
-            if (response.data) {
-              this.subscriped = true;
-              Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
-            } else {
-              Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
-              this.subscriped = false;
+        } 
+        try {
+          const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
+            headers: {
+              'Authorization': 'Bearer ' + this.$store.state.userTokens,
+              'Content-Type': 'application/json'
             }
-          } catch (error) {
-            Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
+          });
+          if (response.data) {
+            this.subscriped = true;
+            Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
+          } else {
+            Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
+            this.subscriped = false;
           }
+        } catch (error) {
+          Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
         }
       },
       async getCourseData() {

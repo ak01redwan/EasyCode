@@ -1,11 +1,11 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid" v-if="user">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-3 col-lg-2 bg-dark text-white" style="height: 500px;">
                 <ul class="nav flex-column">
                     <li v-for="(item, index) in sidebarItems" :key="index" class="nav-item">
-                        <a :class="`nav-link sidebarItemButton ${(currentDisplayedContent == item.content) ? 'fw-lighter fw-bolder text-info' : ''} `" 
+                        <a v-if="user.userType == 'admin' || supervisorHasPrevilageTo(item.content)" :class="`nav-link sidebarItemButton ${(currentDisplayedContent == item.content) ? 'fw-lighter fw-bolder text-info' : ''} `" 
                         @click="changeCurrentDisplayedContent(item.content)">
                             <i :class="item.icon"></i>
                             {{ item.text }}
@@ -48,27 +48,61 @@ import Swal from 'sweetalert2';
   },
   data () {
     return {
-        currentDisplayedContent: 'ShowUsers',
+        user: null,
+        currentDisplayedContent: 'ShowCourses',
         sidebarItems:[ // those are the sidebar items
-            {text: 'Show Users',    icon: 'fas fa-users me-2',            content: 'ShowUsers'},
-            {text: 'Confirmations', icon: 'fas fa-users me-2',            content: 'ConfirmeSuprvisors'},
-            {text: 'student Projects', icon: 'fas fa-users me-2',            content: 'ConfirmingProjects'},
-            {text: 'Categories',    icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
-            {text: 'Courses',       icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
-            {text: 'Stages',        icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
-            {text: 'Analytics',     icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
-            {text: 'Messages',      icon: 'fas fa-envelope me-2',         content: 'ShowMessages'},
-            {text: 'Settings',      icon: 'fas fa-cog me-2',              content: 'ShowSettings'},
+            {text: 'Show Users',       icon: 'fas fa-users me-2',            content: 'ShowUsers'},
+            {text: 'Confirmations',    icon: 'fas fa-users me-2',            content: 'ConfirmeSuprvisors'},
+            {text: 'Asked Projects', icon: 'fas fa-users me-2',              content: 'ConfirmingProjects'},
+            {text: 'Categories',       icon: 'fa-solid fa-layer-group me-2', content: 'ShowCategories'},
+            {text: 'Courses',          icon: 'fa-solid fa-video me-2',       content: 'ShowCourses'},
+            {text: 'Stages',           icon: 'fa-solid fa-laptop-code me-2', content: 'ShowStages'},
+            {text: 'Analytics',        icon: 'fas fa-chart-bar me-2',        content: 'ShowAnalytics'},
         ]
     }
   },
-  created() {
+  async created() {
+    this.user = await this.$store.state.user;
     this.verifySupervisorIsConfirmed();
     this.currentDisplayedContent = this.$store.state.currentDashboardDisplayedContent;
+    if (this.user.userType == 'supervisor') {
+        this.currentDisplayedContent = "ConfirmingProjects";
+        this.$store.state.currentDashboardDisplayedContent = "ConfirmingProjects";
+    }
+    console.log(this.user);
   },
   methods: {
-    verifySupervisorIsConfirmed() {
-        if (this.$store.state.user) {
+    isOneOfMyCourse() {
+
+    },
+    supervisorHasPrevilageTo(content: any){
+        switch (content) {
+            case "ShowUsers":
+                return false;
+                break;
+            case "ConfirmeSuprvisors":
+                return false;
+                break;
+            case "ConfirmingProjects":
+                return true;
+                break;
+            case "ShowCategories":
+                return false;
+                break;
+            case "ShowCourses":
+                return true;
+                break;
+            case "ShowStages":
+                return true;
+                break;
+            case "ShowAnalytics":
+                return true;
+                break;
+            
+        }
+    },
+    async verifySupervisorIsConfirmed() {
+        if (await this.$store.state.user) {
             if (this.$store.state.user.userType == 'supervisor') {
                 if (!this.$store.state.user.supervisorConfirmation[0].isConfirmed) {
                     this.$router.push("/confirmation");
