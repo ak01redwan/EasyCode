@@ -39,6 +39,11 @@ export class CoursesController {
     return await this.coursesService.toggleCoursePublished(+id);
   }
 
+  @Post('adminForThisCourse/:id')
+  async assignCourseAdmin(@Param('id') id: string, @Body() supervisorInfo: any): Promise<Course> {
+    console.log("hited");
+    return await this.coursesService.assignCourseAdmin(+id,supervisorInfo);
+  }
   // all actors student, admin, supervisor, course admin
   @Get()
   async findAll(): Promise<Course[]> {

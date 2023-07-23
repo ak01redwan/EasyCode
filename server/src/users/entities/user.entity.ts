@@ -5,6 +5,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
 import { Project } from 'src/projects/entities/project.entity';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -69,5 +70,8 @@ export class User {
 
   @OneToMany(() => Project, project => project.student)
   projects: Project[];
+
+  @OneToMany(() => Course, course => course.courseAdmin)
+  courses: Course[];
 
 }
