@@ -28,7 +28,7 @@ export class SubscriptionsController {
 
   @Get('by-user/:userId/by-course/:courseId')
   async findByUserAndCourse(@Param('userId') userId: number,@Param('courseId') courseId: number): Promise<Subscription> {
-    return await this.subscriptionsService.findByUserAndCourse(userId,courseId);
+    return await this.subscriptionsService.findByUserAndCourse(courseId, userId);
   }
 
   @Get('by-course/:courseId')
@@ -51,7 +51,7 @@ export class SubscriptionsController {
       newSubscription.user   = { id: req.authData.user.id} as User;
       newSubscription.isDone = false;
       newSubscription.scores = 0;
-      newSubscription.currentStage = newSubscription.course.stages[0] ? newSubscription.course.stages[0] : null;
+      newSubscription.stage = newSubscription.course.stages[0];
       return await this.subscriptionsService.create(newSubscription);
     }
   }

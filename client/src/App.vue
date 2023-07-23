@@ -29,11 +29,10 @@
               ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
             >
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" :class="`${(currentPage == 'more') ? 'fw-lighter fw-bolder' : ''}`">
             <a
               @click="currentPage = 'more'"
-              :class="`nav-link dropdown-toggle ${(currentPage == 'more') ? 'fw-lighter fw-bolder' : ''}`"
-              href="#"
+              class="nav-link dropdown-toggle"
               role="button"
               data-bs-toggle="dropdown"
               ><i class="fa-solid fa-list"></i> More Things</a

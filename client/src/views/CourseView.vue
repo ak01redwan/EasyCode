@@ -1,20 +1,21 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid" v-if="user && course">
       <div class="row flex-nowrap">
           <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
             <div class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
               <router-link to="/user" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-                  <span class="fs-4 m-1"> Course Title </span>
+                  <span class="fs-4 m-1"> {{ course.name }} </span>
               </router-link>
               <hr>
               <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                   <li v-for="(item, index) in SideBarData" :key="index" class="nav-item">
-                      <button  @click="ShowOption(index)" class="nav-link align-middle px-0">
+                      <button v-if="subscriped && !(user.userType == 'student' && item.itemName == 'Chatting Room')"  @click="ShowOption(index)" class="nav-link align-middle px-0">
                         <i class="fa-solid" :class="item.itemIconClass"></i> <span class="ms-1 d-none d-sm-inline text-secondary">{{ item.itemName }}</span>
                       </button>
                   </li>
-                  <li>
-                    <button v-if="user" @click="subscribe()" class="btn btn-primary w-100">
+                  <li class="nav-item w-100">{{ !subscriped ? 'subscripe right now to see more things about this course.' : '' }}</li>
+                  <li class="nav-item w-100">
+                    <button v-if="user" @click="subscribe()" class="btn btn-primary w-100 mt-2">
                       <i class="fa-solid fa-square-check"></i> 
                       <strong>{{ subscriped ? ' unsubscripe' : ' subscripe' }}</strong>
                     </button>
@@ -33,9 +34,12 @@
             <CourseStage v-for="(stage,index) in course.stages" :key="index"
               :stageId="(index+1)"
               :stageTitle="stage.title"
-              :isOpen="stage.isOpen"
+              :isOpen="stage.id <= currentStage.id"
+              style="cursor: pointer;"
+              @click="goToStagesLessons(stage)"
             /> 
           </div>
+
           
           <!--Getting Students-->
           <div v-if="currentOption === listOptions[2]" class="row m-0" style="            
@@ -104,23 +108,47 @@ import axios from 'axios';
     data () {
       return {
         currentOption: "CourseDetails",
-        listOptions: ['CourseDetails','MyCourses','MyProjects','CompleteCourses','Settings','Stages'],
+        listOptions: ['CourseDetails','MyCourses','MyProjects','CompleteCourses','Stages'],
         SideBarData: [
             {itemName: 'Details', itemIconClass: 'fa-circle-info'},
             {itemName: 'Stages', itemIconClass: 'fa-circle-play'},
             {itemName: 'Students', itemIconClass: 'fa-users'},
             {itemName: 'Supervisors', itemIconClass: 'fa-person-chalkboard'},
             {itemName: 'Chatting Room', itemIconClass: 'fa-comments'},
-            {itemName: 'Settings', itemIconClass: 'fa-gear'},
         ],
         searchTerm: "",
         course: null,
         subscriped: false,
-        user: null
+        user: null,
+        currentStage: null
       }
     },
     methods: {
+      async goToStagesLessons(stage: any) {
+        if (stage.id > this.currentStage.id) {
+          Swal.fire({
+            icon: "warning",
+            title: "NOT ALLOWED!",
+            text: "You can not open this stage until you finish it's previous one.",
+          });
+          return;
+        }
+        try {
+          const respons = await axios.get(`http://localhost:3000/stages/${stage.id}`);
+          this.$store.state.stageInLessonPage = await respons.data;
+          //console.log(this.$store.state.stageInLessonPage);
+          this.$router.push('/stage');
+        } catch (error) {}
+      },
       async subscribe() {
+        if (this.course.stages.length <= 0) {
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: "This course dose not have any stages yet so you can not subscripe right now.",
+          });
+          return;
+        }
         if (this.user.userType == 'supervisor') {
           if (!this.user.supervisorConfirmation[0].isConfirmed) {
             Swal.fire({
@@ -177,8 +205,15 @@ import axios from 'axios';
             });
         }
     },
-    created() {
-      this.getCourseData();
+    async created() {
+      await this.getCourseData();
+      try {
+        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
+        await response.data.id ? this.subscriped = true : this.subscriped = false;
+        response.data.stage ? this.currentStage = response.data.stage : '';
+      } catch (error) {
+        console.log(error);
+      }
     },
   })
   export default class CourseView extends Vue {

@@ -18,7 +18,7 @@
               <i class="bi bi-caret-right"></i>
               <strong>&downarrow; Download</strong>
             </a>
-            <span class="btn btn-info col-lg-4 col-md-4 col-sm-10 m-1">
+            <span v-if="stage.exams.length > 0 || stage.stageAskedProjects.length > 0" class="btn btn-info col-lg-4 col-md-4 col-sm-10 m-1">
               <strong>
                 <i class="fas fa-clipboard-list"></i> 
                 Start The Examination
@@ -61,16 +61,16 @@
         !this.stage ? this.$router.push('/') : this.currentLessonURL = this.stage.lessons[0].url;
       },
       nextLesson() {
-        this.lessonIndex++;
         if (this.stage.lessons.length - 1 > this.lessonIndex) {
+          this.lessonIndex++;
           this.currentLessonURL = this.stage.lessons[this.lessonIndex].url;
         }else{
           // getting exam or project
         }
       },
       previousLesson() {
-        this.lessonIndex--;
-        if (this.stage.lesson[this.lessonIndex]) {
+        if (this.lessonIndex > 0) {
+          this.lessonIndex--;
           this.currentLessonURL = this.stage.lesson[this.lessonIndex].url;
         } else {
           this.lessonIndex = 0;

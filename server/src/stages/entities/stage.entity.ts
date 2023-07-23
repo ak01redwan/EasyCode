@@ -20,7 +20,7 @@ export class Stage {
   @ManyToOne(() => Course, (course) => course.stages)
   course: Course;
 
-  @OneToMany(() => Subscription, subscriptions => subscriptions.currentStage)
+  @OneToMany(() => Subscription, subscription => subscription.stage)
   subscriptions: Subscription[];
 
   @OneToMany(() => Lesson, lesson => lesson.stage)

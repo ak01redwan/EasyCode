@@ -32,7 +32,6 @@
             <button @click="toggleCoursePublished(course.id)" v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
             <button @click="toggleCoursePublished(course.id)" v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
             <button @click="viewCourseDetails(course)" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></button>
-            <button class="btn btn-outline-warning" title="Edit This Course"><i class="fas fa-edit"></i></button>
             <button @click="deleteThisCourse(course)" class="btn btn-outline-danger" title="Delete This Course"><i class="fas fa-trash"></i></button>
           </div>
         </div>

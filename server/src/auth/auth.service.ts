@@ -11,6 +11,10 @@ export class AuthService {
     private bcryptService: BcryptService,
     ) {}
 
+  async getThisUserById(id: number) {
+    return await this.usersService.findOne(id);
+  }
+
   async signIn(username, pass) {
     let user = await this.usersService.findByUsername(username);
     if (!user) { user = await this.usersService.findByUserEmail(username); }

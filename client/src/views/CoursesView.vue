@@ -136,11 +136,12 @@ import axios from "axios";
   computed: {
     filteringCourses() {
       return this.chooseByCategory().filter(
-        (course: { name: string; description: string; category: any }): any => {
+        (course: any): any => {
           const searchTerm = this.searchText.toLowerCase();
-          return (
+          return ((
             course.name.toLowerCase().includes(searchTerm) ||
-            course.description.toLowerCase().includes(searchTerm)
+            course.description.toLowerCase().includes(searchTerm))
+            && course.isPublished
           );
         }
       );

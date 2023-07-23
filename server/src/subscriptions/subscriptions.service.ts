@@ -13,35 +13,35 @@ export class SubscriptionsService {
 
   async findAll(): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
-      relations: ['user', 'course'],
+      relations: ['user', 'course','stage'],
     });
   }
 
   async findById(id: number): Promise<Subscription> {
     return this.subscriptionsRepository.findOne({
         where: { id },
-        relations: ['user', 'course'],
+        relations: ['user', 'course','stage'],
     });
   }
 
   async findByUser(userId: number): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
         where: { user: { id: userId } },
-        relations: ['user', 'course'],
+        relations: ['user', 'course','stage'],
     });
   }
 
   async findByCourse(courseId: number): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
         where: { course: { id: courseId } },
-        relations: ['user', 'course'],
+        relations: ['user', 'course','stage'],
     });
   }
 
   async findByUserAndCourse(courseId: number, userId: number): Promise<Subscription>{
     return this.subscriptionsRepository.findOne({
-        where: { course: { id: courseId }, user: { id: userId}},
-        relations: ['user', 'course'],
+      where: { course: { id: courseId }, user: { id: userId}},
+      relations: ['stage','user', 'course']
     });
   }
 
@@ -62,13 +62,13 @@ export class SubscriptionsService {
   async getCurrentStage(subscriptionId: number): Promise<Stage> {
     const subscription = await this.subscriptionsRepository.findOne({
       where: { id: subscriptionId },
-      relations: ['currentStage'],
+      relations: ['stage'],
     });
     
     if (!subscription) {
       throw new Error(`Subscription with id ${subscriptionId} not found`);
     }
 
-    return subscription.currentStage;
+    return subscription.stage;
   }
 }
