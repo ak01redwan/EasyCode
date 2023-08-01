@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { LikesService } from './likes.service';
 import { LikeDto } from './dto/like.dto';
 
@@ -22,7 +30,7 @@ export class LikesController {
   }
 
   @Get()
-  gatAll () {
+  gatAll() {
     return this.likesService.getAll();
   }
 }

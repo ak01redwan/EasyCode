@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, UploadedFiles, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Param,
+  Body,
+  UseInterceptors,
+  UploadedFiles,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -8,7 +20,7 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
 import { Multer } from 'multer';
 import * as fs from 'fs';
-import { AuthGuard } from 'src/auth/auth.guard'
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('projects')
 export class ProjectsController {
@@ -23,23 +35,37 @@ export class ProjectsController {
   async findById(@Param('id') id: number): Promise<Project> {
     return this.projectsService.findById(id);
   }
-  
+
   @UseGuards(AuthGuard)
   @Get('/getByStageAskedProjectId/:id')
-  async getByStageAskedProjectId(@Param('id') id: number,@Request() req) {
-    if (req.authData.user.userType != 'student') { return null };
-    return await this.projectsService.getByStageAskedProjectId(id, req.authData.user.id);
+  async getByStageAskedProjectId(@Param('id') id: number, @Request() req) {
+    if (req.authData.user.userType != 'student') {
+      return null;
+    }
+    return await this.projectsService.getByStageAskedProjectId(
+      id,
+      req.authData.user.id,
+    );
   }
 
   @UseGuards(AuthGuard)
   @Get('/unacceptedProjects/:stageId')
-  async getUnacceptedProjectsByStageId(@Param('stageId') stageId: string, @Request() req) {
-    return await this.projectsService.getUnacceptedProjectsOfUserId(req.authData.user.id, +stageId);
+  async getUnacceptedProjectsByStageId(
+    @Param('stageId') stageId: string,
+    @Request() req,
+  ) {
+    return await this.projectsService.getUnacceptedProjectsOfUserId(
+      req.authData.user.id,
+      +stageId,
+    );
   }
 
   @UseGuards(AuthGuard)
   @Get('/allProjectsWithStatus/:projectStatus')
-  async getAllProjectsWithStatus(@Param('projectStatus') projectStatus: string, @Request() req) {
+  async getAllProjectsWithStatus(
+    @Param('projectStatus') projectStatus: string,
+    @Request() req,
+  ) {
     if (req.authData.user.userType != 'student') {
       if (projectStatus == 'accepted') {
         return await this.projectsService.getAcceptedProjects();
@@ -50,19 +76,23 @@ export class ProjectsController {
       return [];
     }
   }
-  
+
   @Post()
-  @UseInterceptors(
-    FilesInterceptor('files', 2, UploadFileToDiskStorage),
-  )
-  async create(@Body() createProjectDto: CreateProjectDto, @UploadedFiles() files: Multer.File[]): Promise<Project> {
+  @UseInterceptors(FilesInterceptor('files', 2, UploadFileToDiskStorage))
+  async create(
+    @Body() createProjectDto: CreateProjectDto,
+    @UploadedFiles() files: Multer.File[],
+  ): Promise<Project> {
     // first lets extract the prject files (image and document)
     const [imageFile, projectFile] = files;
     try {
-      createProjectDto.askedProject = JSON.parse(`${createProjectDto.askedProject}`);
+      createProjectDto.askedProject = JSON.parse(
+        `${createProjectDto.askedProject}`,
+      );
       createProjectDto.student = JSON.parse(`${createProjectDto.student}`);
       const project = plainToClass(Project, createProjectDto);
-      project.supervisorComment = "waiting for supervisor comment and confirmation";
+      project.supervisorComment =
+        'waiting for supervisor comment and confirmation';
       project.isSubmitted = true;
       // setup paths
       project.imagePath = `/uploads/${imageFile.filename}`;
@@ -80,11 +110,16 @@ export class ProjectsController {
 
   @UseGuards(AuthGuard)
   @Put(':id')
-  async update(@Request() req, @Param('id') id: number, @Body() updateProjectDto: {
-    id: number,
-    reviewerComment: string,
-    accepted: boolean
-  }): Promise<Project> {
+  async update(
+    @Request() req,
+    @Param('id') id: number,
+    @Body()
+    updateProjectDto: {
+      id: number;
+      reviewerComment: string;
+      accepted: boolean;
+    },
+  ): Promise<Project> {
     if (req.authData.user.userType == 'student') {
       return;
     }

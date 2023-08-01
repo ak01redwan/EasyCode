@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Put, Param, Delete, NotFoundException } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+  NotFoundException,
+} from '@nestjs/common';
 import { ExamsService } from './exams.service';
 import { Exam } from './entities/exam.entity';
 import { CreateExamDto } from './dto/create-exam.dto';
@@ -8,7 +17,7 @@ import { UpdateExamDto } from './dto/update-exam.dto';
 export class ExamsController {
   constructor(private readonly examsService: ExamsService) {}
 
-  // accessed by course supervisor 
+  // accessed by course supervisor
   @Post()
   async create(@Body() createExamDto: CreateExamDto): Promise<Exam> {
     return this.examsService.create(createExamDto);
@@ -28,9 +37,12 @@ export class ExamsController {
     return exam;
   }
 
-  // accessed by course supervisor 
+  // accessed by course supervisor
   @Put(':id')
-  async update(@Param('id') id: number, @Body() updateExamDto: UpdateExamDto): Promise<Exam> {
+  async update(
+    @Param('id') id: number,
+    @Body() updateExamDto: UpdateExamDto,
+  ): Promise<Exam> {
     return this.examsService.update(id, updateExamDto);
   }
 
@@ -51,7 +63,10 @@ export class ExamsController {
   }
 
   @Post('/calculate-result/:stageId')
-  async calculateResult(@Param('stageId') stageId: number, @Body() examAnswers: { examId: number, answer: string }[]): Promise<number> {
+  async calculateResult(
+    @Param('stageId') stageId: number,
+    @Body() examAnswers: { examId: number; answer: string }[],
+  ): Promise<number> {
     return this.examsService.calculateResult(stageId, examAnswers);
   }
 }

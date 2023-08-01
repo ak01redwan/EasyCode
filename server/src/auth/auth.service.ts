@@ -9,7 +9,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private bcryptService: BcryptService,
-    ) {}
+  ) {}
 
   async getThisUserById(id: number) {
     return await this.usersService.findOne(id);
@@ -17,8 +17,10 @@ export class AuthService {
 
   async signIn(username, pass) {
     let user = await this.usersService.findByUsername(username);
-    if (!user) { user = await this.usersService.findByUserEmail(username); }
-    if (!user || !await this.bcryptService.compare(pass, user.password)) {
+    if (!user) {
+      user = await this.usersService.findByUserEmail(username);
+    }
+    if (!user || !(await this.bcryptService.compare(pass, user.password))) {
       throw new UnauthorizedException();
     }
     return {
@@ -27,7 +29,7 @@ export class AuthService {
     };
   }
 
-  async getUserTokens (user) {
+  async getUserTokens(user) {
     const payload = { user: user, sub: user.id };
     return await this.jwtService.signAsync(payload);
   }

@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { SubscriptionsService } from './subscriptions.service';
 import { Subscription } from './entities/subscription.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -9,7 +19,8 @@ import { User } from 'src/users/entities/user.entity';
 export class SubscriptionsController {
   constructor(
     private readonly subscriptionsService: SubscriptionsService,
-    private readonly coursesServices: CoursesService) {}
+    private readonly coursesServices: CoursesService,
+  ) {}
 
   @Get()
   async findAll(): Promise<Subscription[]> {
@@ -27,28 +38,39 @@ export class SubscriptionsController {
   }
 
   @Get('by-user/:userId/by-course/:courseId')
-  async findByUserAndCourse(@Param('userId') userId: number,@Param('courseId') courseId: number): Promise<Subscription> {
-    return await this.subscriptionsService.findByUserAndCourse(courseId, userId);
+  async findByUserAndCourse(
+    @Param('userId') userId: number,
+    @Param('courseId') courseId: number,
+  ): Promise<Subscription> {
+    return await this.subscriptionsService.findByUserAndCourse(
+      courseId,
+      userId,
+    );
   }
 
   @Get('by-course/:courseId')
-  async findByCourse(@Param('courseId') courseId: number): Promise<Subscription[]> {
+  async findByCourse(
+    @Param('courseId') courseId: number,
+  ): Promise<Subscription[]> {
     return await this.subscriptionsService.findByCourse(courseId);
   }
 
   @UseGuards(AuthGuard)
   @Post()
-  async create(@Body()  sub: {courseId: number}, @Request() req) {
-    const subscription = await this.subscriptionsService.findByUserAndCourse(sub.courseId, req.authData.user.id);
+  async create(@Body() sub: { courseId: number }, @Request() req) {
+    const subscription = await this.subscriptionsService.findByUserAndCourse(
+      sub.courseId,
+      req.authData.user.id,
+    );
     if (subscription) {
       console.log('removed');
       await this.subscriptionsService.delete(subscription.id);
       return null;
     } else {
       console.log('created');
-      const newSubscription  = new Subscription();
+      const newSubscription = new Subscription();
       newSubscription.course = await this.coursesServices.findOne(sub.courseId);
-      newSubscription.user   = { id: req.authData.user.id} as User;
+      newSubscription.user = { id: req.authData.user.id } as User;
       newSubscription.isDone = false;
       newSubscription.scores = 0;
       newSubscription.stage = newSubscription.course.stages[0];

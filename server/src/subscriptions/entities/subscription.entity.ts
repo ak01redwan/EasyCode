@@ -15,10 +15,10 @@ export class Subscription {
   scores: number;
 
   // relations
-  @ManyToOne(() => User, user => user.subscriptions)
+  @ManyToOne(() => User, (user) => user.subscriptions)
   user: User;
 
-  @ManyToOne(() => Course, course => course.subscriptions)
+  @ManyToOne(() => Course, (course) => course.subscriptions)
   course: Course;
 
   @ManyToOne(() => Stage, (stage) => stage.subscriptions)

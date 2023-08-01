@@ -1,5 +1,11 @@
 import { Transform } from 'class-transformer';
-import { IsNotEmpty, IsEmail, IsDate, IsOptional, IsEmpty } from 'class-validator';
+import {
+  IsNotEmpty,
+  IsEmail,
+  IsDate,
+  IsOptional,
+  IsEmpty,
+} from 'class-validator';
 
 export class CreateUserDto {
   @IsNotEmpty()
@@ -24,7 +30,7 @@ export class CreateUserDto {
   @IsNotEmpty()
   picturePath: string;
 
-  @Transform( ({ value }) => value && new Date(value))
+  @Transform(({ value }) => value && new Date(value))
   @IsDate()
   birthDate: Date;
 

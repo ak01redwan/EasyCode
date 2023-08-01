@@ -1,4 +1,16 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put, UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  Put,
+  UploadedFiles,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Course } from './entities/course.entity';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
@@ -14,10 +26,11 @@ export class CoursesController {
   constructor(private readonly coursesService: CoursesService) {}
 
   @Post()
-  @UseInterceptors(
-    FilesInterceptor('files', 1, UploadFileToDiskStorage),
-  )
-  async create(@Body() createCourseDto: CreateCourseDto, @UploadedFiles() files: Multer.File[]): Promise<Course> {
+  @UseInterceptors(FilesInterceptor('files', 1, UploadFileToDiskStorage))
+  async create(
+    @Body() createCourseDto: CreateCourseDto,
+    @UploadedFiles() files: Multer.File[],
+  ): Promise<Course> {
     const [image] = files;
     try {
       const course = CourseMapper.toEntity(createCourseDto);
@@ -25,12 +38,21 @@ export class CoursesController {
       return await this.coursesService.create(course);
     } catch (error) {
       if (image) {
-        try{fs.unlinkSync(image.path);}catch(error){};
+        try {
+          fs.unlinkSync(image.path);
+        } catch (error) {}
       }
-      if (error.number == '2627') { // 2627 sql error for duplicate value
-        throw new HttpException(`course with name '${createCourseDto.name}' already exists.`, HttpStatus.CONFLICT);
+      if (error.number == '2627') {
+        // 2627 sql error for duplicate value
+        throw new HttpException(
+          `course with name '${createCourseDto.name}' already exists.`,
+          HttpStatus.CONFLICT,
+        );
       }
-      throw new HttpException(`Internal server error: ${error}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        `Internal server error: ${error}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
@@ -40,9 +62,12 @@ export class CoursesController {
   }
 
   @Post('adminForThisCourse/:id')
-  async assignCourseAdmin(@Param('id') id: string, @Body() supervisorInfo: any): Promise<Course> {
-    console.log("hited");
-    return await this.coursesService.assignCourseAdmin(+id,supervisorInfo);
+  async assignCourseAdmin(
+    @Param('id') id: string,
+    @Body() supervisorInfo: any,
+  ): Promise<Course> {
+    console.log('hited');
+    return await this.coursesService.assignCourseAdmin(+id, supervisorInfo);
   }
   // all actors student, admin, supervisor, course admin
   @Get()
@@ -55,22 +80,35 @@ export class CoursesController {
   async findOne(@Param('id') id: string): Promise<Course> {
     const course = await this.coursesService.findOne(+id);
     if (!course) {
-      throw new HttpException(`Course with ID '${id}' not found.`, HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        `Course with ID '${id}' not found.`,
+        HttpStatus.NOT_FOUND,
+      );
     }
     return course;
   }
 
   // for admin and course admin
   @Put(':id')
-  async update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto): Promise<Course> {
+  async update(
+    @Param('id') id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+  ): Promise<Course> {
     try {
       const course = CourseMapper.toEntityWithModificationDate(updateCourseDto);
       return await this.coursesService.update(+id, course);
     } catch (error) {
-      if (error.number == '2627') { // 2627 sql error for duplicate value
-        throw new HttpException(`course with name '${updateCourseDto.name}' already exists.`, HttpStatus.CONFLICT);
+      if (error.number == '2627') {
+        // 2627 sql error for duplicate value
+        throw new HttpException(
+          `course with name '${updateCourseDto.name}' already exists.`,
+          HttpStatus.CONFLICT,
+        );
       }
-      throw new HttpException(`Internal server error: ${error.message}`, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(
+        `Internal server error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 

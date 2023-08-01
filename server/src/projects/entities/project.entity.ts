@@ -1,6 +1,12 @@
 import { Like } from 'src/likes/entities/like.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToMany,
+  ManyToOne,
+} from 'typeorm';
 import { StageAskedProject } from 'src/stage-asked-project/entities/stage-asked-project.entity';
 import { User } from 'src/users/entities/user.entity';
 
@@ -37,16 +43,15 @@ export class Project {
   @OneToMany(() => Like, (like) => like.project)
   likes: Like[];
 
-  @OneToMany(() => Comment, comment => comment.project)
+  @OneToMany(() => Comment, (comment) => comment.project)
   comments: Comment[];
 
-  @ManyToOne(() => StageAskedProject, askedProject => askedProject.projects)
+  @ManyToOne(() => StageAskedProject, (askedProject) => askedProject.projects)
   askedProject: StageAskedProject;
 
-  @ManyToOne(() => User, student => student.projects)
+  @ManyToOne(() => User, (student) => student.projects)
   student: User;
 
-  @ManyToOne(() => User, student => student.projects)
+  @ManyToOne(() => User, (student) => student.projects)
   supervisor: User;
-
 }

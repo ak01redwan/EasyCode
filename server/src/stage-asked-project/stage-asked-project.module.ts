@@ -7,8 +7,8 @@ import { Stage } from 'src/stages/entities/stage.entity';
 import { StagesService } from 'src/stages/stages.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([ StageAskedProject, Stage])],
+  imports: [TypeOrmModule.forFeature([StageAskedProject, Stage])],
   controllers: [StageAskedProjectController],
-  providers: [StageAskedProjectService, StagesService]
+  providers: [StageAskedProjectService, StagesService],
 })
 export class StageAskedProjectModule {}

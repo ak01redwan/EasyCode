@@ -9,12 +9,9 @@ import { BcryptService } from 'src/auth/bcrypt.service';
 import { ConfirmationsModule } from 'src/confirmations/confirmations.module';
 
 @Module({
-  imports: [
-    ConfirmationsModule,
-    TypeOrmModule.forFeature([User])
-  ],
+  imports: [ConfirmationsModule, TypeOrmModule.forFeature([User])],
   controllers: [UsersController],
   providers: [UsersService, AuthService, BcryptService],
-  exports: [UsersService]
+  exports: [UsersService],
 })
 export class UsersModule {}

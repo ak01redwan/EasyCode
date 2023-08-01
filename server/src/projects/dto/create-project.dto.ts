@@ -1,14 +1,13 @@
-import { IsBoolean, IsNotEmpty, IsOptional } from "class-validator";
-import { StageAskedProject } from "src/stage-asked-project/entities/stage-asked-project.entity";
-import { User } from "src/users/entities/user.entity";
+import { IsBoolean, IsNotEmpty, IsOptional } from 'class-validator';
+import { StageAskedProject } from 'src/stage-asked-project/entities/stage-asked-project.entity';
+import { User } from 'src/users/entities/user.entity';
 
 export class CreateProjectDto {
-
   @IsNotEmpty()
   title: string;
 
   @IsNotEmpty()
-  askedProject: StageAskedProject
+  askedProject: StageAskedProject;
 
   @IsNotEmpty()
   student: User;

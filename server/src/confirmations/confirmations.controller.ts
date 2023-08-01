@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseInterceptors,
+  UploadedFiles,
+} from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Multer } from 'multer';
 import * as fs from 'fs';
@@ -14,13 +24,15 @@ export class ConfirmationsController {
   constructor(private readonly confirmationsService: ConfirmationsService) {}
 
   @Post(':id')
-  @UseInterceptors(
-    FilesInterceptor('files', 1, UploadFileToDiskStorage),
-  )
+  @UseInterceptors(FilesInterceptor('files', 1, UploadFileToDiskStorage))
   async create(@Param('id') id: string, @UploadedFiles() files: Multer.File[]) {
     const [certificationsDocs] = files;
-    if (!certificationsDocs) { return; }
-    const confirmation = await this.confirmationsService.getById(+id) as Confirmation;
+    if (!certificationsDocs) {
+      return;
+    }
+    const confirmation = (await this.confirmationsService.getById(
+      +id,
+    )) as Confirmation;
     ////  here you need to put token checking that user own this confirmation entity
     // delelete the old file
     try {
@@ -32,20 +44,20 @@ export class ConfirmationsController {
   }
 
   @Get()
-  findAll() {
-  }
+  findAll() {}
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-  }
+  findOne(@Param('id') id: string) {}
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateConfirmationDto: UpdateConfirmationDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateConfirmationDto: UpdateConfirmationDto,
+  ) {
     const confirmation = plainToClass(Confirmation, updateConfirmationDto);
     return await this.confirmationsService.update(+id, confirmation);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-  }
+  remove(@Param('id') id: string) {}
 }

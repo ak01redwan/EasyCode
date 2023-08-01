@@ -7,6 +7,6 @@ import { Exam } from './entities/exam.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([Exam])],
   controllers: [ExamsController],
-  providers: [ExamsService]
+  providers: [ExamsService],
 })
 export class ExamsModule {}

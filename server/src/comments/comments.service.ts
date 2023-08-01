@@ -7,7 +7,7 @@ import { Comment } from './entities/comment.entity';
 export class CommentsService {
   constructor(
     @InjectRepository(Comment)
-    private readonly commentRepository: Repository<Comment>
+    private readonly commentRepository: Repository<Comment>,
   ) {}
 
   async createComment(comment: Comment): Promise<Comment> {
@@ -15,14 +15,16 @@ export class CommentsService {
   }
 
   async getCommentById(id: number): Promise<Comment> {
-    return await this.commentRepository.findOne({ 
-      where: { id: id}, 
-      relations: ['user', 'course', 'project'] 
+    return await this.commentRepository.findOne({
+      where: { id: id },
+      relations: ['user', 'course', 'project'],
     });
   }
 
   async getAllComments(): Promise<Comment[]> {
-    return await this.commentRepository.find({ relations: ['user', 'course', 'project'] });
+    return await this.commentRepository.find({
+      relations: ['user', 'course', 'project'],
+    });
   }
 
   async updateComment(comment: Comment): Promise<Comment> {
@@ -34,16 +36,16 @@ export class CommentsService {
   }
 
   async getCommentsByCourseId(courseId: number): Promise<Comment[]> {
-    return await this.commentRepository.find({ 
-      where: { course: { id: courseId } }, 
-      relations: ['user', 'course', 'project'] 
+    return await this.commentRepository.find({
+      where: { course: { id: courseId } },
+      relations: ['user', 'course', 'project'],
     });
   }
 
   async getCommentsByProjectId(projectId: number): Promise<Comment[]> {
-    return await this.commentRepository.find({ 
-      where: { project: { id: projectId } }, 
-      relations: ['user', 'course', 'project'] 
+    return await this.commentRepository.find({
+      where: { project: { id: projectId } },
+      relations: ['user', 'course', 'project'],
     });
   }
 }

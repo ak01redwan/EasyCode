@@ -25,7 +25,7 @@ export class ExamsService {
   async findOne(id: number): Promise<Exam> {
     const exam = await this.examsRepository.findOne({
       where: { id },
-      relations: ['stage']
+      relations: ['stage'],
     });
     if (!exam) {
       throw new NotFoundException(`Exam with ID ${id} not found`);
@@ -55,25 +55,30 @@ export class ExamsService {
     });
   }
 
-  async calculateResult(stageId: number, examAnswers: { examId: number, answer: string }[]): Promise<number> {
+  async calculateResult(
+    stageId: number,
+    examAnswers: { examId: number; answer: string }[],
+  ): Promise<number> {
     const exams = await this.examsRepository.find({
       where: { stage: { id: stageId } },
-      relations: ['stage']
+      relations: ['stage'],
     });
-  
+
     const totalQuestions = exams.length;
     let correctAnswers = 0;
-  
+
     for (const examAnswer of examAnswers) {
-      const exam = exams.find(e => e.id === examAnswer.examId);
+      const exam = exams.find((e) => e.id === examAnswer.examId);
       if (!exam) {
-        throw new NotFoundException(`Exam with ID ${examAnswer.examId} not found for stage ${stageId}`);
+        throw new NotFoundException(
+          `Exam with ID ${examAnswer.examId} not found for stage ${stageId}`,
+        );
       }
       if (examAnswer.answer === exam.rightAnswer) {
         correctAnswers++;
       }
     }
-  
+
     const result = (correctAnswers / totalQuestions) * 10;
     return Math.round(result);
   }

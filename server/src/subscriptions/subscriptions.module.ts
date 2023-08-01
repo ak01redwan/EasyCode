@@ -7,10 +7,8 @@ import { CoursesService } from 'src/courses/courses.service';
 import { Course } from 'src/courses/entities/course.entity';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Subscription,Course])
-  ],
+  imports: [TypeOrmModule.forFeature([Subscription, Course])],
   controllers: [SubscriptionsController],
-  providers: [SubscriptionsService, CoursesService]
+  providers: [SubscriptionsService, CoursesService],
 })
 export class SubscriptionsModule {}

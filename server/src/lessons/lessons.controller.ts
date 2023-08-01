@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { LessonsService } from './lessons.service';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
@@ -13,7 +21,7 @@ export class LessonsController {
   create(@Body() createLessonDTOs: CreateLessonDto[]) {
     //console.log(createLessonDTOs);
     let lessons: Lesson[] = new Array<Lesson>();
-    createLessonDTOs.forEach((dto)=>{
+    createLessonDTOs.forEach((dto) => {
       lessons.push(plainToClass(Lesson, dto));
     });
     return this.lessonsService.create(lessons);
@@ -31,13 +39,12 @@ export class LessonsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateLessonDTOs: UpdateLessonDto[]) {
-    let lessons: Lesson[] = new Lesson[updateLessonDTOs.length];
-    updateLessonDTOs.forEach((dto)=>{
+    let lessons: Lesson[] = new Lesson[updateLessonDTOs.length]();
+    updateLessonDTOs.forEach((dto) => {
       lessons.push(plainToClass(Lesson, dto));
     });
     return this.lessonsService.update(lessons);
   }
-
 
   @Delete(':id')
   remove(@Param('id') id: string) {

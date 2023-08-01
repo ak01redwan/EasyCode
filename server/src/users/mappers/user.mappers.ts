@@ -2,7 +2,9 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { User } from '../entities/user.entity';
 
-export const createUserDtoToUserEntity = (createUserDto: CreateUserDto): User => {
+export const createUserDtoToUserEntity = (
+  createUserDto: CreateUserDto,
+): User => {
   const user = new User();
   user.signupDate = new Date();
   user.birthDate = createUserDto.birthDate;
@@ -18,9 +20,12 @@ export const createUserDtoToUserEntity = (createUserDto: CreateUserDto): User =>
   return user;
 };
 
-export const updateUserDtoToUserEntity = (updateUserDto: UpdateUserDto, existUser: User): User => {
+export const updateUserDtoToUserEntity = (
+  updateUserDto: UpdateUserDto,
+  existUser: User,
+): User => {
   // just add the new things
-  const user  = new User();
+  const user = new User();
   user.birthDate = updateUserDto.birthDate;
   user.address = updateUserDto.address;
   user.email = updateUserDto.email;

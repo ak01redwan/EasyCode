@@ -12,10 +12,12 @@ export class StageAskedProjectService {
     @InjectRepository(StageAskedProject)
     private readonly stageAskedProjectRepository: Repository<StageAskedProject>,
     @InjectRepository(Stage)
-    private readonly stagesServicesRepository: Repository<Stage>
-    ) {}
+    private readonly stagesServicesRepository: Repository<Stage>,
+  ) {}
 
-  async create(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
+  async create(
+    stageAskedProject: StageAskedProject,
+  ): Promise<StageAskedProject> {
     return await this.stageAskedProjectRepository.save(stageAskedProject);
   }
 
@@ -24,15 +26,20 @@ export class StageAskedProjectService {
   }
 
   async findOne(id: number): Promise<StageAskedProject> {
-    return await this.stageAskedProjectRepository.findOne({ where: { id: id }});
+    return await this.stageAskedProjectRepository.findOne({
+      where: { id: id },
+    });
   }
 
-  
-  async findByStageId(stageId: number): Promise<StageAskedProject>{
-    return this.stageAskedProjectRepository.findOne({ where: { stage: { id: stageId }}});
+  async findByStageId(stageId: number): Promise<StageAskedProject> {
+    return this.stageAskedProjectRepository.findOne({
+      where: { stage: { id: stageId } },
+    });
   }
 
-  async update(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
+  async update(
+    stageAskedProject: StageAskedProject,
+  ): Promise<StageAskedProject> {
     return await this.stageAskedProjectRepository.save(stageAskedProject);
   }
 

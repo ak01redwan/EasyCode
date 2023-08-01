@@ -1,10 +1,10 @@
-import { IsNotEmpty, MinLength } from "class-validator";
-import { Stage } from "src/stages/entities/stage.entity";
+import { IsNotEmpty, MinLength } from 'class-validator';
+import { Stage } from 'src/stages/entities/stage.entity';
 
 export class CreateStageAskedProjectDto {
-    @IsNotEmpty()
-    name: string;
+  @IsNotEmpty()
+  name: string;
 
-    @IsNotEmpty()
-    stage: Stage;
+  @IsNotEmpty()
+  stage: Stage;
 }

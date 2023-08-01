@@ -12,7 +12,7 @@ import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 export class MessagesService {
   constructor(
     @InjectRepository(Message)
-    private readonly messagesRepository: Repository<Message>
+    private readonly messagesRepository: Repository<Message>,
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
@@ -22,7 +22,10 @@ export class MessagesService {
   }
 
   async getByCourse(course: Course): Promise<Message[]> {
-    return await this.messagesRepository.find({ where: { course: course }, relations: ['sender']});
+    return await this.messagesRepository.find({
+      where: { course: course },
+      relations: ['sender'],
+    });
   }
 
   async howMany(): Promise<number> {
@@ -30,12 +33,12 @@ export class MessagesService {
   }
 
   async findOne(id: number): Promise<Message> {
-    return await this.messagesRepository.findOne({ where: { id: id }});
+    return await this.messagesRepository.findOne({ where: { id: id } });
   }
 
   async remove(id: number, user: User): Promise<void> {
     const message = await this.findOne(id);
-    if (message.sender.id == user.id){
+    if (message.sender.id == user.id) {
       await this.messagesRepository.delete(id);
     }
   }
