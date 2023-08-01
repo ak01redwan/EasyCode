@@ -14,25 +14,25 @@
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <router-link to="/" class="nav-link"
+          <li class="nav-item" @click="currentPage = 'Home'">
+            <router-link to="/" :class="`nav-link ${(currentPage == 'Home') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-house"></i> Home</router-link
             >
           </li>
-          <li class="nav-item">
-            <router-link to="/about" class="nav-link"
+          <li class="nav-item" @click="currentPage = 'About'">
+            <router-link to="/about" :class="`nav-link ${(currentPage == 'About') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-circle-info"></i> About</router-link
             >
           </li>
-          <li v-if="showDashboardLink" class="nav-item">
+          <li class="nav-item">
             <router-link to="/dashboard" class="nav-link"
               ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
             >
           </li>
-          <li class="nav-item dropdown">
+          <li class="nav-item dropdown" :class="`${(currentPage == 'more') ? 'fw-lighter fw-bolder' : ''}`">
             <a
+              @click="currentPage = 'more'"
               class="nav-link dropdown-toggle"
-              href="#"
               role="button"
               data-bs-toggle="dropdown"
               ><i class="fa-solid fa-list"></i> More Things</a
@@ -171,13 +171,6 @@ export default {
   data() {
     return {
       user: null,
-      showDashboardLink: false,
-      showSupervisorLink:false,
-      showGraduatorLink:false,
-      showStudentLink:false,
-      showAllUsersLink:false,
-      showCoursesLink:false,
-      showProgectsLink:false,
     };
   },
   methods: { 
@@ -220,16 +213,24 @@ export default {
       this.$router.push("/users");
     },
     getUserProfileUsingStoredTokens() {
-      if (this.user) { return; }
       const userCookies = Cookies.get("userTokens");
       if (userCookies) {
         axios
           .get("http://localhost:3000/auth/profile", {
-            headers: { Authorization: `Bearer ${userCookies}` },
+            headers: {
+              'Authorization': 'Bearer ' + userCookies,
+              'Content-Type': 'application/json'
+            }
           })
           .then((res) => {
-            if (res.data.user){
-              this.$store.dispatch('login', res.data.user);
+            if (res.data){
+              this.$store.dispatch('login', res.data);
+              this.$store.state.userTokens = userCookies;
+              if (res.data.userType == 'supervisor') {
+                if (!res.user.supervisorConfirmation[0].isConfirmed) {
+                  this.$router.push("/confirmation");
+                }
+              }
             }
           })
           .catch((err) => {});
@@ -252,19 +253,14 @@ export default {
     this.showCoursesLink = false;
     this.showProgectsLink = false;
     },
-    keepUserUpdated(){
-      this.user = this.$store.state.user;
-    }
   },
-   mounted() { 
-   this.keepUserUpdated();
-   this.getUserProfileUsingStoredTokens();
-   this.laodUsers();
-   this.makeUsersHomePage();
+  mounted() {
+    this.keepUserUpdated();
+    this.getUserProfileUsingStoredTokens();
   },
-  computed:{
-    auth(){
-      this.keepUserUpdated();
+  computed: {
+    auth() {
+      this.user = this.$store.state.userTokens;
       return this.user;
     }
   },

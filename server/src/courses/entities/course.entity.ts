@@ -11,6 +11,7 @@ import { Like } from 'src/likes/entities/like.entity';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity()
 export class Course {
@@ -41,6 +42,9 @@ export class Course {
 
   @ManyToOne(() => Category, (category) => category.courses)
   category: Category;
+
+  @ManyToOne(() => User, (courseAdmin) => courseAdmin.courses)
+  courseAdmin: User;
 
   @OneToMany(() => Stage, (stage) => stage.course)
   stages: Stage[];

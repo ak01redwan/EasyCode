@@ -89,11 +89,11 @@
               <div class="invalid-feedback">Please select a course.</div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <button id="cancelButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     Close
                 </button>
-                <button type="submit" class="btn btn-primary">
-                    Add Stage
+                <button :disabled="isSubmitting" type="submit" class="btn btn-primary">
+                    {{ isSubmitting ? 'Adding ....' : 'Add Stage' }}
                 </button>
             </div>
           </form>
@@ -105,25 +105,24 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
+import { MY_YOUTUBE_DEV_API_KEY } from '@/youtube'
+import axios from "axios";
+import Swal from "sweetalert2";
 
 @Options({
+  created() {
+    this.loadCourses();
+  },
   data() {
     return {
+      isSubmitting: false,
       stage: {
         title: "",
         hasProject: false,
         course: null,
       },
       parentCourseSearchTerm: "",
-      courses: [
-        { id: 1, name: "Java", isPublished: true, category: "Web" },
-        { id: 2, name: "Javascript", isPublished: true, category: "Web" },
-        { id: 3, name: "C#", isPublished: true, category: "Andoid" },
-        { id: 4, name: "C++", isPublished: true, category: "Andoid" },
-        { id: 5, name: "Python", isPublished: true, category: "Desktop" },
-        { id: 6, name: "R", isPublished: false, category: "Desktop" },
-        { id: 7, name: "Cotlen", isPublished: false, category: "Web" },
-      ],
+      courses: [],
     };
   },
   computed: {
@@ -140,20 +139,83 @@ import { Options, Vue } from "vue-class-component";
     },
   },
   methods: {
-    onSubmit() { 
+    async loadCourses() {
+      try {
+        const respons = await axios.get('http://localhost:3000/courses');
+        this.courses = respons.data;
+      } catch (error) {}
+    },
+    async loadLessonsDataFromYoutube(stageId: number) {
+      const description = `using ${this.stage.course.name} to explain ${this.stage.title} how to do ${this.stage.title} on ${this.stage.course.name}`;
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=100&q=${encodeURIComponent(description)}&key=${MY_YOUTUBE_DEV_API_KEY}&type=video`;
+      try {
+        const response = await axios.get(url);
+        return response.data.items.filter((item: any) => item.id.kind === 'youtube#video')
+              .slice(0, 10).map((item: any) => ({
+                url: item.id.videoId,
+                stage: {id: stageId}
+              }));
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async createStagesLessons(lessonsData: []) {
+      const respons = await axios.post('http://localhost:3000/lessons',lessonsData);
+    },
+    async onSubmit() {
         const form = document.querySelector('.needs-validation') as HTMLFormElement;
         if (form.checkValidity() === true) {
             if (!this.stage.course){
-                alert('we do not found any course to put this stage inside it!.');
+              Swal.fire({
+                icon: "error",
+                title: "Oops!",
+                text: 'We do not found any course to put this stage inside it!.',
+              });
             }else{ // when inputs are validated and parent course is selected
-                this.$emit("stage-created", this.stage);
-                const modal = document.getElementById('addStageModal');
-                modal?.classList.remove('show');
-                modal?.setAttribute('aria-hidden', 'true');
-                modal?.setAttribute('style', 'display: none');
+              try {
+                this.isSubmitting = true;
+                // do this to make user wait
+                var time: number = 30000;
+                Swal.fire({
+                  icon: 'info',
+                  title: 'Please wait',
+                  text: 'Creating stage and fetching lessons from YouTube API...',
+                  allowOutsideClick: false, // Prevent the user from dismissing the alert by clicking outside of it
+                  timerProgressBar: true, // Enable the progress bar
+                  timer: time,
+                  showConfirmButton: false,
+                  showCancelButton: false,
+                });
+                // start work
+                const response = await axios.post('http://localhost:3000/stages',{
+                  title: this.stage.title,
+                  hasProject: this.stage.hasProject,
+                  course: this.stage.course
+                });
+                const lessonsData = await this.loadLessonsDataFromYoutube(response.data.id);
+                this.createStagesLessons(lessonsData);
+                time = 1;
+                Swal.fire({
+                  icon: "success",
+                  title: "Done...!",
+                  text: 'Stagge Added with it\'s lessons successfully.!',
+                });
+              } catch (error) {
+                console.log(error);
+              } finally {
+                this.isSubmitting = false;
+              }
+              // return emit and hide this modal
+              this.$emit("stage-created", this.stage);
+              const cancelButton = document.getElementById("cancelButton");
+              (cancelButton as any).click();
             }
         } else {
-            alert('You should fill all boxes!.');
+          Swal.fire({
+            icon: "error",
+            title: "Oops!",
+            text: 'You should fill all boxes!.',
+          });
         }
     },
   },

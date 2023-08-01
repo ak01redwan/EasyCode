@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Course } from './entities/course.entity';
 import { UpdateCourseDto } from './dto/update-course.dto';
 import { CourseMapper } from './mappers/course.mappers';
+import { User } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class CoursesService {
@@ -18,6 +19,12 @@ export class CoursesService {
   async toggleCoursePublished(id: number) {
     const course = await this.coursesRepository.findOne({ where: { id } });
     course.isPublished = !course.isPublished;
+    return await this.coursesRepository.save(course);
+  }
+
+  async assignCourseAdmin(id: number, supervisorInfo: any) {
+    const course = await this.coursesRepository.findOne({ where: { id } });
+    course.courseAdmin = { id: supervisorInfo.id } as User;
     return await this.coursesRepository.save(course);
   }
 

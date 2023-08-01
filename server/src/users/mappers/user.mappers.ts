@@ -20,21 +20,22 @@ export const createUserDtoToUserEntity = (
   return user;
 };
 
+<<<<<<< HEAD
 export const updateUserDtoToUserEntity = (
   updateUserDto: UpdateUserDto,
 ): User => {
   const user = new User();
   user.id = updateUserDto.id;
+=======
+export const updateUserDtoToUserEntity = (updateUserDto: UpdateUserDto, existUser: User): User => {
+  // just add the new things
+  const user  = new User();
+>>>>>>> main
   user.birthDate = updateUserDto.birthDate;
   user.address = updateUserDto.address;
   user.email = updateUserDto.email;
   user.username = updateUserDto.username;
-  user.userType = updateUserDto.userType;
-  user.picturePath = updateUserDto.picturePath;
   user.fullName = updateUserDto.fullName;
-  user.password = updateUserDto.password;
   user.userDescription = updateUserDto.userDescription;
-  user.currentCourseId = updateUserDto.currentCourseId;
-  user.isDeleted = updateUserDto.isDeleted;
   return user;
 };

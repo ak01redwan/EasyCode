@@ -1,28 +1,27 @@
 <template>
-  <div class="container py-5" style="min-height: 90vh">
+  <div class="container py-5" style="min-height: 90vh" v-if="user">
     <div class="row justify-content-center">
       <div class="col-md-8 col-lg-6">
-        <h1 class="text-center mb-5">Sign Up</h1>
+        <h1 class="text-center mb-5">Edit User Information</h1>
         <form @submit.prevent="submitForm" class="needs-validation" novalidate ref="form">
           <div v-for="(field, index) in fields" :key="index" :class="field.width" class="form-group was-validated mb-2">
             <label class="form-label" :for="field.name">{{
               field.label
             }}</label>
-            <template v-if="field.type === 'text' ||
-                field.type === 'email' ||
-                field.type === 'password'
-                ">
+            <template v-if="field.type === 'text' || field.type === 'email'">
               <input :id="field.name" class="form-control" :type="field.type" :name="field.name"
-                :placeholder="field.placeholder" v-model="formData[field.name]" :required="field.required"
+                :placeholder="field.placeholder" v-model="formData[field.name]"
+                :accept="field.accept" :required="field.required" />
+            </template>
+            <template v-if="field.type === 'password'">
+              <input :id="field.name" class="form-control" :type="field.type" :name="field.name"
+                :placeholder="field.placeholder" v-model="formData[field.name]"
                 :accept="field.accept" />
             </template>
             <template v-else-if="field.type === 'file'">
+              <img :src="previewImage ? previewImage : `http://localhost:3000${user.picturePath}`" class="mt-2" style="max-width: 100%" />
               <input :id="field.name" class="form-control" :type="field.type" :name="field.name" :accept="field.accept"
-                @change="onFileChange" :required="field.required" ref="fileInput" />
-              <div class="invalid-feedback fs-6">
-                {{ field.validationMessage }}
-              </div>
-              <img v-if="previewImage" :src="previewImage" class="mt-2" style="max-width: 100%" />
+                @change="onFileChange" ref="fileInput" />
               <div class="valid-feedback fs-6">Looks Good</div>
             </template>
             <template v-else-if="field.type === 'date'">
@@ -30,28 +29,16 @@
                 :placeholder="field.placeholder" v-model="formData[field.name]" :required="field.required" />
             </template>
           </div>
-          <div class="form-group col-lg-12 mt-2 mb-2">
-            <label class="form-label" for="userType">User Type</label>
-            <select class="form-select" id="userType" name="userType" v-model="formData.userType" required>
-              <option value="student">Student</option>
-              <option value="supervisor">Supervisor</option>
-            </select>
-          </div>
           <div v-if="formData.userType === 'supervisor'" class="form-group col-lg-12 was-validated mt-4 mb-4">
-            <label class="form-label" for="certificationsDocs">Certifications Document(PDF)</label>
+            <label class="form-label" for="certificationsDocs">
+              Certifications Document(PDF) 
+              <a class="btn btn-info" target="__blank" :href="`http://localhost:3000${user.supervisorConfirmation[0].certificationsDocsPath}`">Show Previous</a>
+            </label>
             <input id="certificationsDocs" class="form-control" type="file" name="certificationsDocs"
-              accept="application/pdf" @change="onDocFileChange" required />
+              accept="application/pdf" @change="onDocFileChange" />
           </div>
           <button type="submit" class="btn btn-primary w-100" :disabled="isSubmitting">
-            {{
-              isSubmitting
-              ? addUser
-                ? "Adding User ..."
-                : "Signing Up ..."
-              : addUser
-                ? "Add New User"
-                : "Sign Up"
-            }}
+            {{ isSubmitting ? "Editing..." : "Update" }}
           </button>
         </form>
       </div>
@@ -65,12 +52,38 @@ import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
 export default {
-  props: {
-    addUser: Boolean,
+  created() {
+    this.user = this.$store.state.userInEditUserPage;
+    if (!this.user) {
+      this.$router.push('/');
+    }else{
+      this.formData.username        = this.user.username;
+      this.formData.fullName        = this.user.fullName;
+      this.formData.email           = this.user.email;
+      this.formData.address         = this.user.address;
+      this.formData.userType        = this.user.userType;
+      this.formData.userDescription = this.user.userDescription;
+      // change date type to the accepted way
+      const timestamp = this.user.birthDate;
+      const date = new Date(timestamp);
+      const year = date.getFullYear();
+      const month = ("0" + (date.getMonth() + 1)).slice(-2);
+      const day = ("0" + date.getDate()).slice(-2);
+      const dateStr = `${year}-${month}-${day}`;
+      this.formData.birthDate = dateStr;
+    }
   },
   data() {
     return {
       fields: [
+        {
+          label: "Personal Photo",
+          name: "photo",
+          type: "file",
+          width: "col-lg-12",
+          accept: "image/*",
+          validationMessage: "Please select a photo for you",
+        },
         {
           label: "User Name",
           name: "username",
@@ -90,22 +103,18 @@ export default {
           validationMessage: "Please enter your email address",
         },
         {
-          label: "Password",
+          label: "Old Password",
           name: "password",
           type: "password",
           width: "col-lg-12",
-          placeholder: "Enter your password",
-          required: true,
-          validationMessage: "Please enter your password",
+          placeholder: "Enter Your Old Password",
         },
         {
-          label: "Repeat Password",
-          name: "password2",
+          label: "New Password",
+          name: "newPassword",
           type: "password",
           width: "col-lg-12",
-          placeholder: "Repeat your password",
-          required: true,
-          validationMessage: "Please repeat your password",
+          placeholder: "Enter The New Password",
         },
         {
           label: "Full Name",
@@ -135,15 +144,6 @@ export default {
           validationMessage: "Please enter your description",
         },
         {
-          label: "Personal Photo",
-          name: "photo",
-          type: "file",
-          width: "col-lg-12",
-          accept: "image/*",
-          required: true,
-          validationMessage: "Please select a photo for you",
-        },
-        {
           label: "Birth Date",
           name: "birthDate",
           type: "date",
@@ -156,18 +156,18 @@ export default {
       formData: {
         username: "",
         email: "",
-        password: "",
-        password2: "",
+        oldPassword: "",
+        newPassword: "",
         fullName: "",
         address: "",
         userDescription: "",
         userType: "student",
-        picturePath: "path/will/setup/on/server",
         birthDate: null,
         files: [null, null],
       },
       previewImage: null,
       isSubmitting: false,
+      user: null
     };
   },
   methods: {
@@ -205,15 +205,7 @@ export default {
         Swal.fire({
           icon: "error",
           title: "Validite Error!",
-          text: "You need to fill all boxes until their colors turn green, then do submit!",
-        });
-        return;
-      }
-      if (this.formData.password != this.formData.password2) {
-        Swal.fire({
-          icon: "error",
-          title: "Oops!",
-          text: "Passwords do not match!",
+          text: "You need to fill all required boxes until their colors turn green, then do submit!",
         });
         return;
       }
@@ -224,45 +216,48 @@ export default {
       // add the file data to the FormData object
       formDataInstance.append("files", this.formData.files[0]);
       formDataInstance.append("files", this.formData.files[1]);
+      if (this.formData.files[0]) {
+        formDataInstance.append("isPhotoChanged", "true");
+      }
+      if (this.formData.files[1]) {
+        formDataInstance.append("isCertificationsDocsChanged", "true");
+      }
       Object.keys(this.formData).forEach((key) => {
         if (key !== "files") {
           formDataInstance.append(key, this.formData[key]);
         }
       });
-
-      axios
-        .post("http://localhost:3000/users", formDataInstance, {
+      axios.put(`http://localhost:3000/users/${this.user.id}`, formDataInstance, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-        })
-        .then(async (response) => {
-          // know the user type who dose this opertion using the tokens
-          if (this.$store.state.user) {
-            if (this.$store.state.user.userType == 'admin') {
-              this.$router.push("/dashboard");
-              await Swal.fire({
-                icon: "success",
-                title: `DONE`,
-                text: `${response.data.user.fullName} has been added successfully`,
-                showConfirmButton: false,
-                timer: 2000,
-                timerProgressBar: true,
-              });
-              this.$emit("done");
-            } else {
-              this.storeThisNewUserInfo(response.data.user, response.data.tokens);
-            }
-          } else {
-            this.storeThisNewUserInfo(response.data.user, response.data.tokens);
-          }
-        }).catch((error) => { });
+      }).then(async (response) => {
+        if (this.$store.state.user.userType == 'admin') {
+          this.$router.push("/dashboard");
+          await Swal.fire({
+            icon: "success",
+            title: `UPDATED`,
+            text: `${response.data.user.fullName} has been updated successfully`,
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true,
+          });
+        } else {
+          this.storeThisNewUserInfo(response.data.user, response.data.tokens);
+        }
+      }).catch((error) => { 
+        console.log(error);
+      });
     },
     async storeThisNewUserInfo(user,tokens) {
       this.$store.dispatch("login", user);
       await this.storeUserCookies(tokens);
       if (user.userType == 'supervisor') {
-        this.$router.push("/confirmation");
+        if (user.supervisorConfirmation[0].isConfirmed) {
+          this.$router.push("/user");
+        } else {
+          this.$router.push("/confirmation");
+        }
       } else {
         this.$router.push("/user"); // go to user page
       }

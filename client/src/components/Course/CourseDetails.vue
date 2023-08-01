@@ -42,7 +42,7 @@
                     aria-expanded="false"
                     aria-controls="stage1-collapse"
                   >
-                    <strong>Stages:</strong>
+                    <strong>Stages {{ course.stages.length }}:</strong>
                   </button>
                 </h2>
                 <div
@@ -52,10 +52,10 @@
                   data-bs-parent="#stage-accordion"
                 >
                   <div
-                    v-for="coursestage in course.courseStage"
+                    v-for="(coursestage,index) in course.stages" :key="index"
                     class="accordion-body list-group-item substage"
                   >
-                    {{ coursestage }}
+                    * {{ coursestage.title }}
                   </div>
                 </div>
               </div>

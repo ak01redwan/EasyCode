@@ -43,6 +43,11 @@ export class ExamsService {
     await this.examsRepository.delete(id);
   }
 
+  async removeStageExams(id: number): Promise<void> {
+    const exams = await this.findByStage(id);
+    await this.examsRepository.remove(exams);
+  }
+
   async findByStage(stageId: number): Promise<Exam[]> {
     return this.examsRepository.find({
       where: { stage: { id: stageId } },

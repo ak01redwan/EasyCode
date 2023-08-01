@@ -10,6 +10,8 @@ import {
   Unique,
 } from 'typeorm';
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
+import { Project } from 'src/projects/entities/project.entity';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -71,4 +73,14 @@ export class User {
 
   @OneToMany(() => Confirmation, (confirmation) => confirmation.reviewer)
   reviewerConfirmations: Confirmation[];
+<<<<<<< HEAD
+=======
+
+  @OneToMany(() => Project, project => project.student)
+  projects: Project[];
+
+  @OneToMany(() => Course, course => course.courseAdmin)
+  courses: Course[];
+
+>>>>>>> main
 }

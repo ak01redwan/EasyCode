@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid">
+  <div class="container-fluid" v-if="userInfo">
     <div class="row flex-nowrap">
       <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg">
         <div
@@ -19,14 +19,14 @@
                 style="font-size: 14px"
               >
                 <strong>{{
-                  userData ? userData.fullName : "No Full Name"
+                  userInfo.fullName
                 }}</strong> </span
               ><br />
               <span
                 class="lead text-secondary text-decoration-underline"
                 style="font-size: 14px"
               >
-                @{{ userData ? userData.username : "No UserName" }}
+                @{{ userInfo.username }}
               </span>
             </div>
           </router-link>
@@ -61,8 +61,8 @@
       <div class="col py-3" style="overflow-y: auto; max-height: 720px">
         <!--Getting user's Details-->
         <UserDetails
-          :UserInfo="userData"
-          v-if="activatedItemContentName === 'UserDetails' && userData"
+          :UserInfo="userInfo"
+          v-if="activatedItemContentName === 'UserDetails'"
         />
         <!-- Getting Current Course Stages -->
         <div
@@ -91,11 +91,6 @@
           :Title="activatedItemContentName"
           v-if="activatedItemContentName === 'CompletedCourses'"
         />
-        <!-- Getting User's Settings -->
-        <Settings
-          :Title="activatedItemContentName"
-          v-else-if="activatedItemContentName === 'Settings'"
-        />
       </div>
     </div>
   </div>
@@ -105,7 +100,6 @@
 import { Options, Vue } from "vue-class-component";
 import Swal from "sweetalert2";
 
-import Settings from "@/components/User/Settings.vue";
 import ProjectsGallery from "@/components/Project/ProjectsGallery.vue";
 import CoursesGallery from "@/components/Course/CoursesGallery.vue";
 import CourseStage from "@/components/Course/CourseStage.vue";
@@ -117,7 +111,6 @@ import UserDetails from "@/components/User/UserDetails.vue";
     CourseStage,
     CoursesGallery,
     ProjectsGallery,
-    Settings,
   },
   data() {
     return {
@@ -162,37 +155,53 @@ import UserDetails from "@/components/User/UserDetails.vue";
       ],
     };
   },
-  
   methods: {
+    goToEditUserPage() {
+      this.$store.state.userInEditUserPage = this.$store.state.user;
+      this.$router.push("/edituser");
+    },
     getUserFromStoredState() {
-      const currentUser = this.$store.state.userInUserDetailsPage;
-      if (currentUser) {
-        this.userInfo = currentUser;
-      } else {
-        this.userInfo = this.$store.state.user;
-      }
       if (!this.$store.state.user) {
         this.$router.push("/login");
+      }else{
+        const currentUser = this.$store.state.userInUserDetailsPage;
+        if (currentUser) {
+          this.userInfo = currentUser;
+        } else {
+          this.userInfo = this.$store.state.user;
+        }
       }
+      //console.log(this.userInfo);
     },
     getSidebarItemByContent(content: string) {
-      return this.sidebarItems.filter(
+      const result = this.sidebarItems.filter(
         (sidebarItem: { content: string }): any => {
           const searchTermLC = content.toLowerCase();
           return sidebarItem.content.toLowerCase() == searchTermLC;
         }
       )[0];
+      if (result.content == 'Settings') {
+        if (this.$store.state.user.id == this.userInfo.id){
+          this.goToEditUserPage();
+          return this.sidebarItems[0];
+        }else{
+          Swal.fire({
+            icon: "error",
+            title: "UnAuthrized",
+            text: "you are not allowed to edit this profile info."
+          });
+          return this.sidebarItems[0];
+        }
+      }
+      return result;
     },
     changeTheShowBasedOnThisSidebarContentValue(content: string) {
       this.activatedItemContentName =
         this.getSidebarItemByContent(content).content;
     },
   },
-  computed: {
-    userData() {
-      this.getUserFromStoredState();
-      return this.userInfo;
-    },
+  created() {
+    this.getUserFromStoredState();
   }
 })
 export default class UserDetailsView extends Vue {

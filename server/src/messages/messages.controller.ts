@@ -15,6 +15,7 @@ import { CreateMessageDto } from './dto/create-message.dto';
 //import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { User } from 'src/users/entities/user.entity';
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
+import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('messages')
 export class MessagesController {
@@ -23,9 +24,17 @@ export class MessagesController {
     private readonly subscriptionsService: SubscriptionsService,
   ) {}
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @Post()
-  async create(@Body() createMessageDto: CreateMessageDto): Promise<Message> {
+  async create(
+    @Request() req,
+    @Body() createMessageDto: CreateMessageDto,
+  ): Promise<Message> {
+    if (req.authData.user.id != createMessageDto.sender.id) {
+      throw new NotAcceptableException(
+        'you can not send by other one identity.!',
+      );
+    }
     const subscription = await this.subscriptionsService.findByUserAndCourse(
       createMessageDto.course.id,
       createMessageDto.sender.id,

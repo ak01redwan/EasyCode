@@ -1,65 +1,21 @@
 <template>
   <div class="container mt-4" style="min-height: 70vh">
-    <h1>Stage Question</h1>
+    <h1>Stages Questions</h1>
+    <h6>{{ time }} minutes are expected to finish the stage exam</h6>
     <div class="d-flex align-items-center">
-      <button
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#addQuestionModal"
-      >
+      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addQuestionModal">
         Add Question <i class="fas fa-plus"></i>
       </button>
       <AddNewQusetion @AddQuestionEvent="addQuestion" />
-      
-      <b-modal id="edit-question-modal" title="Edit Question" aria-labelledby="edit-question-modal" aria-hidden="true" v-if="showEditModal">
-        <div>
-          <label>Question:</label>
-          <input v-model="editingQuestion.text" class="form-control" />
-        </div>
-        <div class="mt-3">
-          <label>Right Answer:</label>
-          <input v-model="editingQuestion.rightAnswer" class="form-control" />
-        </div>
-        <div class="mt-3">
-          <label>Wrong Answers:</label>
-          <div
-            v-for="(answer, index) in editingQuestion.wrongAnswers"
-            :key="index"
-          >
-            <input
-              v-model="editingQuestion.wrongAnswers[index]"
-              class="form-control"
-            />
-          </div>
-        </div>
-        <div class="mt-3">
-          <button class="btn btn-primary" @click="saveQuestion">Save</button>
-          <button class="btn btn-secondary" @click="resetModal">Cancel</button>
-        </div>
-      </b-modal>
     </div>
-    <div class="mt-4">
-      <div
-        v-for="(question, index) in questions"
-        :key="question.id"
-        class="mb-3"
-      >
+    <div v-if="getStage && stage" class="mt-4">
+      <div v-for="(exam, index) in stage.exams" :key="index" class="mb-3">
         <div class="d-flex justify-content-between align-items-center">
-          <div>{{ question.text }}</div>
+          <div>{{ exam.question }}</div>
           <div>
-            <button
-              class="btn btn-sm btn-primary me-2"
-              @click="editQuestion(index)"
-            >
-              <i class="bi bi-pencil"></i> Edit
-            </button>
-            <button
-              class="btn btn-sm btn-danger"
-              @click="deleteQuestion(index)"
-            >
+            <button class="btn btn-sm btn-danger" @click="deleteExam(exam)">
               <i class="bi bi-trash"></i> Delete
             </button>
-
           </div>
         </div>
       </div>
@@ -70,6 +26,8 @@
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
+import axios from "axios";
+import Swal from "sweetalert2";
 
 @Options({
   name: "StageQuestion",
@@ -78,73 +36,64 @@ import AddNewQusetion from "@/components/Course/AddNewQuestion.vue";
   },
   data() {
     return {
-      showModal: false,
-      questions: [],
-      showEditModal: false,
-      editingQuestion: {
-        text: "",
-        rightAnswer: "",
-        wrongAnswers: ["", "", "", ""],
-      },
-      editingQuestionIndex: undefined,
+      stage: null,
+      time: -1
     };
   },
   methods: {
-    addQuestion(questionData: any) {
-      this.questions.push(questionData);
-      this.$bvModal.hide("add-question-modal");
+    async formatAnswers(wrongAnswers: string[], correctAnswer: string) {
+      const randomIndex = Math.floor(Math.random() * (wrongAnswers.length + 1));
+      wrongAnswers.splice(randomIndex, 0, correctAnswer);
+      const allAnswers = wrongAnswers.join(', ');
+      return allAnswers;
     },
-    updateQuestion(questionData: any, index: number) {
-      this.questions.splice(index, 1, questionData);
-      this.$bvModal.hide("add-question-modal");
-      this.editingQuestion = null;
-      this.editingQuestionIndex = undefined;
-    },
-    // addQuestion(question: any) {
-    //   //console.log(question);
-    //   this.questions.push(question);
-    // },
-    editQuestion(index: number) {
-      const question = this.questions[index];
-      this.editingQuestionIndex = index;
-      this.editingQuestion = {
-        text: question.text,
-        rightAnswer: question.rightAnswer,
-        wrongAnswers: [...question.wrongAnswers],
+    async addQuestion(questionData: any) {
+      let payload = await {
+        stage: this.stage,
+        question: questionData.questionText,
+        rightAnswer: questionData.rightAnswerText,
+        answer: await this.formatAnswers(questionData.wrongAnswersArray, questionData.rightAnswerText)
       };
-      this.showEditModal = true;
-    },
-    deleteQuestion(index: number) {
-      this.questions.splice(index, 1);
-    },
-    saveQuestion() {
-      if (this.editingQuestionIndex !== undefined) {
-        this.questions.splice(
-          this.editingQuestionIndex,
-          1,
-          this.editingQuestion
-        );
+      try {
+        const response = await axios.post('http://localhost:3000/exams',payload);
+        // update state and current stage
+        const refreshedStageResponse = await axios.get(`http://localhost:3000/stages/${this.stage.id}`);
+        this.$store.state.stageInExamPage = refreshedStageResponse.data;
+        this.time = (this.stage.exams.length * 2);
+      } catch (error: any) {
+        Swal.fire({
+          icon: "error",
+          title: "Network Error",
+          text: error.message,
+        });
       }
-      
-      this.showEditModal = false;
     },
-    resetModal() {
-      this.editingQuestion = {
-        text: "",
-        rightAnswer: "",
-        wrongAnswers: ["", "", "", ""],
-      };
-      this.editingQuestionIndex = undefined;
-      this.showEditModal = false;
-    },
+    async deleteExam(exam: any) {
+      // axios delete function
+      try {
+        const response  = await axios.delete(`http://localhost:3000/exams/${exam.id}`);
+        this.stage.exams = this.stage.exams.filter((filterdExams:any) => exam !== filterdExams);
+        this.time = (this.stage.exams.length * 2);
+      } catch (error: any) {
+        Swal.fire({
+          icon: "error",
+          title: "Network Error",
+          text: error.message,
+        });
+      }
+      // reset the state value
+    }
   },
+  computed: {
+    async getStage() {
+      this.stage = await this.$store.state.stageInExamPage;
+      !this.stage ? this.$router.push('/') : this.time = (this.stage.exams.length * 2);
+      return this.stage;
+    },
+  }
 })
 export default class ExamView extends Vue {
   [x: string]: any;
-  $bvModal!: { show: Function; hide: Function };
 }
 </script>
 
-<style scoped>
-/* Add any custom styles here */
-</style>

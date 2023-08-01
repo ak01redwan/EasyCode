@@ -26,10 +26,12 @@ export class UsersService {
       );
     }
     user.password = await this.bcryptService.hash(user.password, 10);
-    return await this.usersRepository.save(user);
+    const createdUser =  await this.usersRepository.save(user);
+    return await this.usersRepository.findOne({ where: { id: createdUser.id}});
   }
 
   async findAll(): Promise<User[]> {
+<<<<<<< HEAD
     return await this.usersRepository.find({
       where: { isDeleted: false },
       relations: [
@@ -37,10 +39,16 @@ export class UsersService {
         'reviewerConfirmations',
         'subscriptions',
       ],
+=======
+    return await this.usersRepository.find({ 
+      where: { isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+>>>>>>> main
     });
   }
 
   async findAllByType(userType: string): Promise<User[]> {
+<<<<<<< HEAD
     return await this.usersRepository.find({
       where: { userType: userType, isDeleted: false },
       relations: [
@@ -48,10 +56,16 @@ export class UsersService {
         'reviewerConfirmations',
         'subscriptions',
       ],
+=======
+    return await this.usersRepository.find({ 
+      where: { userType: userType, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+>>>>>>> main
     });
   }
 
   async findOne(id: number): Promise<User> {
+<<<<<<< HEAD
     return await this.usersRepository.findOne({
       where: { id: id, isDeleted: false },
       relations: [
@@ -59,10 +73,16 @@ export class UsersService {
         'reviewerConfirmations',
         'subscriptions',
       ],
+=======
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+>>>>>>> main
     });
   }
 
   async findOneById_WithTheNecessaryRelations(id: number): Promise<User> {
+<<<<<<< HEAD
     return await this.usersRepository.findOne({
       where: { id: id, isDeleted: false },
       relations: [
@@ -70,6 +90,11 @@ export class UsersService {
         'reviewerConfirmations',
         'subscriptions',
       ],
+=======
+    return await this.usersRepository.findOne({ 
+      where: { id: id, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+>>>>>>> main
     });
   }
 
@@ -84,6 +109,7 @@ export class UsersService {
   }
 
   async findByUsername(username: string): Promise<User> {
+<<<<<<< HEAD
     return await this.usersRepository.findOne({
       where: { username: username, isDeleted: false },
       relations: [
@@ -102,12 +128,31 @@ export class UsersService {
         'reviewerConfirmations',
         'subscriptions',
       ],
+=======
+    return await this.usersRepository.findOne({ 
+      where: { username: username, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+    });
+  }
+
+  async findByUserEmail (email: string): Promise<User> {
+    return await this.usersRepository.findOne({ 
+      where: { email: email, isDeleted: false},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+>>>>>>> main
     });
   }
 
   async update(id: number, user: User): Promise<User> {
     await this.usersRepository.update(id, user);
+<<<<<<< HEAD
     return await this.usersRepository.findOne({ where: { id: id } });
+=======
+    return await this.usersRepository.findOne({
+      where: { id: id},
+      relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
+    });
+>>>>>>> main
   }
 
   async remove(id: number): Promise<void> {

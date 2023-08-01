@@ -49,8 +49,6 @@
       </div>
     </div>
   </div>
-  <!--Adding New User Modal-->
-  <AddNewUser />
 </template>
 
 <script lang="ts">
@@ -75,14 +73,13 @@ import Swal from "sweetalert2";
           if (result.isConfirmed) {
             const reviewerComment = result.value;
             const createConfirmationDtoObject = {
-              id: user.supervisorConfirmation[0].id,
               certificationsDocsPath: user.supervisorConfirmation[0].certificationsDocsPath,
               isConfirmed: false,
               reviewerComment: reviewerComment,
               supervisor: user,
               reviewer:  this.$store.state.user
             };
-            this.updateSupervisorConfirmation(createConfirmationDtoObject);
+            this.updateSupervisorConfirmation(createConfirmationDtoObject, user.supervisorConfirmation[0].id);
             // Show success message
             Swal.fire({
               title: "Done!",
@@ -107,14 +104,13 @@ import Swal from "sweetalert2";
           if (result.isConfirmed) {
             const reviewerComment = result.value;
             const createConfirmationDtoObject = {
-              id: user.supervisorConfirmation[0].id,
               certificationsDocsPath: user.supervisorConfirmation[0].certificationsDocsPath,
               isConfirmed: true,
               reviewerComment: reviewerComment,
               supervisor: user,
               reviewer:  this.$store.state.user
             };
-            this.updateSupervisorConfirmation(createConfirmationDtoObject);
+            this.updateSupervisorConfirmation(createConfirmationDtoObject, user.supervisorConfirmation[0].id);
             // Show success message
             Swal.fire({
               title: "User Confirmed!",
@@ -126,12 +122,14 @@ import Swal from "sweetalert2";
           }
         });
       },
-      async updateSupervisorConfirmation(confirmationNewData: any) {
+      async updateSupervisorConfirmation(confirmationNewData: any, id: number) {
         try {
-          await axios.patch(
-            `http://localhost:3000/confirmations/${confirmationNewData.id}`,
+          const response = await axios.patch(
+            `http://localhost:3000/confirmations/${id}`,
             confirmationNewData
           );
+          console.log(response);
+          await this.getAllUsers();
         } catch (error:any) {
           Swal.fire({
             title: "oOPs...!",
@@ -166,11 +164,11 @@ import Swal from "sweetalert2";
               break;
             case 'confirmed':
               return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
-                && user.supervisorConfirmation.isConfirmed);
+                && user.supervisorConfirmation[0].isConfirmed);
               break;
             case 'unconfirmed':
               return ((user.fullName.toLowerCase().includes(searchTermLC) || user.username.toLowerCase().includes(searchTermLC))
-                && !user.supervisorConfirmation.isConfirmed);
+                && !user.supervisorConfirmation[0].isConfirmed);
               break;
           }
         });

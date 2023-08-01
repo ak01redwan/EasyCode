@@ -20,6 +20,7 @@ import { MessagesModule } from './messages/messages.module';
 import { StageAskedProjectModule } from './stage-asked-project/stage-asked-project.module';
 import { CommentsModule } from './comments/comments.module';
 import { ConfirmationsModule } from './confirmations/confirmations.module';
+import { DownloadsModule } from './downloads/downloads.module';
 
 // entities
 import { User } from './users/entities/user.entity';
@@ -83,6 +84,7 @@ import { Confirmation } from './confirmations/entities/confirmation.entity';
     StageAskedProjectModule,
     CommentsModule,
     ConfirmationsModule,
+    DownloadsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

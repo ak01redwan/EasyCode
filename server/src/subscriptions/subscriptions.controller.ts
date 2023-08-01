@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Controller,
   Get,
@@ -7,16 +8,20 @@ import {
   Body,
   Param,
 } from '@nestjs/common';
+=======
+import { Controller, Get, Post, Put, Delete, Body, Param, UseGuards, Request } from '@nestjs/common';
+>>>>>>> main
 import { SubscriptionsService } from './subscriptions.service';
 import { Subscription } from './entities/subscription.entity';
-import { CreateSubscriptionDto } from './dto/create-subscription.dto';
-import { UpdateSubscriptionDto } from './dto/update-subscription.dto';
-import { plainToClass } from 'class-transformer';
-import { validate } from 'class-validator';
+import { AuthGuard } from 'src/auth/auth.guard';
+import { CoursesService } from 'src/courses/courses.service';
+import { User } from 'src/users/entities/user.entity';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
-  constructor(private readonly subscriptionsService: SubscriptionsService) {}
+  constructor(
+    private readonly subscriptionsService: SubscriptionsService,
+    private readonly coursesServices: CoursesService) {}
 
   @Get()
   async findAll(): Promise<Subscription[]> {
@@ -34,6 +39,7 @@ export class SubscriptionsController {
   }
 
   @Get('by-user/:userId/by-course/:courseId')
+<<<<<<< HEAD
   async findByUserAndCourse(
     @Param('userId') userId: number,
     @Param('courseId') courseId: number,
@@ -42,6 +48,10 @@ export class SubscriptionsController {
       userId,
       courseId,
     );
+=======
+  async findByUserAndCourse(@Param('userId') userId: number,@Param('courseId') courseId: number): Promise<Subscription> {
+    return await this.subscriptionsService.findByUserAndCourse(courseId, userId);
+>>>>>>> main
   }
 
   @Get('by-course/:courseId')
@@ -51,7 +61,9 @@ export class SubscriptionsController {
     return await this.subscriptionsService.findByCourse(courseId);
   }
 
+  @UseGuards(AuthGuard)
   @Post()
+<<<<<<< HEAD
   async create(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<Subscription> {
@@ -59,20 +71,31 @@ export class SubscriptionsController {
     const errors = await validate(subscription);
     if (errors.length > 0) {
       throw new Error(`Validation failed: ${errors.join(', ')}`);
+=======
+  async create(@Body()  sub: {courseId: number}, @Request() req) {
+    const subscription = await this.subscriptionsService.findByUserAndCourse(sub.courseId, req.authData.user.id);
+    if (subscription) {
+      console.log('removed');
+      await this.subscriptionsService.delete(subscription.id);
+      return null;
+    } else {
+      console.log('created');
+      const newSubscription  = new Subscription();
+      newSubscription.course = await this.coursesServices.findOne(sub.courseId);
+      newSubscription.user   = { id: req.authData.user.id} as User;
+      newSubscription.isDone = false;
+      newSubscription.scores = 0;
+      newSubscription.stage = newSubscription.course.stages[0];
+      return await this.subscriptionsService.create(newSubscription);
+>>>>>>> main
     }
-    return await this.subscriptionsService.create(subscription);
   }
 
   @Put(':id')
   async update(
     @Param('id') id: number,
-    @Body() updateSubscriptionDto: UpdateSubscriptionDto,
+    @Body() subscription: Subscription,
   ): Promise<Subscription> {
-    const subscription = plainToClass(Subscription, updateSubscriptionDto);
-    const errors = await validate(subscription);
-    if (errors.length > 0) {
-      throw new Error(`Validation failed: ${errors.join(', ')}`);
-    }
     return await this.subscriptionsService.update(id, subscription);
   }
 

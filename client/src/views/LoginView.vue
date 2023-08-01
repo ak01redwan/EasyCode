@@ -85,6 +85,7 @@ export default {
           })
           .then((response) => {
             this.$store.dispatch('login', response.data.user);
+            this.$store.state.userTokens = response.data.access_token;
             if (this.rememberMe) {
               Cookies.set("userTokens", response.data.access_token, { expires: 30 });
             }else{
@@ -94,7 +95,15 @@ export default {
             if (userType === "admin") {
               this.$router.push("/dashboard");
             } else {
-              this.$router.push("/");
+              if (userType == 'supervisor') {
+                if (response.data.user.supervisorConfirmation[0].isConfirmed) {
+                  this.$router.push("/user");
+                } else {
+                  this.$router.push("/confirmation");
+                }
+              } else {
+                this.$router.push("/user"); // go to user page
+              }
             }
             Swal.fire({
               icon: "success",
@@ -124,8 +133,9 @@ export default {
             headers: { Authorization: `Bearer ${userCookies}` },
           })
           .then((res) => {
-            this.$store.dispatch('login', res.data.user);
-            if (res.data.user.userType == "admin") {
+            this.$store.dispatch('login', res.data);
+            this.$store.state.userTokens = userCookies;
+            if (res.data.userType == "admin") {
               this.$router.push("/dashboard"); // go to dashboard
               Swal.fire({
                 icon: "success",
@@ -133,11 +143,19 @@ export default {
                 text: "You have successfully logged in as an Admin.",
               });
             } else {
-              this.$router.push("/user"); // go to student
+              if (res.data.userType == 'supervisor') {
+                if (res.data.supervisorConfirmation[0].isConfirmed) {
+                  this.$router.push("/user");
+                } else {
+                  this.$router.push("/confirmation");
+                }
+              } else {
+                this.$router.push("/user"); // go to user page
+              }
               Swal.fire({
                 icon: "success",
                 title: "Welcome back!",
-                text: `You have successfully logged in as ${res.data.user.userType}.`,
+                text: `You have successfully logged in as ${res.user.userType}.`,
               });
             }
           })

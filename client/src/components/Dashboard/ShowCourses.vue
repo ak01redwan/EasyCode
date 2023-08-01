@@ -29,10 +29,10 @@
           <span class="fw-bold">{{ course.name }}</span>
           <span class="text-muted">@{{course.category.name}}</span>
           <div class="btn-group float-end">
+            <button @click="addCourseAdmin(course)" data-bs-toggle="modal" data-bs-target="#addCourseAdmin" class="btn btn-outline-secondary" title="Add Course Admin"><i class="fa-solid fa-plus"></i></button>
             <button @click="toggleCoursePublished(course.id)" v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
             <button @click="toggleCoursePublished(course.id)" v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
             <button @click="viewCourseDetails(course)" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></button>
-            <button class="btn btn-outline-warning" title="Edit This Course"><i class="fas fa-edit"></i></button>
             <button @click="deleteThisCourse(course)" class="btn btn-outline-danger" title="Delete This Course"><i class="fas fa-trash"></i></button>
           </div>
         </div>
@@ -41,6 +41,9 @@
   </div>
   <!--Adding New User Modal-->
   <AddNewCourse @done="getAllCourses"/>
+  <!--Adding Course Admin Modal-->
+  <AddCourseAdmin :courseToBeAssignedUserAdminTo="courseToBeAssignedUserAdminTo" />
+
 </template>
 <style scoped>
     .user-card {
@@ -63,19 +66,24 @@
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
 import AddNewCourse from '@/components/Dashboard/AddNewCourse.vue';
+import AddCourseAdmin from '@/components/Dashboard/AddCourseAdmin.vue';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 
 @Options({
     components:{
       AddNewCourse,
+      AddCourseAdmin,
     },
     mounted() {
       this.getAllCourses();
     },
     methods:{
-      viewCourseDetails(course: any){
-        this.$store.state.courseInCourseDatailsPage = course;
+      addCourseAdmin(course: any) {
+        this.courseToBeAssignedUserAdminTo = course;
+      },
+      async viewCourseDetails(course: any){
+        this.$store.state.courseInCourseDatailsPage = await course;
         this.$router.push('/course');
       },
       deleteThisCourse(course: any) {
@@ -166,9 +174,10 @@ import Swal from 'sweetalert2';
     },
     data(){
         return {
-            searchTerm: '',
-            filter: '',
-            courses: []
+          searchTerm: '',
+          filter: '',
+          courses: [],
+          courseToBeAssignedUserAdminTo: null
         }
     }
 })

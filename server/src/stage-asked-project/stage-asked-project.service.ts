@@ -15,6 +15,7 @@ export class StageAskedProjectService {
     private readonly stagesServicesRepository: Repository<Stage>,
   ) {}
 
+<<<<<<< HEAD
   async create(
     stageAskedProject: StageAskedProject,
   ): Promise<StageAskedProject> {
@@ -29,6 +30,10 @@ export class StageAskedProjectService {
         `we don't found the stage that you want to add this asked project under it. (${stageAskedProject.stage.title})`,
       );
     }
+=======
+  async create(stageAskedProject: StageAskedProject): Promise<StageAskedProject> {
+    return await this.stageAskedProjectRepository.save(stageAskedProject);
+>>>>>>> main
   }
 
   async findAll(): Promise<StageAskedProject[]> {

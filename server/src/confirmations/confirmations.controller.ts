@@ -17,6 +17,7 @@ import { ConfirmationsService } from './confirmations.service';
 import { CreateConfirmationDto } from './dto/create-confirmation.dto';
 import { UpdateConfirmationDto } from './dto/update-confirmation.dto';
 import { Confirmation } from './entities/confirmation.entity';
+import { plainToClass } from 'class-transformer';
 
 @Controller('confirmations')
 export class ConfirmationsController {
