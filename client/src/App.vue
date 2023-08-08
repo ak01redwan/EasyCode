@@ -65,13 +65,13 @@
             </ul>
           </li>
         </ul>
-        <div v-if="auth" class="d-flex d-grid gap-1">
+        <div v-if="user" class="d-flex d-grid gap-1">
           <button @click="doLogout" class="btn btn-outline-danger">
             <i class="fa-solid fa-sign-out"></i> Logout
           </button>
           <router-link to="/user">
-            <button @click="$store.state.userInUserDetailsPage = null" class="btn btn-outline-secondary">
-              <i class="fa-solid fa-user"></i> Profile
+            <button :title="`${user.fullName} \n ${user.email}`" @click="$store.state.userInUserDetailsPage = null" class="btn btn-outline-secondary">
+              <i class="fa-solid fa-user"></i> {{ user.username }}
             </button>
           </router-link>
         </div>
@@ -191,6 +191,7 @@ export default {
           })
           .then((res) => {
             if (res.data){
+              this.user = res.data;
               this.$store.dispatch('login', res.data);
               this.$store.state.userTokens = userCookies;
               if (res.data.userType == 'supervisor') {
@@ -217,11 +218,5 @@ export default {
   created() {
     this.getUserProfileUsingStoredTokens();
   },
-  computed: {
-    auth() {
-      this.user = this.$store.state.userTokens;
-      return this.user;
-    }
-  }
 };
 </script>
