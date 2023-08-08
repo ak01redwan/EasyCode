@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid" v-if="user && course">
+    <div class="container-fluid" v-if="course">
       <div class="row flex-nowrap">
           <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 bg-dark shadow-lg ">
             <div class="align-items-center align-items-sm-start px-3 pt-2 text-white min-vh-100">
@@ -8,14 +8,14 @@
               </router-link>
               <hr>
               <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                  <li v-for="(item, index) in SideBarData" :key="index" class="nav-item">
-                      <button v-if="subscriped && !(user.userType == 'student' && item.itemName == 'Chatting Room')"  @click="ShowOption(index)" class="nav-link align-middle px-0">
+                  <li v-for="(item, index) in SideBarData" :key="index" class="nav-item" v-if="user">
+                      <button v-if="(subscriped && !(user.userType == 'student' && item.itemName == 'Chatting Room')) || user.userType == 'admin'"  @click="ShowOption(index)" class="nav-link align-middle px-0">
                         <i class="fa-solid" :class="item.itemIconClass"></i> <span class="ms-1 d-none d-sm-inline text-secondary">{{ item.itemName }}</span>
                       </button>
                   </li>
                   <li class="nav-item w-100">{{ !subscriped ? 'subscripe right now to see more things about this course.' : '' }}</li>
                   <li class="nav-item w-100">
-                    <button v-if="user" @click="subscribe()" class="btn btn-primary w-100 mt-2">
+                    <button v-if="user ? (user.userType != 'admin' ? true : false) : true" @click="subscribe()" class="btn btn-primary w-100 mt-2">
                       <i class="fa-solid fa-square-check"></i> 
                       <strong>{{ subscriped ? ' unsubscripe' : ' subscripe' }}</strong>
                     </button>
@@ -141,6 +141,15 @@ import axios from 'axios';
         } catch (error) {}
       },
       async subscribe() {
+        if (!this.user) {
+          Swal.fire({
+            icon: "info",
+            title: "Not Allowed!",
+            text: "In order to subscribe in this course you need first to be logged in.",
+          });
+          this.$router.push('/login');
+          return;
+        }
         if (this.course.stages.length <= 0) {
           Swal.fire({
             icon: "error",
@@ -207,12 +216,14 @@ import axios from 'axios';
     },
     async created() {
       await this.getCourseData();
-      try {
-        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
-        await response.data.id ? this.subscriped = true : this.subscriped = false;
-        response.data.stage ? this.currentStage = response.data.stage : '';
-      } catch (error) {
-        console.log(error);
+      if (this.user && this.course) {
+        try {
+          const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
+          await response.data.id ? this.subscriped = true : this.subscriped = false;
+          response.data.stage ? this.currentStage = response.data.stage : '';
+        } catch (error) {
+          console.log(error);
+        }
       }
     },
   })
