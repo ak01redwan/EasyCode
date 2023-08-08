@@ -24,7 +24,7 @@
               ><i class="fa-solid fa-circle-info"></i> About</router-link
             >
           </li>
-          <li class="nav-item" @click="currentPage = 'Dashboard'">
+          <li v-if="auth && user.userType != 'student'" class="nav-item" @click="currentPage = 'Dashboard'">
             <router-link to="/dashboard" :class="`nav-link ${(currentPage == 'Dashboard') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
               ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
             >
@@ -218,5 +218,11 @@ export default {
   created() {
     this.getUserProfileUsingStoredTokens();
   },
+  computed: {
+    auth() {
+      this.user = this.$store.state.user;
+      return this.user
+    }
+  }
 };
 </script>
