@@ -13,10 +13,10 @@
                         <i class="fa-solid" :class="item.itemIconClass"></i> <span class="ms-1 d-none d-sm-inline text-secondary">{{ item.itemName }}</span>
                       </button>
                   </li>
-                  <li class="nav-item w-100">{{ !subscriped ? 'subscripe right now to see more things about this course.' : '' }}</li>
+                  <li class="nav-item w-100">{{ (!subscriped && user.userType != 'admin') ? 'subscripe right now to see more things about this course.' : '' }}</li>
                   <li class="nav-item w-100">
                     <button v-if="user ? (user.userType != 'admin' ? true : false) : true" @click="subscribe()" class="btn btn-primary w-100 mt-2">
-                      <i class="fa-solid fa-square-check"></i> 
+                      <i class="fa-solid fa-square-check"></i>
                       <strong>{{ subscriped ? ' unsubscripe' : ' subscripe' }}</strong>
                     </button>
                   </li>
