@@ -11,6 +11,7 @@ import LoginViewVue from '@/views/LoginView.vue'
 import EditUserView from '@/views/EditUserView.vue';
 import DashboardView from "@/views/DashboardView.vue"
 import UserDetailsView from '../views/UserDetailsView.vue'
+import SubmitStagesExamView from '@/views/SubmitStagesExamView.vue'
 import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
 import WaitingProjectConfirmationViewVue from '@/views/WaitingProjectConfirmationView.vue'
@@ -94,6 +95,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/submit-project',
     name: 'submitProject',
     component: StageAskedProjectView    
+  },
+  {
+    path: '/submit-exam',
+    name: 'submitExam',
+    component: SubmitStagesExamView 
   }
 ]
 

@@ -18,7 +18,7 @@
               <i class="bi bi-caret-right"></i>
               <strong>&downarrow; Download</strong>
             </a>
-            <span v-if="stage.exams.length > 0 || stage.stageAskedProjects.length > 0" class="btn btn-info col-lg-4 col-md-4 col-sm-10 m-1">
+            <span @click="goToExamOrAskedProjectPage" v-if="stage.exams.length > 0 || stage.stageAskedProjects.length > 0" class="btn btn-info col-lg-4 col-md-4 col-sm-10 m-1">
               <strong>
                 <i class="fas fa-clipboard-list"></i> 
                 Start The Examination
@@ -56,6 +56,15 @@
       await this.getStagesLessons();
     },
     methods: {
+      async goToExamOrAskedProjectPage() {
+        if (this.stage.hasProject) {
+          this.$store.state.stageInShowAskedProjectPage = await this.stage;
+          this.$router.push('/submit-project')
+        }else{
+          this.$store.state.stageInSubmitStagesExamPage = await this.stage;
+          this.$router.push('/submit-exam')
+        }
+      },
       async getStagesLessons() {
         this.stage = await this.$store.state.stageInLessonPage;
         !this.stage ? this.$router.push('/') : this.currentLessonURL = this.stage.lessons[0].url;

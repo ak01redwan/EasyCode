@@ -10,6 +10,7 @@ export default createStore({
     stageInLessonPage: null,
     stageInExamPage: null,
     stageInShowAskedProjectPage: null,
+    stageInSubmitStagesExamPage: null,
     userInEditUserPage: null,
     currentDashboardDisplayedContent: "ShowUsers",
   },
@@ -29,6 +30,7 @@ export default createStore({
         state.stageInLessonPage = null;
         state.stageInExamPage = null;
         state.stageInShowAskedProjectPage = null;
+        state.stageInSubmitStagesExamPage = null;
       }
     },
   },

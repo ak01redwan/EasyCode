@@ -1,0 +1,105 @@
+<template>
+    <hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0 mb-1"><hr class="p-0 m-0">
+    <h1 class="text-center">{{ stage.title }} Stage's Examination Page</h1>
+    <hr class="p-0 m-0 mb-1"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0 mb-1">
+    <form>
+        <div class="p-3" v-for="(exam, index) in stage.exams" :key="index">
+            <label><em><strong style="font-size: larger;">{{ exam.question }}</strong></em></label>
+            <div v-for="choice in splitAnswers(exam.answer)" :key="choice">
+                <input type="radio" :name="'choice' + index" v-model="selectedAnswers[index]" :value="choice" />
+                {{ choice }}
+            </div>
+            <hr/>
+        </div>
+        <button type="button" class="btn btn-primary m-4" @click="submit">Submit</button>
+        <div class="alert alert-warning" role="alert">
+            Will be submitted automatically after 60 minutes, current exam time is now {{ minutesLefted }} minutes.
+        </div>
+    </form>
+    <hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0 mb-4">
+</template>
+
+<script lang="ts">
+import axios from "axios";
+import Swal from "sweetalert2";
+import { Options, Vue } from "vue-class-component";
+@Options({
+  async created() {
+    await this.loadStage();
+    this.startTiming();
+    //await this.checkifTheUserHasSubmittedThisStageProject();
+  },
+  data() {
+    return {
+      stage: null,
+      selectedAnswers: [],
+      minutesLefted: 0,
+    };
+  },
+  methods: {
+    submit() {
+        
+        for(let i = 0; i < this.selectedAnswers.length; i++) {
+            if (this.selectedAnswers[i] == this.stage.exams[i].rightAnswer) {
+                console.log((i+1)+' True');
+            }else{
+                console.log((i+1)+' False');
+            }
+        }
+    },
+    splitAnswers(answerString: string) {
+        return answerString.split(', ');
+    },
+    async checkifTheUserHasSubmittedThisStageExam() {
+      try {
+        // fixe this
+        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/:userId/by-course/:courseId`,{
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.state.userTokens,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (response.data && this.$store.state.user.userType == 'student') {
+          this.goToWaitingProjectConfirmationPage();
+        }
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: `oOPs...`,
+          text: "Network Error.",
+        })
+      }
+    },
+    async loadStage() {
+      this.stage = await this.$store.state.stageInSubmitStagesExamPage;
+      !this.stage ? this.$router.push('/') : this.selectedAnswers = new Array<string>(this.stage.exams.length).fill('.');
+      console.log(this.stage);
+    },
+    startTiming() {
+        Swal.fire({
+            icon: "info",
+            title: "Welcome to the exam page.",
+            text: `You have 60 minutes.`,
+        });
+        let timeLefted = setInterval(() => {
+            this.minutesLefted += 1;
+        },60000);
+        
+        const milliseconds = 60 * 60 * 1000;
+        let examTime = setTimeout(() => {
+            Swal.fire({
+                icon: "info",
+                title: "Done",
+                text: `Examination time is finished.`,
+            });
+            clearInterval(timeLefted);
+            // here do the auto submitting
+        }, milliseconds);
+    },
+  }
+})
+export default class SubmitStagesExamView extends Vue {
+[x: string]: any;
+}
+</script>
+
