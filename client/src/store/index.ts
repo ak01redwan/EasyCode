@@ -13,6 +13,7 @@ export default createStore({
     stageInSubmitStagesExamPage: null,
     userInEditUserPage: null,
     currentDashboardDisplayedContent: "ShowUsers",
+    currentStage: null
   },
   getters: {
     isAuthenticated(state) {
@@ -31,6 +32,7 @@ export default createStore({
         state.stageInExamPage = null;
         state.stageInShowAskedProjectPage = null;
         state.stageInSubmitStagesExamPage = null;
+        state.currentStage = null;
       }
     },
   },

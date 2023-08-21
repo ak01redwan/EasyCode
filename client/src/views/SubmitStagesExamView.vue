@@ -38,14 +38,6 @@ import { Options, Vue } from "vue-class-component";
   },
   methods: {
     async submit() {
-      /*
-      for(let i = 0; i < this.selectedAnswers.length; i++) {
-          if (this.selectedAnswers[i] == this.stage.exams[i].rightAnswer) {
-              console.log((i+1)+' True');
-          }else{
-              console.log((i+1)+' False');
-          }
-      }*/
       try {
         const answers = new Array<{ examId: number, answer: string }>();
         this.selectedAnswers.forEach((answer: any, index: number) => {
@@ -59,7 +51,11 @@ import { Options, Vue } from "vue-class-component";
             'Content-Type': 'application/json'
           }
         });
-        console.log(response);
+        if (response.data.stage.id > this.stage.id) {
+          this.$store.state.currentStage = response.data.stage;
+          this.$router.push('/course');
+        }
+        
       } catch (error) {
         console.log(error);
       }

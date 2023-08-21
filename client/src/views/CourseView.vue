@@ -183,6 +183,12 @@ import axios from 'axios';
             Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
             this.subscriped = false;
           }
+          try {
+            const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
+            response.data.stage ? this.currentStage = response.data.stage : '';
+          } catch (error) {
+            console.log(error);
+          }
         } catch (error) {
           Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
         }
@@ -219,6 +225,9 @@ import axios from 'axios';
     async created() {
       await this.getCourseData();
       if (this.user && this.course) {
+        if (this.$store.state.currentStage) {
+          this.currentOption = this.listOptions[1];
+        }
         try {
           const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
           await response.data.id ? this.subscriped = true : this.subscriped = false;
