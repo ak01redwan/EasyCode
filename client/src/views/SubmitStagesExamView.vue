@@ -37,6 +37,14 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   methods: {
+    shuffleArray(array: any[]): any[] {
+      const shuffledArray = [...array];
+      for (let i = shuffledArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffledArray[i], shuffledArray[j]] = [shuffledArray[j], shuffledArray[i]];
+      }
+      return shuffledArray;
+    },
     async submit() {
       try {
         const answers = new Array<{ examId: number, answer: string }>();
@@ -61,7 +69,7 @@ import { Options, Vue } from "vue-class-component";
       }
     },
     splitAnswers(answerString: string) {
-        return answerString.split(', ');
+      return this.shuffleArray(answerString.split(', '));
     },
     async checkifTheUserHasSubmittedThisStageExam() {
       try {

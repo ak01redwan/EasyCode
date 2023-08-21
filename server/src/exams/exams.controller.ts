@@ -63,7 +63,7 @@ export class ExamsController {
                         @Request() req): Promise<any> {
     const result = await this.examsService.calculateResult(stageId, data.examAnswers);
     let sub = await this.subsServices.findByUserAndCourse(data.courseId,req.authData.user.id);
-    if (result >= 5 && !sub.isDone) {
+    if (result >= 5 && !sub.isDone && sub.stage.id == stageId) {
       const course = await this.coursesServices.findOne(data.courseId);
       var stageIndex = 0;
       course.stages.forEach((stage: any, index) => {
