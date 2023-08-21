@@ -5,6 +5,8 @@ import { Exam } from './entities/exam.entity';
 import { CreateExamDto } from './dto/create-exam.dto';
 import { UpdateExamDto } from './dto/update-exam.dto';
 import { plainToClass } from 'class-transformer';
+import { Stage } from 'src/stages/entities/stage.entity';
+import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 
 @Injectable()
 export class ExamsService {
@@ -77,4 +79,6 @@ export class ExamsService {
     const result = (correctAnswers / totalQuestions) * 10;
     return Math.round(result);
   }
+
+  
 }

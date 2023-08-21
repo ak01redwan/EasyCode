@@ -51,7 +51,7 @@ export class SubscriptionsService {
 
   async update(id: number, subscription: Subscription): Promise<Subscription> {
     await this.subscriptionsRepository.update(id, subscription);
-   return this.findById(id);
+    return this.findById(id);
   }
 
   async delete(id: number): Promise<any> {

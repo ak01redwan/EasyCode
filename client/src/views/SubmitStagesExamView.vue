@@ -1,8 +1,8 @@
 <template>
     <hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0 mb-1"><hr class="p-0 m-0">
-    <h1 class="text-center">{{ stage.title }} Stage's Examination Page</h1>
+    <h1 class="text-center" v-if="stage">{{ stage.title }} Stage's Examination Page</h1>
     <hr class="p-0 m-0 mb-1"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0"><hr class="p-0 m-0 mb-1">
-    <form>
+    <form v-if="stage">
         <div class="p-3" v-for="(exam, index) in stage.exams" :key="index">
             <label><em><strong style="font-size: larger;">{{ exam.question }}</strong></em></label>
             <div v-for="choice in splitAnswers(exam.answer)" :key="choice">
@@ -37,15 +37,32 @@ import { Options, Vue } from "vue-class-component";
     };
   },
   methods: {
-    submit() {
-        
-        for(let i = 0; i < this.selectedAnswers.length; i++) {
-            if (this.selectedAnswers[i] == this.stage.exams[i].rightAnswer) {
-                console.log((i+1)+' True');
-            }else{
-                console.log((i+1)+' False');
-            }
-        }
+    async submit() {
+      /*
+      for(let i = 0; i < this.selectedAnswers.length; i++) {
+          if (this.selectedAnswers[i] == this.stage.exams[i].rightAnswer) {
+              console.log((i+1)+' True');
+          }else{
+              console.log((i+1)+' False');
+          }
+      }*/
+      try {
+        const answers = new Array<{ examId: number, answer: string }>();
+        this.selectedAnswers.forEach((answer: any, index: number) => {
+          answers.push({ examId: this.stage.exams[index].id, answer: answer });
+        });
+        const payload = { courseId: this.stage.course.id, examAnswers: answers };
+        const response = await axios.post(`http://localhost:3000/exams/calculate-result/${this.stage.id}`,
+        payload,{
+          headers: {
+            'Authorization': 'Bearer ' + this.$store.state.userTokens,
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log(response);
+      } catch (error) {
+        console.log(error);
+      }
     },
     splitAnswers(answerString: string) {
         return answerString.split(', ');

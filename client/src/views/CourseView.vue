@@ -188,13 +188,15 @@ import axios from 'axios';
         }
       },
       async getCourseData() {
-        this.user = await this.$store.state.user;
+        try {
+          this.user = await this.$store.state.user;
+        } catch (error) {
+          
+        }
         this.course = await this.$store.state.courseInCourseDatailsPage;
         if (!this.course) {
           this.$router.push('/courses');
         }
-        //const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.$store.state.user}/by-course/${this.course.id}`);
-        //console.log(response);
       },
       ShowOption(optionNumber: number){
         this.currentOption = this.listOptions[optionNumber];
@@ -224,6 +226,13 @@ import axios from 'axios';
         } catch (error) {
           console.log(error);
         }
+      }else{
+        Swal.fire({
+          icon: 'warning',
+          title: 'No Account',
+          text: 'You need to login in or sign up to access more things.'
+        });
+        this.$router.push('/login');
       }
     },
   })
