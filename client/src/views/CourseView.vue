@@ -181,6 +181,7 @@ import axios from 'axios';
             Swal.fire("WELL DONE", `You have subscriped to ${this.course.name} course.`, "success");
           } else {
             Swal.fire("LEAVE OUT", `You are now out of ${this.course.name} course, you may loss some of this course prevliages.`, "warning");
+            this.currentOption = "CourseDetails";
             this.subscriped = false;
           }
           try {
