@@ -3,7 +3,7 @@
   <img src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="card-img-top" alt="Course Image">
   <div class="card-body">
     <h5 class="card-title">{{ Title }}</h5>
-    <p class="card-text">{{ Description.substring(0,10) }}</p>
+    <p class="card-text">{{ Description.substring(0,50) }}</p>
   </div>
   <ul class="list-group list-group-flush">
     <li class="list-group-item" @click="likeThisCourse">

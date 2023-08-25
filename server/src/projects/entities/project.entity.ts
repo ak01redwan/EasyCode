@@ -52,5 +52,4 @@ export class Project {
 
   @ManyToOne(() => Course, course => course.projects)
   course: Course;
-
 }

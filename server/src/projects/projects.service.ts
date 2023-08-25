@@ -13,7 +13,7 @@ export class ProjectsService {
 
   async findAll(): Promise<Project[]> {
     return this.projectRepository.find({
-      relations: ['likes','comments','askedProject','student','supervisor']
+      relations: ['likes','comments','askedProject','student','supervisor','course']
     });
   }
 

@@ -6,16 +6,17 @@ import UsersView from '../views/UsersView.vue'
 import SignupView from '@/views/SignupView.vue'
 import CourseView from '@/views/CourseView.vue'
 import LessonView from '@/views/LessonView.vue'
-import CoursesView from '@/views/CoursesView.vue'
 import LoginViewVue from '@/views/LoginView.vue'
-import EditUserView from '@/views/EditUserView.vue';
-import DashboardView from "@/views/DashboardView.vue"
+import CoursesView from '@/views/CoursesView.vue'
+import ProjectsVeiw from '@/views/ProjectsVeiw.vue'
+import EditUserView from '@/views/EditUserView.vue'
+import DashboardView from '@/views/DashboardView.vue'
+import ProjectsDetails from '@/views/ProjectsDetails.vue'
 import UserDetailsView from '../views/UserDetailsView.vue'
 import SubmitStagesExamView from '@/views/SubmitStagesExamView.vue'
 import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
 import WaitingProjectConfirmationViewVue from '@/views/WaitingProjectConfirmationView.vue'
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/dashboard',
@@ -75,6 +76,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/stage',
     name: 'stage',
     component: LessonView
+  },
+  {
+    path: '/project',
+    name: 'project',
+    component: ProjectsDetails
+  },
+  {
+    path: '/projects',
+    name: 'projects',
+    component: ProjectsVeiw
   },
   {
     path: '/login',

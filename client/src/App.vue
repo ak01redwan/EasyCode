@@ -39,15 +39,15 @@
             >
             <ul class="dropdown-menu">
               <li @click="goToUsersPage('supervisor')" class="dropdown-item btn">
+                <i class="fa-solid fa-users"></i>
                 Supervisors
               </li>
-              <li @click="goToUsersPage('graduator')" class="dropdown-item btn">
-                Graduators
-              </li>
               <li @click="goToUsersPage('student')" class="dropdown-item btn">
+                <i class="fa-solid fa-users"></i>
                 Students
               </li>
               <li @click="goToUsersPage('')" class="dropdown-item btn">
+                <i class="fa-solid fa-users"></i>
                 All Users
               </li>
               <li>
