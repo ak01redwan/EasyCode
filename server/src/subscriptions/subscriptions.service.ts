@@ -20,6 +20,13 @@ export class SubscriptionsService {
     });
   }
 
+  async changeIsDonePropForAllEnrollmentsInThisCourse(course: Course): Promise<number> {
+    const subs = await this.subscriptionsRepository.find({ where: { course: { id: course.id }}});
+    subs.forEach((sub) => { sub.isDone = false; });
+    await this.subscriptionsRepository.save(subs);
+    return subs.length;
+  }
+
   async upgradeToNextStage(userId: number, courseId: number): Promise<boolean> {
     const sub = await this.subscriptionsRepository.findOne({
       where: {

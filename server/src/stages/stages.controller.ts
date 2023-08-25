@@ -4,10 +4,14 @@ import { CreateStageDto } from './dto/create-stage.dto';
 import { UpdateStageDto } from './dto/update-stage.dto';
 import { Stage } from './entities/stage.entity';
 import { plainToClass } from 'class-transformer';
+import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 
 @Controller('stages')
 export class StagesController {
-  constructor(private readonly stagesService: StagesService) {}
+  constructor(
+    private readonly stagesService: StagesService,
+    private readonly subsService: SubscriptionsService
+    ) {}
 
   @Get()
   async findAll(): Promise<Stage[]> {
@@ -22,7 +26,12 @@ export class StagesController {
   @Post()
   async create(@Body() createStageDto: CreateStageDto): Promise<any> {
     const stage = plainToClass(Stage, createStageDto);
-    return await this.stagesService.create(stage);
+    const result = await this.stagesService.create(stage);
+    if (!result.message) {
+      const numberOfChangedSubs = await this.subsService.changeIsDonePropForAllEnrollmentsInThisCourse(stage.course);
+      console.log(numberOfChangedSubs);
+    }
+    return result;
   }
 
   @Put(':id')
