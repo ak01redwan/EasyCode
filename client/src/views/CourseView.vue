@@ -52,15 +52,12 @@
               </form>
             </div>
           
-            <div v-for="(student,index) in (searchResults)" :key="index" class="user-card col-12 p-3">
-              <img src="https://via.placeholder.com/50"  alt="User Avatar" class="bd-placeholder-img rounded-circle">
-              <span class="fw-bold m-4">{{ student.fullname }}</span>
-              <span class="text-muted m-3">{{student.username}}</span>
+            <div v-for="(studentSub,index) in searchResults" :key="index" class="user-card col-12 p-3">
+              <img :src="`http://localhost:3000/${studentSub.user.picturePath}`"  alt="User Avatar" style="border-radius: 50%; widows: 50px; height: 50px;">
+              <span class="fw-bold m-4">{{ studentSub.user.fullName }}</span>
+              <span class="text-muted m-3">@{{studentSub.user.username}}</span>
               <div class="btn-group float-end">
-                <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
-                <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
-                <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-outline-primary" title="View Details"><i class="fas fa-info-circle"></i></button>
               </div>
             </div>
           </div>
@@ -74,15 +71,12 @@
                 <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
               </form>
             </div>
-            <div v-for="(student,index) in searchResultsSuperviser" :key="index" class="user-card col-12  p-3">
-              <img src="https://via.placeholder.com/50"  alt="User Avatar" class="bd-placeholder-img rounded-circle">
-              <span class="fw-bold m-4 ">{{ student.fullname }}</span>
-              <span class="text-muted m-3 ">{{student.username}}</span>
+            <div v-for="(supervisorSub,index) in searchResultsSuperviser" :key="index" class="user-card col-12  p-3">
+              <img :src="`http://localhost:3000/${supervisorSub.user.picturePath}`"  alt="User Avatar" style="border-radius: 50%; widows: 50px; height: 50px;">
+              <span class="fw-bold m-4 ">{{ supervisorSub.user.fullName }}</span>
+              <span class="text-muted m-3 ">{{supervisorSub.user.username}}</span>
               <div class="btn-group float-end">
-                <button class="btn btn-outline-secondary" title="Send Email"><i class="fas fa-envelope"></i></button>
-                <button class="btn btn-outline-secondary" title="View Details"><i class="fas fa-info-circle"></i></button>
-                <button class="btn btn-outline-secondary" title="Edit User"><i class="fas fa-edit"></i></button>
-                <button class="btn btn-outline-danger" title="Delete User"><i class="fas fa-trash"></i></button>
+                <button class="btn btn-outline-primary" title="View Details"><i class="fas fa-info-circle"></i></button>
               </div>
             </div>
           </div> 
@@ -120,7 +114,9 @@ import axios from 'axios';
         course: null,
         subscriped: false,
         user: null,
-        currentStage: null
+        currentStage: null,
+        students: [],
+        Supervisers: [],
       }
     },
     methods: {
@@ -197,12 +193,19 @@ import axios from 'axios';
       async getCourseData() {
         try {
           this.user = await this.$store.state.user;
+          this.course = await this.$store.state.courseInCourseDatailsPage;
+          if (!this.course) {
+            this.$router.push('/courses');
+          }
+          const response = await axios.get(`http://localhost:3000/subscriptions/by-course/${this.course.id}`);
+          this.Supervisers = response.data.filter((sub: any) => {
+            return (sub.user.userType == 'supervisor')
+          });
+          this.students = response.data.filter((sub: any) => {
+            return (sub.user.userType == 'student')
+          });
         } catch (error) {
-          
-        }
-        this.course = await this.$store.state.courseInCourseDatailsPage;
-        if (!this.course) {
-          this.$router.push('/courses');
+          console.log(error);
         }
       },
       ShowOption(optionNumber: number){
@@ -210,18 +213,18 @@ import axios from 'axios';
       }
     },
     computed:{
-        searchResults() {
-            return this.students.filter((student: { fullname: string; username: string}): any => {
-                const searchTerm = this.searchTerm.toLowerCase();
-                return (student.fullname.toLowerCase().includes(searchTerm) || student.username.toLowerCase().includes(searchTerm));
-            });
-        },
-        searchResultsSuperviser() {
-            return this.Supervisers.filter((superviser: { fullname: string; username: string}): any => {
-                const searchTerm = this.searchTerm.toLowerCase();
-                return (superviser.fullname.toLowerCase().includes(searchTerm) || superviser.username.toLowerCase().includes(searchTerm));
-            });
-        }
+      searchResults() {
+        return this.students.filter((student: any) => {
+          const searchTerm = this.searchTerm.toLowerCase();
+          return (student.user.fullName.toLowerCase().includes(searchTerm) || student.user.username.toLowerCase().includes(searchTerm));
+        });
+      },
+      searchResultsSuperviser() {
+        return this.Supervisers.filter((sub: any) => {
+            const searchTerm = this.searchTerm.toLowerCase();
+            return (sub.user.fullName.toLowerCase().includes(searchTerm) || sub.user.username.toLowerCase().includes(searchTerm));
+        });
+      }
     },
     async created() {
       await this.getCourseData();
