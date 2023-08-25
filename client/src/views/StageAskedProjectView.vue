@@ -182,7 +182,8 @@ import { Options, Vue } from "vue-class-component";
       formDataInstance.append("title", this.projectTitle);
       formDataInstance.append("askedProject", JSON.stringify(this.askedProject));
       formDataInstance.append("student", JSON.stringify(this.$store.state.user));
-
+      formDataInstance.append("course", JSON.stringify(this.$store.state.courseInCourseDatailsPage));
+      
       axios
         .post("http://localhost:3000/projects", formDataInstance, {
           headers: {
@@ -260,13 +261,7 @@ import { Options, Vue } from "vue-class-component";
       !this.stage
         ? this.$router.push("/")
         : (this.askedProject = this.stage.stageAskedProjects[0]);
-    },
-    startTiming(minutes: number) {
-      const milliseconds = minutes * 60 * 1000;
-      setTimeout(() => {
-        alert(`Time finished after ${minutes} minutes.`);
-      }, milliseconds);
-    },
+    }
   },
 })
 export default class StageAskedProjectView extends Vue {

@@ -22,17 +22,23 @@
             <span class="text-muted">@{{project.student.username}}</span>
           </div>
           <div class="btn-group float-end">
-            <a :href="`http://localhost:3000${project.documentPath}`" class="btn btn-outline-primary" title="View Certification Document (PDF)">
-              <i class="fas fa-cloud-download"></i>
-              Project
+            <a
+              :href="`http://localhost:3000${project.askedProject.documentsPath}`"
+              target="_blank"
+              class="btn btn-primary"
+              ><i class="fa fa-eye" aria-hidden="true"></i> Asked Project
             </a>
-            <button @click="confirm(project)" class="btn btn-outline-success" title="Confirme This Supervisor">
+            <a :href="`http://localhost:3000${project.documentPath}`" class="btn btn-outline-primary" title="View Project Document (.rar or .zip)">
+              <i class="fas fa-cloud-download"></i>
+              Submitted Project
+            </a>
+            <button @click="confirm(project)" class="btn btn-outline-success" title="Confirme This Project">
               <i class="fas fa-check-circle"></i>
-              Confirme
+              Approve Project
             </button>
-            <button @click="refuse(project)" class="btn btn-outline-danger" title="Refuse This Supervisor">
+            <button @click="refuse(project)" class="btn btn-outline-danger" title="Refuse This Project">
               <i class="fa fa-recycle"></i>
-              Retry
+              Refuse
             </button>
           </div>
         </div>
@@ -47,8 +53,6 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 @Options({
-    components:{
-    },
     methods:{
       refuse(project: any) {
         Swal.fire({
@@ -57,7 +61,7 @@ import Swal from "sweetalert2";
           inputPlaceholder: "Enter your refusing comment here...",
           inputValue: "",
           showCancelButton: true,
-          confirmButtonText: "Save",
+          confirmButtonText: "Send",
           cancelButtonText: "Cancel",
         }).then((result) => {
           if (result.isConfirmed) {
@@ -86,7 +90,7 @@ import Swal from "sweetalert2";
           inputPlaceholder: "Enter your confirmation comment here...",
           inputValue: "",
           showCancelButton: true,
-          confirmButtonText: "Save",
+          confirmButtonText: "Send",
           cancelButtonText: "Cancel",
         }).then((result) => {
           if (result.isConfirmed) {

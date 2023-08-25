@@ -11,6 +11,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
     TypeOrmModule.forFeature([Course])
   ],
   controllers: [CoursesController],
-  providers: [CoursesService]
+  providers: [CoursesService],
+  exports: [CoursesService]
 })
 export class CoursesModule {}

@@ -3,18 +3,52 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Subscription } from './entities/subscription.entity';
 import { Stage } from 'src/stages/entities/stage.entity';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Injectable()
 export class SubscriptionsService {
   constructor(
     @InjectRepository(Subscription)
-    private readonly subscriptionsRepository: Repository<Subscription>
+    private readonly subscriptionsRepository: Repository<Subscription>,
+    @InjectRepository(Course)
+    private readonly coursesRepository: Repository<Course>,
   ) {}
 
   async findAll(): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
       relations: ['user', 'course','stage'],
     });
+  }
+
+  async upgradeToNextStage(userId: number, courseId: number): Promise<boolean> {
+    const sub = await this.subscriptionsRepository.findOne({
+      where: {
+        user: { id: userId },
+        course: { id: courseId }
+      },
+      relations: ['stage']
+    });
+    const course = await this.coursesRepository.findOne({ 
+      where: { id: courseId },
+      relations: ['stages']
+    });
+    if (sub && course) {
+      const stage: Stage = await this.getNextStage(course, sub.stage.id);
+      if (sub.isDone) { return false; } else { sub.scores += 10; }
+      stage.id > sub.stage.id ? sub.stage = stage : sub.isDone = true;
+      this.subscriptionsRepository.save(sub); // update
+      return true;
+    }
+    console.log("this is after the if and stell run");
+    return false;
+  }
+
+  private async getNextStage(course: Course, currentStageId: number): Promise<Stage> {
+    if (course.stages[course.stages.length - 1].id > currentStageId) {
+      return await course.stages.find(stage => stage.id > currentStageId);
+    } else {
+      return course.stages[course.stages.length - 1];
+    }
   }
 
   async findById(id: number): Promise<Subscription> {

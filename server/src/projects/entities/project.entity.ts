@@ -3,6 +3,7 @@ import { Comment } from 'src/comments/entities/comment.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne } from 'typeorm';
 import { StageAskedProject } from 'src/stage-asked-project/entities/stage-asked-project.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Entity()
 export class Project {
@@ -48,5 +49,8 @@ export class Project {
 
   @ManyToOne(() => User, student => student.projects)
   supervisor: User;
+
+  @ManyToOne(() => Course, course => course.projects)
+  course: Course;
 
 }

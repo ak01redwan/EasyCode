@@ -6,6 +6,7 @@ import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { Message } from 'src/messages/entities/message.entity';
 import { Comment } from 'src/comments/entities/comment.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Project } from 'src/projects/entities/project.entity';
 
 @Entity()
 export class Course {
@@ -51,4 +52,7 @@ export class Course {
 
   @OneToMany(() => Comment, comment => comment.course)
   comments: Comment[];
+
+  @OneToMany(() => Project, project => project.course)
+  projects: Project[];
 }

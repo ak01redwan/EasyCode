@@ -50,7 +50,7 @@
             <hr>
             <p><strong>Refused Times: </strong> {{ project.refusedTimes }}</p>
             <hr>
-            <p><strong>Status: </strong> {{ project.isSubmitted ? 'Submitted' : 'Not submitted Yet' }}</p>
+            <p><strong>Status: </strong> {{ project.isSubmitted ? 'Submitted' : 'Need to be resubmitted' }} </p>
         </p>
     </div>
     <div v-if="!project.isSubmitted" class="card border-primary m-5 row" style="background: #eaebed">
@@ -118,8 +118,11 @@ import { Options, Vue } from "vue-class-component";
 @Options({
   async created() {
     if (await this.loadStage()) {
-        await this.loadProject();
+      await this.loadProject();
     }
+    setInterval(()=>{
+      this.loadProject();
+    },10000);
   },
   data() {
     return {
@@ -170,21 +173,21 @@ import { Options, Vue } from "vue-class-component";
             "Content-Type": "multipart/form-data",
           },
         })
-        .then((response) => {
+        .then((res) => {
           sumittingProgressTime = 1000;
           Swal.fire({
             icon: "success",
             title: `Done!...`,
-            text: "Project Submitted successfully, we are going to direct you to go To Waiting Project Confirmation Page.",
+            text: "Project Submitted successfully.",
           });
-          this.goToWaitingProjectConfirmationPage();
+         this.loadProject();
         })
         .catch((error) => {
           console.log(error);
           Swal.fire({
             icon: "error",
             title: "Oops!",
-            text: error.response.data.message,
+            text: 'network error',
           });
         })
         .finally(() => {
@@ -248,7 +251,8 @@ import { Options, Vue } from "vue-class-component";
             });
             this.project = response.data;
             if (!this.project) {
-                this.$router.push('/');
+              this.$store.state.currentStage = this.stage;
+              this.$router.push('/course');
             }
         } catch (error) {
             console.log(error);

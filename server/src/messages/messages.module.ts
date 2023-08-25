@@ -3,12 +3,15 @@ import { MessagesController } from './messages.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { MessagesService } from './messages.service';
-import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 import { Subscription } from 'src/subscriptions/entities/subscription.entity';
+import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Message,Subscription])],
+  imports: [
+    TypeOrmModule.forFeature([Message]),
+    SubscriptionsModule
+  ],
   controllers: [MessagesController],
-  providers: [MessagesService, SubscriptionsService]
+  providers: [MessagesService]
 })
 export class MessagesModule {}

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, UploadedFiles, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, UseInterceptors, UploadedFiles, UseGuards, Request, ConflictException } from '@nestjs/common';
 import { ProjectsService } from './projects.service';
 import { Project } from './entities/project.entity';
 import { CreateProjectDto } from './dto/create-project.dto';
@@ -9,10 +9,14 @@ import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
 import { Multer } from 'multer';
 import * as fs from 'fs';
 import { AuthGuard } from 'src/auth/auth.guard'
+import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 
 @Controller('projects')
 export class ProjectsController {
-  constructor(private readonly projectsService: ProjectsService) {}
+  constructor(
+    private readonly projectsService: ProjectsService,
+    private readonly subsServices: SubscriptionsService
+    ) {}
 
   @Get()
   async findAll(): Promise<Project[]> {
@@ -65,10 +69,26 @@ export class ProjectsController {
       project.supervisorComment = "waiting for supervisor comment and confirmation";
       project.isSubmitted = true;
       // setup paths
-      project.imagePath = `/uploads/${imageFile.filename}`;
-      project.documentPath = `/uploads/${projectFile.filename}`;
-      return this.projectsService.create(project);
+      if (projectFile) { // check if it is the first time (create project).
+        project.imagePath = `/uploads/${imageFile.filename}`;
+        project.documentPath = `/uploads/${projectFile.filename}`;
+        project.course = JSON.parse(`${createProjectDto.course}`);
+        return this.projectsService.create(project);
+      } else if (files[0]) { // only one file which is the project docs
+        project.documentPath = `/uploads/${files[0].filename}`;
+        // get the old image path 
+        const oldProject = await this.projectsService.findOneByStudentIdAndStageAskedProjectId(
+          project.student.id,
+          project.askedProject.id
+        );
+        project.imagePath = oldProject.imagePath;
+        project.supervisor = oldProject.supervisor;
+        return this.projectsService.update(oldProject.id, project);
+      }else {
+        throw new ConflictException('can not create or update the project');
+      }
     } catch (error) {
+      console.log(error);
       try {
         imageFile ? fs.unlinkSync(imageFile.path) : null;
         projectFile ? fs.unlinkSync(projectFile.path) : null;
@@ -88,6 +108,7 @@ export class ProjectsController {
     if (req.authData.user.userType == 'student') {
       return;
     }
+    
     const project = await this.findById(id);
     project.supervisorComment = updateProjectDto.reviewerComment;
     project.isAcceptedAndDone = updateProjectDto.accepted;
@@ -95,6 +116,11 @@ export class ProjectsController {
     if (!project.isAcceptedAndDone) {
       project.refusedTimes++;
       project.isSubmitted = false;
+    }else{ // if the project hass been accepted
+      this.subsServices.upgradeToNextStage(
+        project.student.id,
+        project.course.id
+      );
     }
     return this.projectsService.update(id, project);
   }
