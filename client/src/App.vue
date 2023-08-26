@@ -57,7 +57,7 @@
                 >
               </li>
               <li>
-                <router-link to="/users" class="dropdown-item"
+                <router-link to="/projects" class="dropdown-item"
                   ><i class="fa-solid fa-diagram-project"></i>
                   Progects</router-link
                 >

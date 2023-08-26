@@ -96,7 +96,7 @@ import axios from 'axios';
     }
   },
   async created() {
-      await this.getAllProjects();
+    await this.getAllProjects();
   },
 })
 export default class ProjectsVeiw extends Vue {

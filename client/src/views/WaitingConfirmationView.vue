@@ -109,7 +109,31 @@ import Swal from "sweetalert2";
       isSubmitting: false,
     };
   },
+  created() {
+    setInterval(() => {
+      this.getUserProfileUsingStoredTokens();
+    },10000);
+  },
   methods: {
+    getUserProfileUsingStoredTokens() {
+      const userCookies = this.$store.state.userTokens;
+      if (userCookies) {
+        axios
+          .get("http://localhost:3000/auth/profile", {
+            headers: {
+              'Authorization': 'Bearer ' + userCookies,
+              'Content-Type': 'application/json'
+            }
+          })
+          .then((res) => {
+            if (res.data){
+              this.user = res.data;
+              this.$store.dispatch('login', res.data);
+            }
+          })
+          .catch((err) => {});
+      }
+    },
     updateCertifcationDoc() {
       if (!this.formData.certificationDocs) {
         Swal.fire({
