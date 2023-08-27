@@ -1,6 +1,6 @@
 <template>
     <nav class="navbar navbar-expand-lg navbar-light bg-light mb-3">
-    <div class="container-fluid">
+    <div class="container-fluid" v-if="user">
       <form class="d-flex me-auto" @submit.prevent="onSubmit">
         <input v-model="searchTerm" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search-bar">
         <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>

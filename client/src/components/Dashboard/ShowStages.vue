@@ -183,7 +183,7 @@ import Swal from "sweetalert2";
     deleteThisStage(stage: any) {
       Swal.fire({
         title: "Delete?",
-        text: `Are you sure. you went to delete ${ stage.title }?`,
+        text: `Are you sure you went to delete ${ stage.title } stage, this will delete all projects and exams related to it?`,
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: '#ff0101',

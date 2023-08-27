@@ -69,7 +69,6 @@ import Swal from 'sweetalert2';
         this.currentDisplayedContent = "ConfirmingProjects";
         this.$store.state.currentDashboardDisplayedContent = "ConfirmingProjects";
     }
-    //console.log(this.user);
   },
   methods: {
     isOneOfMyCourse() {
