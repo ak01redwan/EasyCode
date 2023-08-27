@@ -33,7 +33,8 @@ export class CoursesService {
         'category',
         'subscriptions',
         'stages',
-        'likes'
+        'likes',
+        'courseAdmin'
       ]
     });
   }
@@ -44,7 +45,8 @@ export class CoursesService {
         'category',
         'subscriptions',
         'stages',
-        'likes'
+        'likes',
+        'courseAdmin'
       ]
     });
   }
@@ -56,7 +58,8 @@ export class CoursesService {
         'category',
         'subscriptions',
         'stages',
-        'likes'
+        'likes',
+        'courseAdmin'
       ] 
     });
   }

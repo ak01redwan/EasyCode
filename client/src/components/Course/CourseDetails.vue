@@ -19,7 +19,7 @@
             <strong> Description: </strong>{{ course.description }}
           </li>
           <li class="list-group-item">
-            <strong>Course Admin:</strong> some user name
+            <strong>Course Admin:</strong> {{ course.courseAdmin.fullName }} @{{ course.courseAdmin.username }}
           </li>
           <li class="list-group-item">
             <strong>Subscriptions No:</strong> {{ course.subscriptions.length }}
@@ -74,8 +74,8 @@ import { Options, Vue } from "vue-class-component";
     course: null,
   },
   data() {
-    return {};
-  },
+    return {}
+  }
 })
 export default class CourseDetails extends Vue {
   [x: string]: any;
