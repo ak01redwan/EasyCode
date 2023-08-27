@@ -23,7 +23,11 @@ export default createStore({
   mutations: {
     setUser(state, user) {
       state.user = user
-      if (!user) {
+      if (user) {
+        if (user.userType == 'supervisor') {
+          state.currentDashboardDisplayedContent = "ConfirmingProjects";
+        }
+      } else {
         state.userTokens = null;
         state.showUsersWithType = '';
         state.userInUserDetailsPage = null;

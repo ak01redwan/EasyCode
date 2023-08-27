@@ -65,10 +65,6 @@ import Swal from 'sweetalert2';
     this.user = await this.$store.state.user;
     this.verifySupervisorIsConfirmed();
     this.currentDisplayedContent = this.$store.state.currentDashboardDisplayedContent;
-    if (this.user.userType == 'supervisor') {
-        this.currentDisplayedContent = "ConfirmingProjects";
-        this.$store.state.currentDashboardDisplayedContent = "ConfirmingProjects";
-    }
   },
   methods: {
     isOneOfMyCourse() {
