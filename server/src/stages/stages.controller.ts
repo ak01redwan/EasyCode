@@ -13,16 +13,6 @@ export class StagesController {
     private readonly subsService: SubscriptionsService
     ) {}
 
-  @Get()
-  async findAll(): Promise<Stage[]> {
-    return await this.stagesService.findAll();
-  }
-
-  @Get(':id')
-  async findOne(@Param('id') id: number): Promise<Stage> {
-    return await this.stagesService.findOne(id);
-  }
-
   @Post()
   async create(@Body() createStageDto: CreateStageDto): Promise<any> {
     const stage = plainToClass(Stage, createStageDto);
@@ -32,6 +22,21 @@ export class StagesController {
       console.log(numberOfChangedSubs);
     }
     return result;
+  }
+
+  @Get()
+  async findAll(): Promise<Stage[]> {
+    return await this.stagesService.findAll();
+  }
+
+  @Get('course-admin-id/:id')
+  async getAllByCourseAdminId(@Param('id') id: number): Promise<Stage[]> {
+    return await this.stagesService.getAllByCourseAdminId(id);
+  }
+
+  @Get(':id')
+  async findOne(@Param('id') id: number): Promise<Stage> {
+    return await this.stagesService.findOne(id);
   }
 
   @Put(':id')

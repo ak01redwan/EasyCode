@@ -214,8 +214,14 @@ import Swal from "sweetalert2";
     },
     async loadStages() {
       try {
-        const respons = await axios.get('http://localhost:3000/stages');
-        this.stages = respons.data;
+        const user = await this.$store.state.user;
+        let response = { data: [] };
+        if (user.userType == 'supervisor') {
+          response = await axios.get(`http://localhost:3000/stages/course-admin-id/${user.id}`);
+        } else { // in case the user is the admin then get all stages
+          response = await axios.get('http://localhost:3000/stages');
+        }
+        this.stages = response.data;
       } catch (error) {}
     },
   },

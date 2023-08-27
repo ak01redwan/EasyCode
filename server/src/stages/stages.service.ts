@@ -16,6 +16,13 @@ export class StagesService {
     });
   }
 
+  async getAllByCourseAdminId(courseAdminId: number): Promise<Stage[]> {
+    return await this.stageRepository.find({
+      where: { course: { courseAdmin: { id: courseAdminId }} },
+      relations: ['course','lessons','exams','stageAskedProjects'],
+    });
+  }
+
   async findOne(id: number): Promise<Stage> {
     return await this.stageRepository.findOne({
       where: { id },
