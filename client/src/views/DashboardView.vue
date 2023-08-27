@@ -79,11 +79,11 @@ import Swal from 'sweetalert2';
             case "ShowUsers":
                 return false;
                 break;
-            case "ConfirmeSuprvisors":
-                return false;
-                break;
             case "ConfirmingProjects":
                 return true;
+                break;
+            case "ConfirmeSuprvisors":
+                return false;
                 break;
             case "ShowCategories":
                 return false;

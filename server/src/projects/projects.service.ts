@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
 import { promises } from 'dns';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Injectable()
 export class ProjectsService {
   constructor(
     @InjectRepository(Project)
     private readonly projectRepository: Repository<Project>,
+    @InjectRepository(Course)
+    private readonly coursesRepository: Repository<Course>
   ) {}
 
   async findAll(): Promise<Project[]> {
@@ -57,6 +60,22 @@ export class ProjectsService {
       where: { isAcceptedAndDone: true },
       relations: ['likes','comments','askedProject','student','supervisor']
     });
+  }
+
+  async getAcceptedAndNotAcceptedProjectsByCourseSupervisorId(supervisorId: number, isAccepted: boolean): Promise<Project[]> {
+    const projects: Project[] = new Array();
+    const courses: Course[] = await this.coursesRepository.find({
+      where: { subscriptions: { user: { id: supervisorId }}},
+      relations: ['projects', 'projects.student','projects.supervisor','projects.askedProject']
+    });
+    courses.forEach((course: Course) => {
+      course.projects.forEach((project: Project) => {
+        if (project.isAcceptedAndDone == isAccepted) {
+          projects.push(project);
+        }
+      });
+    });
+    return projects;
   }
 
   async create(projectData: Project): Promise<Project> {

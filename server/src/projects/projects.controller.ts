@@ -44,11 +44,21 @@ export class ProjectsController {
   @UseGuards(AuthGuard)
   @Get('/allProjectsWithStatus/:projectStatus')
   async getAllProjectsWithStatus(@Param('projectStatus') projectStatus: string, @Request() req) {
-    if (req.authData.user.userType != 'student') {
+    if (req.authData.user.userType == 'admin') {
       if (projectStatus == 'accepted') {
         return await this.projectsService.getAcceptedProjects();
       } else {
         return await this.projectsService.getUnacceptedProjects();
+      }
+    } else if (req.authData.user.userType == 'supervisor') {
+      if (projectStatus == 'accepted') {
+        return await this.projectsService.getAcceptedAndNotAcceptedProjectsByCourseSupervisorId(
+          req.authData.user.id, true
+        );
+      } else {
+        return await this.projectsService.getAcceptedAndNotAcceptedProjectsByCourseSupervisorId(
+          req.authData.user.id, false
+        );
       }
     } else {
       return [];

@@ -138,6 +138,7 @@ import Swal from "sweetalert2";
             }
           });
           this.unacceptedProjects = response.data;
+          //console.log(this.unacceptedProjects);
         } catch (error) {
           console.log(error);
         }
