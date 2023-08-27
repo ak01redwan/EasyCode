@@ -141,9 +141,21 @@ import Swal from "sweetalert2";
   methods: {
     async loadCourses() {
       try {
-        const respons = await axios.get('http://localhost:3000/courses');
-        this.courses = respons.data;
-      } catch (error) {}
+        const user = await this.$store.state.user;
+        let response = { data: []};
+        if (user.userType == 'supervisor') {
+          response = await axios.get(`http://localhost:3000/courses/by-course-admin-id/${user.id}`);
+          if (response.data.length >= 1) {
+            this.stage.course = response.data[0];
+            this.parentCourseSearchTerm = this.stage.course.name;
+          }
+        } else {
+          response = await axios.get('http://localhost:3000/courses');
+        }
+        this.courses = response.data;
+      } catch (error) {
+        console.log(error);
+      }
     },
     async loadLessonsDataFromYoutube(stageId: number) {
       const description = `using ${this.stage.course.name} to explain ${this.stage.title} how to do ${this.stage.title} on ${this.stage.course.name}`;
@@ -160,7 +172,11 @@ import Swal from "sweetalert2";
       }
     },
     async createStagesLessons(lessonsData: []) {
-      const respons = await axios.post('http://localhost:3000/lessons',lessonsData);
+      try {
+        const respons = await axios.post('http://localhost:3000/lessons',lessonsData);
+      } catch (error) {
+        console.log(error);
+      }
     },
     async onSubmit() {
         const form = document.querySelector('.needs-validation') as HTMLFormElement;
@@ -214,7 +230,7 @@ import Swal from "sweetalert2";
           Swal.fire({
             icon: "error",
             title: "Oops!",
-            text: 'You should fill all boxes!.',
+            text: 'You should fill all boxes! and be sure that you found the course that will hold this stage.',
           });
         }
     },
