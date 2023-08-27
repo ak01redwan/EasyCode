@@ -41,8 +41,12 @@ export class CoursesController {
 
   @Post('adminForThisCourse/:id')
   async assignCourseAdmin(@Param('id') id: string, @Body() supervisorInfo: any): Promise<Course> {
-    console.log("hited");
     return await this.coursesService.assignCourseAdmin(+id,supervisorInfo);
+  }
+
+  @Get('by-course-admin-id/:id')
+  async getCoursesByAdminId(@Param('id') id: string): Promise<Course[]> {
+    return await this.coursesService.getCoursesByAdminId(+id);
   }
   // all actors student, admin, supervisor, course admin
   @Get()

@@ -26,6 +26,18 @@ export class CoursesService {
     return await this.coursesRepository.save(course);
   }
 
+  async getCoursesByAdminId(adminId: number): Promise<Course[]> {
+    return await this.coursesRepository.find({
+      where: { courseAdmin: { id: adminId }},
+      relations: [
+        'category',
+        'subscriptions',
+        'stages',
+        'likes'
+      ]
+    });
+  }
+
   async findAll(): Promise<Course[]> {
     return await this.coursesRepository.find({ 
       relations: [

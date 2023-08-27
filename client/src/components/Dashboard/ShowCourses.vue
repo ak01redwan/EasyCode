@@ -15,7 +15,10 @@
           <li><a class="dropdown-item btn" @click="changeFilterValue('Unpublished')">Unpublished</a></li>
         </ul>
       </div>
-      <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">Add New Course <i class="fas fa-plus"></i></button>
+      <button v-if="user.userType == 'admin'" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+        Add New Course 
+        <i class="fas fa-plus"></i>
+      </button>
     </div>
   </nav>
   <div class="container">
@@ -29,11 +32,11 @@
           <span class="fw-bold">{{ course.name }}</span>
           <span class="text-muted">@{{course.category.name}}</span>
           <div class="btn-group float-end">
-            <button @click="addCourseAdmin(course)" data-bs-toggle="modal" data-bs-target="#addCourseAdmin" class="btn btn-outline-secondary" title="Add Course Admin"><i class="fa-solid fa-plus"></i></button>
+            <button v-if="user.userType == 'admin'" @click="addCourseAdmin(course)" data-bs-toggle="modal" data-bs-target="#addCourseAdmin" class="btn btn-outline-secondary" title="Add Course's Admin"><i class="fa-solid fa-plus"></i></button>
             <button @click="toggleCoursePublished(course.id)" v-if="!course.isPublished" class="btn btn-outline-secondary" title="Publish this course"><i class="fa-solid fa-upload"></i></button>
             <button @click="toggleCoursePublished(course.id)" v-else-if="course.isPublished" class="btn btn-outline-secondary" title="Unpublish this course"><i class="fa-sharp fa-regular fa-circle-stop"></i></button>
             <button @click="viewCourseDetails(course)" class="btn btn-outline-info" title="View Details"><i class="fas fa-info-circle"></i></button>
-            <button @click="deleteThisCourse(course)" class="btn btn-outline-danger" title="Delete This Course"><i class="fas fa-trash"></i></button>
+            <button v-if="user.userType == 'admin'" @click="deleteThisCourse(course)" class="btn btn-outline-danger" title="Delete This Course"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       </div>
@@ -75,7 +78,8 @@ import Swal from 'sweetalert2';
       AddNewCourse,
       AddCourseAdmin,
     },
-    mounted() {
+    async created() {
+      this.user = await this.$store.state.user;
       this.getAllCourses();
     },
     methods:{
@@ -140,8 +144,13 @@ import Swal from 'sweetalert2';
       },
       async getAllCourses() {
         try {
-          const response = await axios.get('http://localhost:3000/courses');
-          this.courses = response.data;
+          if (this.user.userType == 'supervisor') {
+            const response = await axios.get(`http://localhost:3000/courses/by-course-admin-id/${this.user.id}`);
+            this.courses = response.data;
+          } else {
+            const response = await axios.get('http://localhost:3000/courses');
+            this.courses = response.data;
+          }
         } catch (error) {
           Swal.fire(
             "oOps!",
@@ -174,6 +183,7 @@ import Swal from 'sweetalert2';
     },
     data(){
         return {
+          user: null,
           searchTerm: '',
           filter: '',
           courses: [],
