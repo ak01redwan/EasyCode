@@ -69,12 +69,13 @@
           class="row"
           v-else-if="activatedItemContentName === 'CurrentActiveCourseStages'"
         >
-          <CourseStage
-            v-for="stage in CurrentCourseStages"
-            :stageId="stage.stageId"
-            :stageTitle="stage.stageTitle"
-            :isOpen="stage.isOpen"
-          />
+          <CourseStage v-for="(stage,index) in currentCourse.stages" :key="index"
+              :stageId="(index+1)"
+              :stageTitle="stage.title"
+              :isOpen="stage.id <= currentStage.id"
+              style="cursor: pointer;"
+              @click="goToStagesLessons(stage)"
+            /> 
         </div>
         <!-- Getting User's Subscriped Courses -->
         <CoursesGallery
@@ -104,6 +105,7 @@ import ProjectsGallery from "@/components/Project/ProjectsGallery.vue";
 import CoursesGallery from "@/components/Course/CoursesGallery.vue";
 import CourseStage from "@/components/Course/CourseStage.vue";
 import UserDetails from "@/components/User/UserDetails.vue";
+import axios from "axios";
 
 @Options({
   components: {
@@ -144,18 +146,43 @@ import UserDetails from "@/components/User/UserDetails.vue";
         },
         { text: "Settings", icon: "fa-solid fa-gear", content: "Settings" },
       ],
-      CurrentCourseStages: [
-        { stageId: 1, stageTitle: "Stage Title 1", isOpen: true },
-        { stageId: 2, stageTitle: "Stage Title 2", isOpen: true },
-        { stageId: 3, stageTitle: "Stage Title 3", isOpen: false },
-        { stageId: 4, stageTitle: "Stage Title 4", isOpen: false },
-        { stageId: 5, stageTitle: "Stage Title 5", isOpen: false },
-        { stageId: 6, stageTitle: "Stage Title 6", isOpen: false },
-        { stageId: 7, stageTitle: "Stage Title 7", isOpen: false },
-      ],
+      currentStage: null,
+      currentCourse: null
     };
   },
   methods: {
+    async goToStagesLessons(stage: any) {
+      if (stage.id > this.currentStage.id) {
+        Swal.fire({
+          icon: "warning",
+          title: "NOT ALLOWED!",
+          text: "You can not open this stage until you finish it's previous one.",
+        });
+        return;
+      }
+      try {
+        const respons = await axios.get(`http://localhost:3000/stages/${stage.id}`);
+        this.$store.state.stageInLessonPage = await respons.data;
+        //console.log(this.$store.state.stageInLessonPage);
+        this.$router.push('/stage');
+      } catch (error) {}
+    },
+    async getCurrentCourse() {
+      try {
+        const response = await axios.get(`http://localhost:3000/courses/${this.userInfo.currentCourseId}`);
+        this.currentCourse = response.data;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    async getCurrentStage() {
+      try {
+        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.userInfo.id}/by-course/${this.userInfo.currentCourseId}`);
+        response.data.stage ? this.currentStage = response.data.stage : '';
+      } catch (error) {
+        console.log(error);
+      }
+    },
     getSidebarItems() {
       console.log(this.userInfo);
       if (this.userInfo.id != this.$store.state.user.id) {
@@ -224,8 +251,10 @@ import UserDetails from "@/components/User/UserDetails.vue";
         this.getSidebarItemByContent(content).content;
     },
   },
-  created() {
-    this.getUserFromStoredState();
+  async created() {
+    await this.getUserFromStoredState();
+    await this.getCurrentCourse();
+    await this.getCurrentStage();
   }
 })
 export default class UserDetailsView extends Vue {
