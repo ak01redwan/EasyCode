@@ -61,8 +61,8 @@
       </p>
       <p>
         <strong> Start Now For Free </strong>
-        <router-link to="/signup">
-          <button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Signup </button>
+        <router-link to="/user">
+          <button class="btn btn-outline-warning" ><i class="fa-solid fa-user-plus"></i> Join </button>
         </router-link>
       </p>
     </div>

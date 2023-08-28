@@ -4,12 +4,15 @@ import { Subscription } from './entities/subscription.entity';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { CoursesService } from 'src/courses/courses.service';
 import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
   constructor(
     private readonly subscriptionsService: SubscriptionsService,
-    private readonly coursesServices: CoursesService) {}
+    private readonly coursesServices: CoursesService,
+    private readonly usersServices: UsersService
+    ) {}
 
   @Get()
   async findAll(): Promise<Subscription[]> {
@@ -41,7 +44,9 @@ export class SubscriptionsController {
   async create(@Body()  sub: {courseId: number}, @Request() req) {
     const subscription = await this.subscriptionsService.findByUserAndCourse(sub.courseId, req.authData.user.id);
     if (subscription) {
-      console.log('removed');
+      const user = await this.usersServices.findOne(req.authData.user.id);
+      user.currentCourseId = null;
+      await this.usersServices.update(user.id, user);
       await this.subscriptionsService.delete(subscription.id);
       return null;
     } else {
@@ -52,6 +57,9 @@ export class SubscriptionsController {
       newSubscription.isDone = false;
       newSubscription.scores = 0;
       newSubscription.stage = newSubscription.course.stages[0];
+      const user = await this.usersServices.findOne(req.authData.user.id);
+      user.currentCourseId = newSubscription.course.id+'';
+      await this.usersServices.update(user.id, user);
       return await this.subscriptionsService.create(newSubscription);
     }
   }

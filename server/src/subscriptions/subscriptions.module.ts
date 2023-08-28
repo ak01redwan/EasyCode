@@ -6,11 +6,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CoursesService } from 'src/courses/courses.service';
 import { Course } from 'src/courses/entities/course.entity';
 import { CoursesModule } from 'src/courses/courses.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Subscription, Course]),
-    CoursesModule
+    CoursesModule,
+    UsersModule
   ],
   controllers: [SubscriptionsController],
   providers: [SubscriptionsService],

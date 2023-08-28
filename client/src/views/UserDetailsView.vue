@@ -36,7 +36,7 @@
             id="menu"
           >
             <li
-              v-for="(item, index) in sidebarItems"
+              v-for="(item, index) in getSidebarItems()"
               :key="index"
               class="nav-item"
             >
@@ -156,6 +156,30 @@ import UserDetails from "@/components/User/UserDetails.vue";
     };
   },
   methods: {
+    getSidebarItems() {
+      console.log(this.userInfo);
+      if (this.userInfo.id != this.$store.state.user.id) {
+        return this.sidebarItems.filter((item: any) => {
+        switch (item.content) {
+          case 'CurrentActiveCourseStages':
+            return false;
+            break;
+          case 'SubscripedCourses':
+            return false;
+            break;
+          case 'Settings':
+            return false;
+            break;
+
+          default:
+            return true;
+            break;
+        }
+      });
+      } else {
+        return this.sidebarItems;
+      }
+    },
     goToEditUserPage() {
       this.$store.state.userInEditUserPage = this.$store.state.user;
       this.$router.push("/edituser");

@@ -18,7 +18,7 @@
           <li class="list-group-item">
             <strong> Description: </strong>{{ course.description }}
           </li>
-          <li class="list-group-item">
+          <li class="list-group-item" v-if="course.courseAdmin">
             <strong>Course Admin:</strong> {{ course.courseAdmin.fullName }} @{{ course.courseAdmin.username }}
           </li>
           <li class="list-group-item">
