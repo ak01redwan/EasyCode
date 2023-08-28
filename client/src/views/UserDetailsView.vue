@@ -79,6 +79,7 @@
         </div>
         <!-- Getting User's Subscriped Courses -->
         <CoursesGallery
+          :Courses="myCourses"
           :Title="activatedItemContentName"
           v-else-if="activatedItemContentName === 'SubscripedCourses'"
         />
@@ -89,6 +90,7 @@
         />
         <!-- Getting User's Completed Courses -->
         <CoursesGallery
+          :Courses="myCourses"
           :Title="activatedItemContentName"
           v-if="activatedItemContentName === 'CompletedCourses'"
         />
@@ -147,10 +149,22 @@ import axios from "axios";
         { text: "Settings", icon: "fa-solid fa-gear", content: "Settings" },
       ],
       currentStage: null,
-      currentCourse: null
+      currentCourse: null,
+      myCourses: []
     };
   },
   methods: {
+    async getMyCourses() {
+      const courses = new Array();
+      try {
+        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.userInfo.id}`);
+        response.data.forEach((subs: any) => { courses.push(subs.course); });
+      } catch (error) {
+        console.log(error);
+      }
+      console.log(courses);
+      return courses;
+    },
     async goToStagesLessons(stage: any) {
       if (stage.id > this.currentStage.id) {
         Swal.fire({
@@ -255,6 +269,7 @@ import axios from "axios";
     await this.getUserFromStoredState();
     await this.getCurrentCourse();
     await this.getCurrentStage();
+    this.myCourses = await this.getMyCourses();
   }
 })
 export default class UserDetailsView extends Vue {

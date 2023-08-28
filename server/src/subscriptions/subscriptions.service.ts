@@ -68,7 +68,7 @@ export class SubscriptionsService {
   async findByUser(userId: number): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
         where: { user: { id: userId } },
-        relations: ['user', 'course','stage'],
+        relations: ['user', 'course','stage','course.likes'],
     });
   }
 
