@@ -46,7 +46,7 @@ export class SubscriptionsController {
     if (subscription) {
       const user = await this.usersServices.findOne(req.authData.user.id);
       user.currentCourseId = null;
-      await this.usersServices.update(user.id, user);
+      await this.usersServices.update(user);
       await this.subscriptionsService.delete(subscription.id);
       return null;
     } else {
@@ -58,8 +58,8 @@ export class SubscriptionsController {
       newSubscription.scores = 0;
       newSubscription.stage = newSubscription.course.stages[0];
       const user = await this.usersServices.findOne(req.authData.user.id);
-      user.currentCourseId = newSubscription.course.id+'';
-      await this.usersServices.update(user.id, user);
+      user.currentCourseId = (await this.coursesServices.findOne(sub.courseId)).id.toString();
+      await this.usersServices.update(user);
       return await this.subscriptionsService.create(newSubscription);
     }
   }

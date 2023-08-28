@@ -187,6 +187,7 @@ import axios from 'axios';
             console.log(error);
           }
         } catch (error) {
+          console.log(error);
           Swal.fire("oOps!", "You Can not you have now some relations with this subscription.", "error");
         }
       },

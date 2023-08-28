@@ -144,7 +144,8 @@ export class UsersController {
       user.picturePath = `/uploads/${photo.filename}`;
     }
     // update user
-    const updatedUser = await this.usersService.update(+id, user);
+    user.id = +id;
+    const updatedUser = await this.usersService.update(user);
     // update user confirmation if it is supervisor
     if (updateUserDto.userType == 'supervisor' && certificationsDocs) {
       try { fs.unlinkSync(`/public${updatedUser.supervisorConfirmation[0].certificationsDocsPath}`); } catch (error) { console.log(error)}

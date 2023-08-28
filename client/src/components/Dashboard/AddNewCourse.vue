@@ -35,7 +35,7 @@
                                         <div class="invalid-feedback fs-6 ">Please enter the course image</div>
                                         <div class="valid-feedback fs-6">Looks Good</div>
                                     </div>           
-                                    <input :disabled="isSubmitting" type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5 fw-bold" :value="`${isSubmitting?'Saving...':'Save'}`">
+                                    <input :disabled="isSubmitting" type="submit" class="btn btn-success col-10 m-auto mt-3 fs-5" :value="`${isSubmitting?'creating...':'create'}`">
                                 </form>
                             </div>
                         </div>

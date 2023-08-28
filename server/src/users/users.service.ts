@@ -71,10 +71,10 @@ export class UsersService {
     });
   }
 
-  async update(id: number, user: User): Promise<User> {
-    await this.usersRepository.update(id, user);
+  async update(user: User): Promise<User> {
+    await this.usersRepository.save(user);
     return await this.usersRepository.findOne({
-      where: { id: id},
+      where: { id: user.id},
       relations: ['supervisorConfirmation', 'reviewerConfirmations', 'subscriptions','projects']
     });
   }
