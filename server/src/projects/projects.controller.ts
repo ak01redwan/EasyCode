@@ -23,6 +23,11 @@ export class ProjectsController {
     return this.projectsService.findAll();
   }
 
+  @Get('by-student-id/:id')
+  async getByUserId(@Param('id') id: number): Promise<Project[]> {
+    return this.projectsService.getByStudentId(id);
+  }
+
   @Get(':id')
   async findById(@Param('id') id: number): Promise<Project> {
     return this.projectsService.findById(id);
@@ -75,6 +80,8 @@ export class ProjectsController {
     try {
       createProjectDto.askedProject = JSON.parse(`${createProjectDto.askedProject}`);
       createProjectDto.student = JSON.parse(`${createProjectDto.student}`);
+      createProjectDto.course = JSON.parse(`${createProjectDto.course}`);
+      console.log(createProjectDto);
       const project = plainToClass(Project, createProjectDto);
       project.supervisorComment = "waiting for supervisor comment and confirmation";
       project.isSubmitted = true;
@@ -82,7 +89,6 @@ export class ProjectsController {
       if (projectFile) { // check if it is the first time (create project).
         project.imagePath = `/uploads/${imageFile.filename}`;
         project.documentPath = `/uploads/${projectFile.filename}`;
-        project.course = JSON.parse(`${createProjectDto.course}`);
         return this.projectsService.create(project);
       } else if (files[0]) { // only one file which is the project docs
         project.documentPath = `/uploads/${files[0].filename}`;

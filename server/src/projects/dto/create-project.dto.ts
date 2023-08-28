@@ -14,6 +14,6 @@ export class CreateProjectDto {
   @IsNotEmpty()
   student: User;
 
-  @IsOptional()
+  @IsNotEmpty()
   course: Course;
 }

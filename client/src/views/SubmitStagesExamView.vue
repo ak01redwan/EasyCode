@@ -61,6 +61,18 @@ import { Options, Vue } from "vue-class-component";
         });
         if (response.data.stage.id > this.stage.id) {
           this.$store.state.currentStage = response.data.stage;
+          Swal.fire({
+            icon: "success",
+            title: `WELL DONE`,
+            text: "well done looks like you are doing great.",
+          })
+          this.$router.push('/course');
+        } else {
+          Swal.fire({
+            icon: "info",
+            title: `oOPs...`,
+            text: "you get F but we say F is find another answers, learn more watch more them come back.",
+          })
           this.$router.push('/course');
         }
         

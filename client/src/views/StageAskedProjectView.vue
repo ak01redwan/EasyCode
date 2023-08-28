@@ -182,7 +182,13 @@ import { Options, Vue } from "vue-class-component";
       formDataInstance.append("title", this.projectTitle);
       formDataInstance.append("askedProject", JSON.stringify(this.askedProject));
       formDataInstance.append("student", JSON.stringify(this.$store.state.user));
-      formDataInstance.append("course", JSON.stringify(this.$store.state.courseInCourseDatailsPage));
+      if (this.$store.state.courseInCourseDatailsPage){
+        formDataInstance.append("course", JSON.stringify(this.$store.state.courseInCourseDatailsPage));
+      } else {
+        formDataInstance.append("course", JSON.stringify({
+          id: this.$store.state.user.currentCourseId
+        }));
+      }
       
       axios
         .post("http://localhost:3000/projects", formDataInstance, {

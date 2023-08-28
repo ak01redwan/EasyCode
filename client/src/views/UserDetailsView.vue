@@ -85,12 +85,13 @@
         />
         <!--Getting User's Projects-->
         <ProjectsGallery
+          :Projects="myProjects"
           :Title="activatedItemContentName"
           v-else-if="activatedItemContentName === 'Projects'"
         />
         <!-- Getting User's Completed Courses -->
         <CoursesGallery
-          :Courses="myCourses"
+          :Courses="myCompletedCourses"
           :Title="activatedItemContentName"
           v-if="activatedItemContentName === 'CompletedCourses'"
         />
@@ -137,7 +138,7 @@ import axios from "axios";
           content: "SubscripedCourses",
         },
         {
-          text: "Student Projects",
+          text: "Completed Projects",
           icon: "fa-solid fa-diagram-project",
           content: "Projects",
         },
@@ -150,10 +151,35 @@ import axios from "axios";
       ],
       currentStage: null,
       currentCourse: null,
-      myCourses: []
+      myCourses: [],
+      myCompletedCourses: [],
+      myProjects: [],
     };
   },
   methods: {
+    async getMyProjects() {
+      try {
+        const response = await axios.get(`http://localhost:3000/projects/by-student-id/${this.userInfo.id}`);
+        return response.data;
+      } catch (error) {
+        console.log(error);
+      }
+      return [];
+    },
+    async getMyCompletedCourses() {
+      const courses = new Array();
+      try {
+        const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.userInfo.id}`);
+        response.data.forEach((subs: any) => { 
+          if (subs.isDone) {
+            courses.push(subs.course);
+          } 
+        });
+      } catch (error) {
+        console.log(error);
+      }
+      return courses; 
+    },
     async getMyCourses() {
       const courses = new Array();
       try {
@@ -162,7 +188,6 @@ import axios from "axios";
       } catch (error) {
         console.log(error);
       }
-      console.log(courses);
       return courses;
     },
     async goToStagesLessons(stage: any) {
@@ -270,6 +295,8 @@ import axios from "axios";
     await this.getCurrentCourse();
     await this.getCurrentStage();
     this.myCourses = await this.getMyCourses();
+    this.myProjects = await this.getMyProjects();
+    this.myCompletedCourses = await this.getMyCompletedCourses();
   }
 })
 export default class UserDetailsView extends Vue {

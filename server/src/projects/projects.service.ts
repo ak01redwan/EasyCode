@@ -20,6 +20,13 @@ export class ProjectsService {
     });
   }
 
+  async getByStudentId(studentId: number): Promise<Project[]> {
+    return this.projectRepository.find({
+      where: { student: { id: studentId }},
+      relations: ['likes','comments','askedProject','student','supervisor','course']
+    });
+  }
+
   async findOneByStudentIdAndStageAskedProjectId(studentId: number, stageAskedProjectId: number) {
     return this.projectRepository.findOne({
       where: { student: { id: studentId }, askedProject: { id: stageAskedProjectId }},
