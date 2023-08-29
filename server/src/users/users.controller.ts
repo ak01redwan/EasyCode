@@ -15,6 +15,7 @@ import { UploadFileToDiskStorage } from 'src/helpers/upload-file'
 import { ConfirmationsService } from 'src/confirmations/confirmations.service';
 import { CreateConfirmationDto } from 'src/confirmations/dto/create-confirmation.dto';
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 
 @Controller('users')
@@ -22,7 +23,8 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    private readonly confirmationsService: ConfirmationsService
+    private readonly confirmationsService: ConfirmationsService,
+    private readonly notificationsService: NotificationsService
     ) {}
 
   @Post()
@@ -73,6 +75,12 @@ export class UsersController {
         userWithTokens.user = await this.usersService.findOneById_WithTheNecessaryRelations(userWithTokens.user.id);
       }
 
+      await this.notificationsService.create({
+        text: `new user hass join ${userWithTokens.user.fullName}`,
+        entityId: userWithTokens.user.id,
+        pagePath: 'users',
+        pageSection: user.userType  
+      });
       // everything is done just return the result
       return userWithTokens;
 

@@ -50,9 +50,10 @@
             </ul>
           </li>  
           <li class="nav-item">
-            <router-link to="/notifications">
+            <router-link class="nav-link" to="/notifications" 
+            :title="`====================\nclick to see more\n====================\n${notificationsTitle}`">
               <i class="fas fa-bell text-white"></i>
-              <span class="badge rounded-pill badge-notification bg-danger">4</span>
+              <span class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
             </router-link>
           </li>
         </ul>
@@ -133,10 +134,23 @@ export default {
   data() {
     return {
       user: null,
-      currentPage: 'Home'
+      currentPage: 'Home',
+      notifications: [],
+      notificationsTitle: ''
     };
   },
   methods: {
+    async getNotifications() {
+      try {
+        const response = await axios.get(`http://localhost:3000/notifications/${this.user.id}`);
+        this.notifications = response.data;
+        response.data.forEach((notification) => {
+          this.notificationsTitle += `${notification.text}\n`;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    },
     goToUsersPage(showUsersWithType) {
       this.$store.state.showUsersWithType = showUsersWithType;
       this.$router.push("/users");
@@ -177,8 +191,9 @@ export default {
       })
     },
   },
-  created() {
-    this.getUserProfileUsingStoredTokens();
+  async created() {
+    await this.getUserProfileUsingStoredTokens();
+    await this.getNotifications();
   },
   computed: {
     auth() {

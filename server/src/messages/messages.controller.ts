@@ -6,12 +6,15 @@ import { CreateMessageDto } from './dto/create-message.dto';
 import { User } from 'src/users/entities/user.entity';
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
 import { AuthGuard } from 'src/auth/auth.guard';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Controller('messages')
 export class MessagesController {
   constructor(
     private readonly messagesService: MessagesService,
-    private readonly subscriptionsService: SubscriptionsService) {}
+    private readonly subscriptionsService: SubscriptionsService,
+    private readonly notificationsService: NotificationsService
+    ) {}
 
   @UseGuards(AuthGuard)
   @Post()
@@ -24,12 +27,19 @@ export class MessagesController {
       createMessageDto.sender.id
       );
     //console.log(subscription);
-    if (subscription)
-      return this.messagesService.create(createMessageDto);
-    else
+    if (subscription) {
+      const message = await this.messagesService.create(createMessageDto);
+      await this.notificationsService.create({
+        text: `new message in ${message.course.name} from ${message.sender.username}`,
+        entityId: message.course.id,
+        pagePath: 'course',
+        pageSection: 'ChattingRoom'
+      });
+      return message;
+    } else {
       throw new NotAcceptableException('subscription not found!.');
+    }
   }
-
   @UseGuards(AuthGuard)
   @Post('/get-user-msgs')
   async getUserMessagesBasedOn(@Request() req, @Body() info: { courseId: number}): Promise<Message[]>{

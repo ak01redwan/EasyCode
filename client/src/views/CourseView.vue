@@ -102,7 +102,7 @@ import axios from 'axios';
     data () {
       return {
         currentOption: "CourseDetails",
-        listOptions: ['CourseDetails','MyCourses','MyProjects','CompleteCourses','Stages'],
+        listOptions: ['CourseDetails','Stages','Students','Supervisors','ChattingRoom'],
         SideBarData: [
             {itemName: 'Details', itemIconClass: 'fa-circle-info'},
             {itemName: 'Stages', itemIconClass: 'fa-circle-play'},
@@ -211,6 +211,7 @@ import axios from 'axios';
       },
       ShowOption(optionNumber: number){
         this.currentOption = this.listOptions[optionNumber];
+        console.log(this.currentOption);
       }
     },
     computed:{

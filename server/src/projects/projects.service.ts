@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Project } from './entities/project.entity';
-import { promises } from 'dns';
 import { Course } from 'src/courses/entities/course.entity';
 
 @Injectable()

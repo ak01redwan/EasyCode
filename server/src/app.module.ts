@@ -21,6 +21,7 @@ import { StageAskedProjectModule } from './stage-asked-project/stage-asked-proje
 import { CommentsModule } from './comments/comments.module';
 import { ConfirmationsModule } from './confirmations/confirmations.module';
 import { DownloadsModule } from './downloads/downloads.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 // entities
 import { User } from './users/entities/user.entity';
@@ -36,6 +37,8 @@ import { Message } from './messages/entities/message.entity';
 import { StageAskedProject } from './stage-asked-project/entities/stage-asked-project.entity';
 import { Comment } from './comments/entities/comment.entity';
 import { Confirmation } from './confirmations/entities/confirmation.entity';
+import { Status } from './notifications/entities/status.entity';
+import { Notification } from './notifications/entities/notification.entity';
 
 @Module({
   imports: [
@@ -66,7 +69,9 @@ import { Confirmation } from './confirmations/entities/confirmation.entity';
         Message, 
         StageAskedProject, 
         Comment, 
-        Confirmation
+        Confirmation,
+        Notification,
+        Status
       ],
       synchronize: true,
     }),
@@ -85,6 +90,7 @@ import { Confirmation } from './confirmations/entities/confirmation.entity';
     CommentsModule,
     ConfirmationsModule,
     DownloadsModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

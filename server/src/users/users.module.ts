@@ -7,9 +7,11 @@ import { UsersService } from './users.service';
 import { AuthService } from 'src/auth/auth.service';
 import { BcryptService } from 'src/auth/bcrypt.service';
 import { ConfirmationsModule } from 'src/confirmations/confirmations.module';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
+    NotificationsModule,
     ConfirmationsModule,
     TypeOrmModule.forFeature([User])
   ],

@@ -8,10 +8,14 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
 import { Multer } from 'multer';
 import * as fs from 'fs';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly notificationsService: NotificationsService
+    ) {}
 
   @Post()
   @UseInterceptors(
@@ -36,7 +40,16 @@ export class CoursesController {
 
   @Post('toggleCoursePublished/:id')
   async toggleCoursePublished(@Param('id') id: string): Promise<Course> {
-    return await this.coursesService.toggleCoursePublished(+id);
+    const course = await this.coursesService.toggleCoursePublished(+id);
+    if (course.isPublished) {
+      await this.notificationsService.create({
+        text: `new course hass been published ${course.name}`,
+        entityId: course.id,
+        pagePath: 'courses',
+        pageSection: 'allCourses'        
+      });
+    }
+    return course;
   }
 
   @Post('adminForThisCourse/:id')
