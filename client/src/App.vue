@@ -1,42 +1,31 @@
 <template>
   <nav class="navbar navbar-expand-sm text-color1 background-color1">
     <div class="container-fluid">
-      <router-link to="/" class="nav-link"
-        ><i class="fa-solid fa-code"></i> EasyCode
+      <router-link to="/" class="nav-link"><i class="fa-solid fa-code"></i> EasyCode
       </router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#collapsibleNavbar"
-      >
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="collapsibleNavbar">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item" @click="currentPage = 'Home'">
-            <router-link to="/" :class="`nav-link ${(currentPage == 'Home') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
-              ><i class="fa-solid fa-house"></i> Home</router-link
-            >
+            <router-link to="/"
+              :class="`nav-link ${(currentPage == 'Home') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"><i
+                class="fa-solid fa-house"></i> Home</router-link>
           </li>
           <li class="nav-item" @click="currentPage = 'About'">
-            <router-link to="/about" :class="`nav-link ${(currentPage == 'About') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
-              ><i class="fa-solid fa-circle-info"></i> About</router-link
-            >
+            <router-link to="/about"
+              :class="`nav-link ${(currentPage == 'About') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"><i
+                class="fa-solid fa-circle-info"></i> About</router-link>
           </li>
           <li v-if="auth && user.userType != 'student'" class="nav-item" @click="currentPage = 'Dashboard'">
-            <router-link to="/dashboard" :class="`nav-link ${(currentPage == 'Dashboard') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"
-              ><i class="fa-solid fa-dashboard"></i> Dashboard</router-link
-            >
+            <router-link to="/dashboard"
+              :class="`nav-link ${(currentPage == 'Dashboard') ? 'fw-lighter fw-bolder text-uppercase' : ''}`"><i
+                class="fa-solid fa-dashboard"></i> Dashboard</router-link>
           </li>
           <li class="nav-item dropdown" :class="`${(currentPage == 'more') ? 'fw-lighter fw-bolder' : ''}`">
-            <a
-              @click="currentPage = 'more'"
-              class="nav-link dropdown-toggle"
-              role="button"
-              data-bs-toggle="dropdown"
-              ><i class="fa-solid fa-list"></i> More Things</a
-            >
+            <a @click="currentPage = 'more'" class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"><i
+                class="fa-solid fa-list"></i> More Things</a>
             <ul class="dropdown-menu">
               <li @click="goToUsersPage('supervisor')" class="dropdown-item btn">
                 <i class="fa-solid fa-users"></i>
@@ -51,18 +40,20 @@
                 All Users
               </li>
               <li>
-                <router-link to="/courses" class="dropdown-item"
-                  ><i class="fa-solid fa-video"></i>
-                  Courses</router-link
-                >
+                <router-link to="/courses" class="dropdown-item"><i class="fa-solid fa-video"></i>
+                  Courses</router-link>
               </li>
               <li>
-                <router-link to="/projects" class="dropdown-item"
-                  ><i class="fa-solid fa-diagram-project"></i>
-                  Progects</router-link
-                >
+                <router-link to="/projects" class="dropdown-item"><i class="fa-solid fa-diagram-project"></i>
+                  Progects</router-link>
               </li>
             </ul>
+          </li>  
+          <li class="nav-item">
+            <router-link to="/notifications">
+              <i class="fas fa-bell text-white"></i>
+              <span class="badge rounded-pill badge-notification bg-danger">4</span>
+            </router-link>
           </li>
         </ul>
         <div v-if="user" class="d-flex d-grid gap-1">
@@ -70,7 +61,8 @@
             <i class="fa-solid fa-sign-out"></i> Logout
           </button>
           <router-link to="/user">
-            <button :title="`${user.fullName} \n ${user.email}`" @click="$store.state.userInUserDetailsPage = null" class="btn btn-outline-secondary">
+            <button :title="`${user.fullName} \n ${user.email}`" @click="$store.state.userInUserDetailsPage = null"
+              class="btn btn-outline-secondary">
               <i class="fa-solid fa-user"></i> {{ user.username }}
             </button>
           </router-link>
@@ -96,57 +88,27 @@
     <div class="container p-4 pb-0">
       <section class="mb-4">
         <!-- Facebook -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #3b5998"
-          href="#!"
-          role="button"
-          ><i class="fab fa-facebook-f"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #3b5998" href="#!" role="button"><i
+            class="fab fa-facebook-f"></i></a>
 
         <!-- Twitter -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #55acee"
-          href="#!"
-          role="button"
-          ><i class="fab fa-twitter"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #55acee" href="#!" role="button"><i
+            class="fab fa-twitter"></i></a>
 
         <!-- Google -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #dd4b39"
-          href="#!"
-          role="button"
-          ><i class="fab fa-google"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #dd4b39" href="#!" role="button"><i
+            class="fab fa-google"></i></a>
 
         <!-- Instagram -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #ac2bac"
-          href="#!"
-          role="button"
-          ><i class="fab fa-instagram"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #ac2bac" href="#!" role="button"><i
+            class="fab fa-instagram"></i></a>
 
         <!-- Linkedin -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #0082ca"
-          href="#!"
-          role="button"
-          ><i class="fab fa-linkedin-in"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #0082ca" href="#!" role="button"><i
+            class="fab fa-linkedin-in"></i></a>
         <!-- Github -->
-        <a
-          class="btn text-white btn-floating me-2"
-          style="background-color: #333333"
-          href="#!"
-          role="button"
-          ><i class="fab fa-github"></i
-        ></a>
+        <a class="btn text-white btn-floating me-2" style="background-color: #333333" href="#!" role="button"><i
+            class="fab fa-github"></i></a>
       </section>
     </div>
     <!-- End social media icons container -->
@@ -190,7 +152,7 @@ export default {
             }
           })
           .then((res) => {
-            if (res.data){
+            if (res.data) {
               this.user = res.data;
               this.$store.dispatch('login', res.data);
               this.$store.state.userTokens = userCookies;
@@ -201,7 +163,7 @@ export default {
               }
             }
           })
-          .catch((err) => {});
+          .catch((err) => { });
       }
     },
     doLogout() {
