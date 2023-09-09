@@ -16,6 +16,7 @@ import { ConfirmationsService } from 'src/confirmations/confirmations.service';
 import { CreateConfirmationDto } from 'src/confirmations/dto/create-confirmation.dto';
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
 
 
 @Controller('users')
@@ -75,12 +76,16 @@ export class UsersController {
         userWithTokens.user = await this.usersService.findOneById_WithTheNecessaryRelations(userWithTokens.user.id);
       }
 
-      await this.notificationsService.create({
+      // create the notification DTO object
+      const notificationContent: CreateNotificationDto = {
         text: `new user hass join ${userWithTokens.user.fullName}`,
         entityId: userWithTokens.user.id,
         pagePath: 'users',
         pageSection: user.userType  
-      });
+      };
+      // creating the notification for each user in the system
+      this.notificationsService.create(notificationContent);
+
       // everything is done just return the result
       return userWithTokens;
 

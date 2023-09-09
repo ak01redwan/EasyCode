@@ -18,7 +18,11 @@ export class MessagesService {
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
     const message = this.messagesRepository.create(createMessageDto);
     message.DateAndTime = new Date();
-    return await this.messagesRepository.save(message);
+    const createdMessage = await this.messagesRepository.save(message);
+    return await this.messagesRepository.findOne({
+      where: { id: createdMessage.id },
+      relations: ['course','sender']
+    });
   }
 
   async getByCourse(course: Course): Promise<Message[]> {

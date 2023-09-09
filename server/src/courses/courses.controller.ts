@@ -9,6 +9,7 @@ import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
 import { Multer } from 'multer';
 import * as fs from 'fs';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
 
 @Controller('courses')
 export class CoursesController {
@@ -40,14 +41,21 @@ export class CoursesController {
 
   @Post('toggleCoursePublished/:id')
   async toggleCoursePublished(@Param('id') id: string): Promise<Course> {
+    // toggling out course appearnce
     const course = await this.coursesService.toggleCoursePublished(+id);
+    
+    // creating notifications for all users
+    //* this happend only of we toggle it from unPublished to published
     if (course.isPublished) {
-      await this.notificationsService.create({
-        text: `new course hass been published ${course.name}`,
+      // creating the notification DTO object
+      const notification: CreateNotificationDto = {
+        text: `${course.name} course hass been published`,
         entityId: course.id,
         pagePath: 'courses',
         pageSection: 'allCourses'        
-      });
+      };
+      // create the notification with users as subscribers
+      await this.notificationsService.create(notification);
     }
     return course;
   }

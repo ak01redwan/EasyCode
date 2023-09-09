@@ -39,7 +39,7 @@
   
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Card from '@/components/Card.vue'
+import Card from '@/components/Project/Card.vue'
 import axios from 'axios';
 
 @Options({

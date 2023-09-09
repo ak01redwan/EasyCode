@@ -13,7 +13,9 @@ export default createStore({
     stageInSubmitStagesExamPage: null,
     userInEditUserPage: null,
     currentDashboardDisplayedContent: "ShowUsers",
-    currentStage: null
+    currentCourseDisplayedContent: 'CourseDetails',
+    currentStage: null,
+    ProjectInProjectDatailsPage: null
   },
   getters: {
     isAuthenticated(state) {
@@ -37,6 +39,7 @@ export default createStore({
         state.stageInShowAskedProjectPage = null;
         state.stageInSubmitStagesExamPage = null;
         state.currentStage = null;
+        state.ProjectInProjectDatailsPage = null;
       }
     },
   },

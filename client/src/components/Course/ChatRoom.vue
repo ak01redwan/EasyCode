@@ -9,7 +9,7 @@
               <span class="mb-0 fs-4">CourseName ChattingRoom</span>
             </div>
             <div
-                id="messagescontainer"
+              id="messagescontainer"
               class="card-body overflow-auto"
               data-mdb-perfect-scrollbar="true"
               style="position: relative; height: 400px"
@@ -24,10 +24,10 @@
                         <small class="text-primary" style="font-size: 12px;">(me)</small> 
                         {{ message.sender.username }}@
                     </h6> 
-                    <p class="small p-2 me-3 mb-1 rounded-3 bg-primary">
+                    <p class="small p-2 me-3 mb-1 rounded-3" style="background-color: #cfe2ff;">
                       {{ message.textContent }}
                     </p>
-                    <p
+                    <p style="font-size: 10px;"
                       class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end"
                     >
                     {{ new Date(message.DateAndTime).toLocaleDateString() }} - {{ new Date(message.DateAndTime).toLocaleTimeString() }}
@@ -36,14 +36,14 @@
                   <img
                     src="@/assets/images/img-user.png"
                     alt="avatar 1"
-                    style="width: 45px; height: 100%"
+                    style="width: 20px; height: 100%"
                   />
                 </div>
                 <div v-else class="d-flex flex-row justify-content-start">
                   <img
                     src="@/assets/images/img-user.png"
                     alt="avatar 1"
-                    style="width: 45px; height: 100%"
+                    style="width: 20px; height: 100%"
                   />
                   <div>
                     <h6 class="text-start fw-bold text-secondary">
@@ -52,8 +52,8 @@
                     <p class="small p-2 ms-3 mb-1 rounded-3 bg-light">
                       {{ message.textContent }}
                     </p>
-                    <p class="small ms-3 mb-3 rounded-3 text-muted">
-                        {{ new Date(message.DateAndTime).toLocaleDateString() }} - {{ new Date(message.DateAndTime).toLocaleTimeString() }}
+                    <p class="small ms-3 mb-3 rounded-3 text-muted" style="font-size: 10px;">
+                      {{ new Date(message.DateAndTime).toLocaleDateString() }} - {{ new Date(message.DateAndTime).toLocaleTimeString() }}
                     </p>
                   </div>
                 </div>
@@ -69,6 +69,7 @@
                 style="width: 40px; height: 100%"
               />
               <input
+                @keyup.enter="sendMessage"
                 v-model="textContent"
                 type="text"
                 placeholder="Type your message"
@@ -97,6 +98,8 @@ import { Options, Vue } from "vue-class-component";
   async created() {
     this.me = this.$store.state.user;
     await this.loadMessages();
+    var objDiv: any = document.getElementById("messagescontainer");
+    objDiv.scrollTop = objDiv.scrollHeight;
   },
   methods: {
     async sendMessage() {
@@ -119,19 +122,17 @@ import { Options, Vue } from "vue-class-component";
         this.loadMessages();
     },
     async loadMessages() {
-        const response = await axios.post(
-            "http://localhost:3000/messages/get-user-msgs",
-            { courseId: this.currentCourse.id },
-            {
-                headers: {
-                    Authorization: "Bearer " + this.$store.state.userTokens,
-                    "Content-Type": "application/json",
-                },
-            }
-        );
-        this.messages = response.data;
-        var objDiv: any = document.getElementById("messagescontainer");
-        objDiv.scrollTop = objDiv.scrollHeight;
+      const response = await axios.post(
+        "http://localhost:3000/messages/get-user-msgs",
+        { courseId: this.currentCourse.id },
+        {
+          headers: {
+            Authorization: "Bearer " + this.$store.state.userTokens,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      this.messages = response.data;
     },
   },
   data() {

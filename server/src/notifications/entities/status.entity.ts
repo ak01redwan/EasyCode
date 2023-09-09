@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Notification } from './notification.entity';
 
@@ -6,6 +6,9 @@ import { Notification } from './notification.entity';
 export class Status {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({default: false})
+  viewed: boolean;
 
   // relations
 

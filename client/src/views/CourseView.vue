@@ -195,6 +195,7 @@ import axios from 'axios';
         try {
           this.user = await this.$store.state.user;
           this.course = await this.$store.state.courseInCourseDatailsPage;
+          this.currentOption = this.$store.state.currentCourseDisplayedContent;
           if (!this.course) {
             this.$router.push('/courses');
           }

@@ -53,7 +53,7 @@
             <router-link class="nav-link" to="/notifications" 
             :title="`====================\nclick to see more\n====================\n${notificationsTitle}`">
               <i class="fas fa-bell text-white"></i>
-              <span class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
+              <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
             </router-link>
           </li>
         </ul>
@@ -142,11 +142,14 @@ export default {
   methods: {
     async getNotifications() {
       try {
-        const response = await axios.get(`http://localhost:3000/notifications/${this.user.id}`);
-        this.notifications = response.data;
-        response.data.forEach((notification) => {
-          this.notificationsTitle += `${notification.text}\n`;
-        });
+        if (this.user) {
+          const response = await axios.get(`http://localhost:3000/notifications/${this.user.id}`);
+          this.notifications = response.data;
+          this.notificationsTitle = '';
+          response.data.forEach((notification) => {
+            this.notificationsTitle += `${notification.text}\n`;
+          });
+        }
       } catch (error) {
         console.log(error);
       }
@@ -193,7 +196,9 @@ export default {
   },
   async created() {
     await this.getUserProfileUsingStoredTokens();
-    await this.getNotifications();
+    setInterval(() => {
+      this.getNotifications();
+    }, 15000);
   },
   computed: {
     auth() {

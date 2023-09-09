@@ -1,15 +1,19 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
-import { CreateNotificationDto } from './dto/create-notification.dto';
 import { UpdateNotificationDto } from './dto/update-notification.dto';
 
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @Post()
-  create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationsService.create(createNotificationDto);
+  @Post(':userId')
+  async create(@Param('userId') userId: string) {
+    const userNotifications = await this.notificationsService.getUsersNotifications(+userId);
+  }
+
+  @Post('/declaringNotificationsHaveBeenViewed/:userId')
+  async declaringNotificationsHaveBeenViewed(@Param('userId') userId: string) {
+    return await this.notificationsService.declaringNotificationsHaveBeenViewedForThisUser(+userId);
   }
 
   @Get()
