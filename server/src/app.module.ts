@@ -39,6 +39,7 @@ import { Comment } from './comments/entities/comment.entity';
 import { Confirmation } from './confirmations/entities/confirmation.entity';
 import { Status } from './notifications/entities/status.entity';
 import { Notification } from './notifications/entities/notification.entity';
+import { ReportsModule } from './reports/reports.module';
 
 @Module({
   imports: [
@@ -91,6 +92,7 @@ import { Notification } from './notifications/entities/notification.entity';
     ConfirmationsModule,
     DownloadsModule,
     NotificationsModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
