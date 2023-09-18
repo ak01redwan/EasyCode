@@ -70,6 +70,7 @@
             v-for="course in filteringCourses"
             :Id="course.id"
             :Title="course.name"
+            :ImagePath="course.imagePath"
             :Description="course.description"
             :Type="course.category.name"
             :LikesNo="course.likes.length"

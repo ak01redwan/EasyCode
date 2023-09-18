@@ -1,22 +1,22 @@
 <template>
-<div class="card mb-1 col-lg-4 col-sm-5 shadow-lg">
-  <img src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="card-img-top" alt="Course Image">
-  <div class="card-body">
-    <h5 class="card-title">{{ Title }}</h5>
-    <p class="card-text">{{ Description.substring(0,50) }}</p>
+  <div class="card mb-1 col-lg-4 col-sm-5 shadow-lg p-0">
+    <img v-if="ImagePath" :src="`http://localhost:3000${ImagePath}`" class="card-img-top" alt="Course Image">
+    <img v-else src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="card-img-top" alt="Course Image">
+    <div class="card-body">
+      <h5 class="card-title">{{ Title }}</h5>
+      <p class="card-text">{{ Description.substring(0,50) }}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      <li class="list-group-item" @click="likeThisCourse">
+        <i class="fas fa-thumbs-up"></i>
+        Likes: {{ numberOfLikes }}
+        <button class="btn btn-outline-primary btn-sm float-end"><i :class="`fas fa-thumbs-${liked ? 'up' : 'down'}`"></i> Like</button>
+      </li>
+    </ul>
+    <div class="card-footer">
+      <a @click="goToCourseDetails" class="btn btn-primary"><i class="fas fa-info-circle"></i> Details</a>
+    </div>
   </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item" @click="likeThisCourse">
-      <i class="fas fa-thumbs-up"></i>
-      Likes: {{ numberOfLikes }}
-      <button class="btn btn-outline-primary btn-sm float-end"><i :class="`fas fa-thumbs-${liked ? 'up' : 'down'}`"></i> Like</button>
-    </li>
-  </ul>
-  <div class="card-footer">
-    <a @click="goToCourseDetails" class="btn btn-primary"><i class="fas fa-info-circle"></i> Details</a>
-  </div>
-</div>
-
 </template>
 <script lang="ts">
 import axios from 'axios';
@@ -27,6 +27,7 @@ import { Options, Vue } from 'vue-class-component';
   props: {
     Id: Number,
     Title: String,
+    ImagePath: String,
     Description: String,
     Type: String,
     LikesNo: Number,
@@ -74,12 +75,13 @@ import { Options, Vue } from 'vue-class-component';
 export default class CoursesGallery extends Vue {
   Id!: Number;
   Title!: String;
+  ImagePath!: String;
   Description!: String;
   Type!: String;
   LikesNo!: Number;
   likeThisCourse: ((payload: MouseEvent) => void) | undefined;
   goToCourseDetails: ((payload: MouseEvent) => void) | undefined;
   numberOfLikes: any;
-liked: any;
+  liked: any;
 }
 </script>

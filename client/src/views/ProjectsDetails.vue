@@ -1,8 +1,8 @@
 <template>
-  <div class="container mt-5" v-if="project">
+  <div class="container mt-5" style="min-height: 65vh;" v-if="project">
     <div class="row">
       <div class="col-md-6">
-        <img :src="`http://localhost:3000/${project.imagePath}`" class="img-fluid" alt="">
+        <img :src="`http://localhost:3000/${project.imagePath}`" class="rounded float-left shadw w-90" alt="">
       </div>
       <div class="col-md-6">
         <h1>                                          {{ project.title }}</h1>

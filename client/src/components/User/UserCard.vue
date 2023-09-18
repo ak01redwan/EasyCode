@@ -2,10 +2,8 @@
     <div class="col-lg-3 col-md-12 mb-0">
         <div class="card shadow-lg mb-5 bg-body rounded">
           <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
-            <img src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="img-fluid">
-            <a href="#!">
-              <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
-            </a>
+            <img v-if="user.picturePath" :src="`http://localhost:3000${user.picturePath}`" class="img-fluid" alt="Project Image">
+            <img v-else src="https://mdbootstrap.com/img/new/standard/nature/111.jpg" class="img-fluid" alt="Project Image">
           </div>
           <div class="card-body">
             <h5 class="card-title mb-0">{{ user.fullName }}</h5>
