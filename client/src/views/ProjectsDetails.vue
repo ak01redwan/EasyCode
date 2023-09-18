@@ -1,41 +1,23 @@
 <template>
-  <div class="container mt-5">
+  <div class="container mt-5" style="min-height: 65vh;" v-if="project">
     <div class="row">
       <div class="col-md-6">
-        <img :src="project.image" class="img-fluid" alt="">
+        <img :src="`http://localhost:3000/${project.imagePath}`" class="rounded float-left shadw w-90" alt="">
       </div>
       <div class="col-md-6">
-        <h1>{{ project.name }}</h1>
-        <p class="lead">{{ project.description }} </p>
-        <p>Created {{ project.createdDate }} </p>
-        <p>Likes:{{ project.likes }}</p>
+        <h1>                                          {{ project.title }}</h1>
+        <p><strong>Created date: </strong>            {{ project.createdDate }} </p>
+        <p><strong>Likes number: </strong>            {{ project.likes.length }}</p>
+        <p><strong>Refused times: </strong>           {{ project.refusedTimes }}</p>
+        <p><strong>Supervisor comment:</strong>       {{ project.supervisorComment }} </p>
+        <p><strong>Supervisor user name: </strong>   @{{ project.supervisor.username }}</p>
+        <p><strong>Student user name: </strong>      @{{ project.student.username }}</p>
         <hr>
-        <div v-for="comment in project.comments" :key="comment.id">
-          <div class="d-flex mb-2">
-            <div class="flex-grow-1">
-              <p class="font-weight-bold mb-0">{{ comment.author }}</p>
-              <p class="mb-0">{{ comment.message }}</p>
-            </div>
-            <div>
-              <small>{{ comment.date }}</small>
-            </div>
-          </div>
-        </div>
-        <form @submit.prevent="addComment">
-          <div class="form-group">
-            <label for="newComment">Add a Comment:</label>
-            <textarea class="form-control" id="newComment" rows="3" v-model="newComment"></textarea>
-          </div>
-
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <hr>
-        <div>
-          <p class="font-weight-bold mb-0">Supervisor Comment:</p>
-          <p>{{ project.supervisorComment }}</p>
-        </div>
         <div class="mt-3">
-          <a :href="project.downloadLink" class="btn btn-primary"><i class="fas fa-download"></i> Download</a>
+          <a @click="downloadStudentProject()" class="btn btn-primary m-2">
+            <i class="fas fa-download"></i> 
+            {{ isDownloading? 'Downloading...' : 'Download' }}
+          </a>
         </div>
       </div>
     </div>
@@ -43,31 +25,54 @@
 </template>
 <script lang="ts">
 
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import { Options, Vue } from 'vue-class-component';
 @Options({
-  components: {
-
+  async created() {
+    this.project = await this.$store.state.ProjectInProjectDatailsPage;
+    //console.log(this.project);
   },
   data() {
     return {
+      isDownloading: false,
       newComment: '',
-      project: {
-        id: 1,
-        name: 'Project Name',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-        likes: 10,
-        comments: [
-          { id: 1, author: 'John Doe', message: 'Great project!', date: '2023-05-26' },
-          { id: 2, author: 'Jane Doe', message: 'I really enjoyed working on this project. Thanks for the opportunity!', date: '2023-05-25' }
-        ],
-        image: 'https://via.placeholder.com/600x400',
-        createdDate: '2023-05-24',
-        supervisorComment: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.',
-        downloadLink: 'https://www.example.com/download'
-      }
+      project: null
     }
   },
   methods: {
+    async downloadStudentProject() {
+      console.log("Downloading...");
+      this.isDownloading = true;
+      const parts = this.project.documentPath.split("/");
+      const filename = parts[parts.length - 1];
+      //const filenameWithoutExtension = filename.slice(0, filename.lastIndexOf('.'));
+      axios({
+        url: `http://localhost:3000/downloads/${filename}`,
+        method: "GET",
+        responseType: "blob",
+      })
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", filename);
+          link.style.display = "none"; // hide the link
+          document.body.appendChild(link); // append the link to the document body
+          link.click();
+          Swal.fire({
+            icon: "success",
+            title: "Download Compeleted.",
+            text: `downloading ${this.project.title} has been compeleted successfully.`,
+          });
+          document.body.removeChild(link); // remove the link from the document body after download is complete
+        })
+        .catch((error) => {
+          console.log(error);
+        }).finally(() => {
+          this.isDownloading = false;
+        });
+    },
     addComment() {
       if (this.newComment.length > 0) {
         this.project.comments.push({

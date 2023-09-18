@@ -10,12 +10,14 @@ import { Multer } from 'multer';
 import * as fs from 'fs';
 import { AuthGuard } from 'src/auth/auth.guard'
 import { SubscriptionsService } from 'src/subscriptions/subscriptions.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Controller('projects')
 export class ProjectsController {
   constructor(
     private readonly projectsService: ProjectsService,
-    private readonly subsServices: SubscriptionsService
+    private readonly subsServices: SubscriptionsService,
+    private readonly notificationsService: NotificationsService
     ) {}
 
   @Get()
@@ -81,7 +83,6 @@ export class ProjectsController {
       createProjectDto.askedProject = JSON.parse(`${createProjectDto.askedProject}`);
       createProjectDto.student = JSON.parse(`${createProjectDto.student}`);
       createProjectDto.course = JSON.parse(`${createProjectDto.course}`);
-      console.log(createProjectDto);
       const project = plainToClass(Project, createProjectDto);
       project.supervisorComment = "waiting for supervisor comment and confirmation";
       project.isSubmitted = true;
@@ -124,7 +125,6 @@ export class ProjectsController {
     if (req.authData.user.userType == 'student') {
       return;
     }
-    
     const project = await this.findById(id);
     project.supervisorComment = updateProjectDto.reviewerComment;
     project.isAcceptedAndDone = updateProjectDto.accepted;
@@ -137,6 +137,12 @@ export class ProjectsController {
         project.student.id,
         project.course.id
       );
+      await this.notificationsService.create({
+        text: `new project hass been accepted ${project.title}`,
+        entityId: project.id,
+        pagePath: 'projects',
+        pageSection: 'allProjects'        
+      });
     }
     return this.projectsService.update(id, project);
   }

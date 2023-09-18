@@ -70,6 +70,7 @@
             v-for="course in filteringCourses"
             :Id="course.id"
             :Title="course.name"
+            :ImagePath="course.imagePath"
             :Description="course.description"
             :Type="course.category.name"
             :LikesNo="course.likes.length"
@@ -82,7 +83,7 @@
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
-import Card from "@/components/Card.vue";
+import Card from "@/components/Course/Card.vue";
 import Swal from "sweetalert2";
 import axios from "axios";
 

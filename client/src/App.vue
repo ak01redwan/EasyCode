@@ -50,9 +50,10 @@
             </ul>
           </li>  
           <li class="nav-item">
-            <router-link to="/notifications">
+            <router-link class="nav-link" to="/notifications" 
+            :title="`====================\nclick to see more\n====================\n${notificationsTitle}`">
               <i class="fas fa-bell text-white"></i>
-              <span class="badge rounded-pill badge-notification bg-danger">4</span>
+              <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
             </router-link>
           </li>
         </ul>
@@ -133,10 +134,26 @@ export default {
   data() {
     return {
       user: null,
-      currentPage: 'Home'
+      currentPage: 'Home',
+      notifications: [],
+      notificationsTitle: ''
     };
   },
   methods: {
+    async getNotifications() {
+      try {
+        if (this.user) {
+          const response = await axios.get(`http://localhost:3000/notifications/${this.user.id}`);
+          this.notifications = response.data;
+          this.notificationsTitle = '';
+          response.data.forEach((notification) => {
+            this.notificationsTitle += `${notification.text}\n`;
+          });
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    },
     goToUsersPage(showUsersWithType) {
       this.$store.state.showUsersWithType = showUsersWithType;
       this.$router.push("/users");
@@ -177,8 +194,11 @@ export default {
       })
     },
   },
-  created() {
-    this.getUserProfileUsingStoredTokens();
+  async created() {
+    await this.getUserProfileUsingStoredTokens();
+    setInterval(() => {
+      this.getNotifications();
+    }, 15000);
   },
   computed: {
     auth() {

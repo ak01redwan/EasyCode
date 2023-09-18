@@ -28,9 +28,13 @@
           <input v-model="searchText" class="mt-2 mb-2 w-50 p-2" placeholder="Search...">
         </div>
         <div class="row">
-          <Card v-for="project in filteringprojects" :Id="project.id" :Title="project.title"
+          <Card v-for="project in filteringprojects" 
+            :Id="project.id" 
+            :Title="project.title"
+            :ImagePath="project.imagePath"
             :Description="`@${project.student.username} & ${project.supervisor.username}\n${project.supervisorComment}`" 
-            :Type="project.course.name" :LikesNo="0" />
+            :Type="project.course.name" 
+            :LikesNo="0" />
         </div>
       </main>
     </div>
@@ -39,7 +43,7 @@
   
 <script lang="ts">
 import { Options, Vue } from 'vue-class-component';
-import Card from '@/components/Card.vue'
+import Card from '@/components/Project/Card.vue'
 import axios from 'axios';
 
 @Options({

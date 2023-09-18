@@ -13,6 +13,7 @@ import EditUserView from '@/views/EditUserView.vue'
 import DashboardView from '@/views/DashboardView.vue'
 import ProjectsDetails from '@/views/ProjectsDetails.vue'
 import UserDetailsView from '../views/UserDetailsView.vue'
+import NotificationsViewVue from '@/views/NotificationsView.vue'
 import SubmitStagesExamView from '@/views/SubmitStagesExamView.vue'
 import StageAskedProjectView from '@/views/StageAskedProjectView.vue'
 import WaitingConfirmationView from '@/views/WaitingConfirmationView.vue'
@@ -111,7 +112,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/submit-exam',
     name: 'submitExam',
     component: SubmitStagesExamView 
-  }
+  },
+  {
+    path: '/notifications',
+    name: 'notifications',
+    component: NotificationsViewVue 
+  },
 ]
 
 const router = createRouter({

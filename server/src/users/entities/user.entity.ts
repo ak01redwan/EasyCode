@@ -6,6 +6,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn, Unique } from 'typeo
 import { Confirmation } from 'src/confirmations/entities/confirmation.entity';
 import { Project } from 'src/projects/entities/project.entity';
 import { Course } from 'src/courses/entities/course.entity';
+import { Status } from 'src/notifications/entities/status.entity';
 
 @Entity()
 @Unique(['email', 'username'])
@@ -74,4 +75,6 @@ export class User {
   @OneToMany(() => Course, course => course.courseAdmin)
   courses: Course[];
 
+  @OneToMany(() => Status, notification => notification.user)
+  notifications: Status[];
 }

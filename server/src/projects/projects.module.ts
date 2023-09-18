@@ -5,11 +5,13 @@ import { Project } from './entities/project.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SubscriptionsModule } from 'src/subscriptions/subscriptions.module';
 import { Course } from 'src/courses/entities/course.entity';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Project, Course]),
     SubscriptionsModule,
+    NotificationsModule
   ],
   controllers: [ProjectsController],
   providers: [ProjectsService]

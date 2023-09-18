@@ -8,10 +8,15 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { UploadFileToDiskStorage } from 'src/helpers/upload-file';
 import { Multer } from 'multer';
 import * as fs from 'fs';
+import { NotificationsService } from 'src/notifications/notifications.service';
+import { CreateNotificationDto } from 'src/notifications/dto/create-notification.dto';
 
 @Controller('courses')
 export class CoursesController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly notificationsService: NotificationsService
+    ) {}
 
   @Post()
   @UseInterceptors(
@@ -36,7 +41,23 @@ export class CoursesController {
 
   @Post('toggleCoursePublished/:id')
   async toggleCoursePublished(@Param('id') id: string): Promise<Course> {
-    return await this.coursesService.toggleCoursePublished(+id);
+    // toggling out course appearnce
+    const course = await this.coursesService.toggleCoursePublished(+id);
+    
+    // creating notifications for all users
+    //* this happend only of we toggle it from unPublished to published
+    if (course.isPublished) {
+      // creating the notification DTO object
+      const notification: CreateNotificationDto = {
+        text: `${course.name} course hass been published`,
+        entityId: course.id,
+        pagePath: 'courses',
+        pageSection: 'allCourses'        
+      };
+      // create the notification with users as subscribers
+      await this.notificationsService.create(notification);
+    }
+    return course;
   }
 
   @Post('adminForThisCourse/:id')
