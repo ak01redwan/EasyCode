@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-sm text-color1 background-color1">
+  <nav id="easycode-header" class="navbar navbar-expand-sm text-color1 background-color1">
     <div class="container-fluid">
       <router-link to="/" class="nav-link"><i class="fa-solid fa-code"></i> EasyCode
       </router-link>

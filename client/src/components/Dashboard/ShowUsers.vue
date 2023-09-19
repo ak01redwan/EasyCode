@@ -23,7 +23,7 @@
   <div class="container">
     <div class="row">
       <div class="col-12" style="
-                                max-height: 415px;
+                                max-height: 90vh;
                                 overflow-y: scroll;
                                 margin: 0;">
         <div v-for="(user,index) in searchResults" :key="index" class="user-card">

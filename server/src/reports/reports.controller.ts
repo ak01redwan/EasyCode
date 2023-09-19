@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, NotFoundException, NotAcceptableException } from '@nestjs/common';
+import { Controller, Get, Body, Param, NotFoundException, NotAcceptableException, Post } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 
@@ -6,8 +6,8 @@ import { CreateReportDto } from './dto/create-report.dto';
 export class ReportsController {
   constructor(private readonly reportsService: ReportsService) {}
 
-  @Get()
-  async getGeneralReport(@Body() createReportDto: CreateReportDto) {
+  @Post()
+  async getGeneralReport(@Body() createReportDto: any) {
     return await this.reportsService.getGeneralReport(createReportDto.fromDate, createReportDto.toDate);
   }
 

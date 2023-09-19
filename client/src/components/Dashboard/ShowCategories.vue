@@ -28,7 +28,7 @@
     <div class="row">
       <div
         class="col-12"
-        style="max-height: 415px; overflow-y: scroll; margin: 0"
+        style="max-height: 90vh; overflow-y: scroll; margin: 0"
       >
         <div
           v-for="(category, index) in searchResults"
