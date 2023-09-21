@@ -20,7 +20,7 @@ export class ReportsController {
     }
   }
 
-  @Get('/courses')
+  @Post('/courses')
   async getCoursesReport(@Body() createReportDto: CreateReportDto) {
     return await this.reportsService.getCoursesReport(createReportDto.fromDate, createReportDto.toDate);
   }

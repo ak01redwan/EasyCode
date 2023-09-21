@@ -1,7 +1,7 @@
 <style>
 .easy-code-report-container {
-    margin: 0; 
-    padding: 0; 
+    margin: 0;
+    padding: 0;
     margin-top: 4px;
     background-color: rgba(220, 220, 234, 0.523);
     border: 2px solid rgba(13, 46, 103, 0.591);
@@ -18,19 +18,24 @@
 <template>
     <div id="easy-code-report-container-id" class="easy-code-report-container">
         <ReportHeader @report-type-changed="changeReportTemp" @report-data="fillTempWithReportData" />
-        <div v-if="reportData">
-            {{ reportData }}
-        </div>
+        <!--Reports Temps-->
+        <GeneralTemp v-if="reportData && reportType == 'general'" :report-data="reportData" />
+        <CoursesTemp v-if="reportData && reportType == 'courses'" :report-data="reportData" />
+
     </div>
 </template>
 
 <script lang="ts">
 import { Options, Vue } from "vue-class-component";
 import ReportHeader from "./ReportHeader.vue";
+import GeneralTemp from "./GeneralTemp.vue";
+import CoursesTemp from "./CoursesTemp.vue"
 
 @Options({
-    components:{
-        ReportHeader
+    components: {
+        ReportHeader,
+        GeneralTemp,
+        CoursesTemp
     },
     data() {
         return {
@@ -38,11 +43,12 @@ import ReportHeader from "./ReportHeader.vue";
             reportType: 'general'
         };
     },
-    beforeMount() {},
-    mounted() {},
+    beforeMount() { },
+    mounted() { },
     methods: {
         changeReportTemp(reportType: 'general' | 'courses' | 'supervisors' | 'students') {
-            alert(reportType);
+            this.reportData = null;
+            this.reportType = reportType;
         },
         fillTempWithReportData(data: any) {
             this.reportData = data;
@@ -50,6 +56,6 @@ import ReportHeader from "./ReportHeader.vue";
     },
 })
 export default class ReportsContainer extends Vue {
-[x: string]: any;
+    [x: string]: any;
 }
 </script>

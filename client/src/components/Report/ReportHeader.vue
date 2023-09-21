@@ -82,10 +82,10 @@
     <h6 class="text-secondary m-2">{{ selectedReportType }} report at {{ reportData.reportDate }}</h6>
     <div class="row">
       <em class="col-6 text-left text-primary" style="font-weight: bold">
-        From: {{ new Date(reportData.fromDate).toDateString() }}
+        From: {{  new Date(reportData.fromDate).toDateString() != 'Invalid Date' ? new Date(reportData.fromDate).toDateString() : reportData.fromDate }}
       </em>
       <em class="col-6 text-right text-primary" style="font-weight: bold">
-        To: {{ new Date(reportData.toDate).toDateString() }}
+        To: {{ reportData.toDate }}
       </em>
     </div>
   </div>
@@ -115,6 +115,18 @@ type Payload = {
     this.$emit("report-type-changed", this.selectedReportType);
   },
   methods: {
+    async loadCoursesReportData(payload: Payload) {
+      try {
+        const response = await axios.post("http://localhost:3000/reports/courses", payload);
+        return response.data
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Oops..",
+          text: "can not get the courses report data from the server"+error
+        });
+      }
+    },
     async loadGenralReportData(payload: Payload) {
       try {
         const response = await axios.post("http://localhost:3000/reports", payload);
@@ -136,6 +148,9 @@ type Payload = {
       switch(this.selectedReportType) {
         case 'general':
           data = await this.loadGenralReportData(payload);
+          break;
+        case 'courses':
+          data = await this.loadCoursesReportData(payload);
           break;
       }
       this.reportData = data;

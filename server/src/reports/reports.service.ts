@@ -113,11 +113,24 @@ export class ReportsService {
     const coursesReport: CoursesReport = new CoursesReport();
     // if one of them null then get all
     if (fromDate == null || toDate == null) {
-      coursesReport.courses = await this.coursesRepository.find();
+      coursesReport.courses = await this.coursesRepository.find({
+        relations: [
+          'courseAdmin',
+          'category',
+          'stages',
+          'messages',
+          'projects',
+          'subscriptions',
+          'stages.exams',
+          'stages.lessons'
+        ]
+      });
     } else {
       coursesReport.courses = await this.coursesRepository.find({
         where: { createdDate: Between(fromDate, toDate) },
         relations: [
+          'courseAdmin',
+          'category',
           'stages',
           'messages',
           'projects',
