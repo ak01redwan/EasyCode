@@ -81,10 +81,10 @@
     <h1 class="m-2">Easy Coding Report</h1>
     <h6 class="text-secondary m-2">{{ selectedReportType }} report at {{ reportData.reportDate }}</h6>
     <div class="row">
-      <em class="col-6 text-left text-primary" style="font-weight: bold">
+      <em class="col-6 text-left text-secondary" style="font-weight: bold">
         From: {{  new Date(reportData.fromDate).toDateString() != 'Invalid Date' ? new Date(reportData.fromDate).toDateString() : reportData.fromDate }}
       </em>
-      <em class="col-6 text-right text-primary" style="font-weight: bold">
+      <em class="col-6 text-right text-secondary" style="font-weight: bold">
         To: {{ reportData.toDate }}
       </em>
     </div>
