@@ -1,6 +1,31 @@
 <style>
-.custom-notification-background:hover {
+.nots-container{
+    width: 70%;
+    height: 90vh;
+    margin: 0 auto;
+    background-color: rgba(21, 250, 238, 0.022);
+    padding: 20px;
+    border-radius: 22px;
+}
+.custom-notification-background{
+    background-color: #cfe2ff;
+    border-radius: 12px;
+    border-color: #9bc3fc;
+    color: #084298;
+    cursor: pointer;
+    padding: 20px;
+    margin: 10px;
+    width: 100%;
+    box-shadow: 5px 5px 5px 0px lightblue;
+}
+.custom-notification-background:hover{
     background-color: #a0c4fa;
+    font-size: large;
+    font-weight: bold;
+    margin-left: 15px;
+    margin-top: 11px;
+    margin-bottom: 11px;
+    box-shadow: 10px 10px 5px 0px lightblue;
 }
 </style>
 
@@ -16,27 +41,42 @@
     </div>
   </header>
 
-  <main class="container mt-4" style="min-height: 70vh;">
-    <div class="alert alert-primary m-1 btn w-100 custom-notification-background"
-        @click="goToPage(notification)" 
-        v-for="(notification, index) in notifications" :key="index">
-      {{ notification.text }}
+  <main class="container mt-4 text-center" style="min-height: 70vh;">
+    <div class="nots-container">
+        <p class="custom-notification-background"
+            @click="goToPage(notification)" 
+            v-for="(notification, index) in filterdNotifications" :key="index">
+        {{ notification.text }}
+        </p>
     </div>
   </main>
 </template>
 
 <script lang="ts">
 import axios from "axios";
+import Swal from "sweetalert2";
 import { Options, Vue } from "vue-class-component";
 
 @Options({
     data() {
         return {
-            notifications: []
+            notifications: [],
         }
     },
     async created() {
         await this.getNotifications();
+    },
+    computed: {
+        filterdNotifications() {
+            let nots = [];
+            const notType = this.$store.state.notificationsType;
+            if (notType == 'public') {
+                nots = this.notifications;
+            } else {
+                nots = this.notifications.filter((notification: any) => notification.pageSection == 'ChattingRoom');
+            }
+            return nots;
+        }
     },
     methods:{
         async declaringNotificationsHaveBeenViewed() {
@@ -47,10 +87,16 @@ import { Options, Vue } from "vue-class-component";
                 //console.log(res);
             }
         },
-        goToPage(notification: any) {
+        async goToPage(notification: any) {
             switch (notification.pageSection) {
                 case 'ChattingRoom':
                     this.$store.state.currentCourseDisplayedContent = "ChattingRoom";
+                    try {
+                        const response = await axios.get(`http://localhost:3000/courses/${notification.entityId}`);
+                        this.$store.state.courseInCourseDatailsPage = response.data;
+                    } catch (error) {
+                        Swal.fire("oOps!", "Can not loading the course data.", "error");
+                    }
                     this.$router.push(`/${notification.pagePath}`);
                     break;
             
@@ -63,7 +109,7 @@ import { Options, Vue } from "vue-class-component";
             try {
                 const userId = await this.$store.state.user.id;
                 const response = await axios.get(`http://localhost:3000/notifications/${userId}`);
-                this.notifications = response.data;
+                this.notifications = response.data.reverse()
                 //console.log(this.notifications);
             } catch (error) {
                 console.log(error);

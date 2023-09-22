@@ -49,12 +49,15 @@
               </li>
             </ul>
           </li>  
-          <li class="nav-item">
-            <router-link class="nav-link" to="/notifications" 
-            :title="`====================\nclick to see more\n====================\n${notificationsTitle}`">
+          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('personal')"
+            :title="`====================\nclick to see you personal notifications\n====================\n${notificationsTitle}`">
               <i class="fas fa-bell text-white"></i>
               <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
-            </router-link>
+          </li>
+          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('public')"
+            :title="`====================\nclick to see your public notifications\n====================\n${notificationsTitle}`">
+              <i class="fas fa-bell text-white"></i>
+              <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
           </li>
         </ul>
         <div v-if="user" class="d-flex d-grid gap-1">
@@ -140,6 +143,10 @@ export default {
     };
   },
   methods: {
+    goToNotificationsPage(notificationType) {
+      this.$store.state.notificationsType = notificationType;
+      this.$router.push("/notifications");
+    },
     async getNotifications() {
       try {
         if (this.user) {
@@ -198,7 +205,7 @@ export default {
     await this.getUserProfileUsingStoredTokens();
     setInterval(() => {
       this.getNotifications();
-    }, 15000);
+    }, 10000); // this should be replaced by web socket
   },
   computed: {
     auth() {

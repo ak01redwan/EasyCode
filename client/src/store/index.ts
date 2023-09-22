@@ -15,7 +15,8 @@ export default createStore({
     currentDashboardDisplayedContent: "ShowUsers",
     currentCourseDisplayedContent: 'CourseDetails',
     currentStage: null,
-    ProjectInProjectDatailsPage: null
+    ProjectInProjectDatailsPage: null,
+    notificationsType: 'public'
   },
   getters: {
     isAuthenticated(state) {
