@@ -31,6 +31,10 @@
           <ChatRoom :currentCourse="course" v-if="currentOption === listOptions[4]" />
           <!--Getting Course Stages-->
           <div v-if="currentOption === listOptions[1]" class="row">
+            <p v-if="isDone" class="alert alert-success">You have successfully finished this course with degree {{ degree }} of {{ (course.stages.length*10) }}.</p>
+            <p v-else class="alert alert-success">You are in the progress your degree now is {{ degree }} of {{ (course.stages.length*10) }}.</p>
+
+
             <CourseStage v-for="(stage,index) in course.stages" :key="index"
               :stageId="(index+1)"
               :stageTitle="stage.title"
@@ -110,6 +114,8 @@ import axios from 'axios';
             {itemName: 'Supervisors', itemIconClass: 'fa-person-chalkboard'},
             {itemName: 'Chatting Room', itemIconClass: 'fa-comments'},
         ],
+        degree: 0,
+        isDone: false,
         searchTerm: "",
         course: null,
         subscriped: false,
@@ -237,8 +243,14 @@ import axios from 'axios';
         }
         try {
           const response = await axios.get(`http://localhost:3000/subscriptions/by-user/${this.user.id}/by-course/${this.course.id}`);
-          await response.data.id ? this.subscriped = true : this.subscriped = false;
-          response.data.stage ? this.currentStage = response.data.stage : '';
+          if (response.data.id) {
+            this.subscriped = true;
+            this.currentStage = response.data.stage;
+            this.isDone = response.data.isDone;
+            this.degree = response.data.scores;
+          } else {
+            this.subscriped = false;
+          }
         } catch (error) {
           console.log(error);
         }

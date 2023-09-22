@@ -66,16 +66,21 @@ import { Options, Vue } from "vue-class-component";
             title: `WELL DONE`,
             text: "well done looks like you are doing great.",
           })
-          this.$router.push('/course');
+        } else if (response.data.isDone) {
+          Swal.fire({
+            icon: "success",
+            title: `WILL DONE`,
+            text: "You have successfilly finished this course.",
+          })
         } else {
           Swal.fire({
             icon: "info",
             title: `oOPs...`,
             text: "you get F but we say F is find another answers, learn more watch more them come back.",
           })
-          this.$router.push('/course');
         }
-        
+        this.$store.state.currentCourseDisplayedContent = 'Stages';
+        this.$router.push('/course');
       } catch (error) {
         console.log(error);
       }
