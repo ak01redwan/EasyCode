@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { CoursesService } from 'src/courses/courses.service';
 import { User } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { Course } from 'src/courses/entities/course.entity';
 
 @Controller('subscriptions')
 export class SubscriptionsController {
@@ -40,17 +41,26 @@ export class SubscriptionsController {
   }
 
   @UseGuards(AuthGuard)
-  @Post()
+  @Post('/toggle')
   async create(@Body()  sub: {courseId: number}, @Request() req) {
     const subscription = await this.subscriptionsService.findByUserAndCourse(sub.courseId, req.authData.user.id);
     if (subscription) {
+      // remove current active course for the user
       const user = await this.usersServices.findOne(req.authData.user.id);
-      user.currentCourseId = null;
-      await this.usersServices.update(user);
+      if (user.currentCourseId == sub.courseId.toString()) {
+        user.currentCourseId = null;
+        await this.usersServices.update(user);
+      }
+      // check if this user is the admin of this course then update the course to has no admin
+      const course = (await this.coursesServices.getCoursesByAdminId(req.authData.user.id)).find((course: Course) => course.id == sub.courseId);
+      if (course) {
+        course.courseAdmin = null;
+        await this.coursesServices.updateCourse(course);
+      }
       await this.subscriptionsService.delete(subscription.id);
       return null;
     } else {
-      console.log('created');
+      //console.log('subscription created');
       const newSubscription  = new Subscription();
       newSubscription.course = await this.coursesServices.findOne(sub.courseId);
       newSubscription.user   = { id: req.authData.user.id} as User;

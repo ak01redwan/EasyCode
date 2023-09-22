@@ -1,7 +1,7 @@
 <template>
   <nav id="easycode-header" class="navbar navbar-expand-sm text-color1 background-color1">
     <div class="container-fluid">
-      <router-link to="/" class="nav-link"><i class="fa-solid fa-code"></i> EasyCode
+      <router-link to="/" class="nav-link"><i class="fa-solid fa-code fa-fade"></i> EasyCode
       </router-link>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavbar">
         <span class="navbar-toggler-icon"></span>
@@ -49,14 +49,14 @@
               </li>
             </ul>
           </li>  
-          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('personal')"
-            :title="`====================\nclick to see you personal notifications\n====================\n${notificationsTitle}`">
-              <i class="fas fa-bell text-white"></i>
+          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('public')"
+            :title="`====================\nclick to see public notifications\n====================\n${notificationsTitle}`">
+              <i class="fas fa-bell fa-shake text-white"></i>
               <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
           </li>
-          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('public')"
-            :title="`====================\nclick to see your public notifications\n====================\n${notificationsTitle}`">
-              <i class="fas fa-bell text-white"></i>
+          <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('personal')"
+            :title="`====================\nclick to see your personal notifications\n====================\n${notificationsTitle}`">
+              <i class="fa-solid fa-question fa-bounce text-white "></i>
               <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
           </li>
         </ul>
@@ -66,8 +66,8 @@
           </button>
           <router-link to="/user">
             <button :title="`${user.fullName} \n ${user.email}`" @click="$store.state.userInUserDetailsPage = null"
-              class="btn btn-outline-secondary">
-              <i class="fa-solid fa-user"></i> {{ user.username }}
+              class="btn btn-outline-secondary fa-fade">
+              <i class="fa-solid fa-user fa-beat-fade"></i> {{ user.username }}
             </button>
           </router-link>
         </div>

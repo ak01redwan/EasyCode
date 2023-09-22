@@ -5,12 +5,13 @@ import { Course } from './entities/course.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoriesModule } from 'src/categories/categories.module';
 import { NotificationsModule } from 'src/notifications/notifications.module';
+import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 
 @Module({
   imports: [
     NotificationsModule,
     CategoriesModule,
-    TypeOrmModule.forFeature([Course])
+    TypeOrmModule.forFeature([Course, Subscription])
   ],
   controllers: [CoursesController],
   providers: [CoursesService],

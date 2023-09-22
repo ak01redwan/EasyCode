@@ -166,7 +166,7 @@ import axios from 'axios';
           }
         } 
         try {
-          const response = await axios.post(`http://localhost:3000/subscriptions`,{ courseId: this.course.id},{
+          const response = await axios.post(`http://localhost:3000/subscriptions/toggle`,{ courseId: this.course.id},{
             headers: {
               'Authorization': 'Bearer ' + this.$store.state.userTokens,
               'Content-Type': 'application/json'

@@ -13,7 +13,7 @@ export class SubscriptionsService {
     @InjectRepository(Course)
     private readonly coursesRepository: Repository<Course>,
   ) {}
-
+  //*! this service with the courses service should be restructured and use the modules instead
   async findAll(): Promise<Subscription[]> {
     return this.subscriptionsRepository.find({
       relations: ['user', 'course','stage'],
