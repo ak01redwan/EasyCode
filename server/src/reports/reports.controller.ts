@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Param, NotFoundException, NotAcceptableException, Post } from '@nestjs/common';
+import { Controller, Body, Param, NotAcceptableException, Post } from '@nestjs/common';
 import { ReportsService } from './reports.service';
 import { CreateReportDto } from './dto/create-report.dto';
 
@@ -11,7 +11,7 @@ export class ReportsController {
     return await this.reportsService.getGeneralReport(createReportDto.fromDate, createReportDto.toDate);
   }
 
-  @Get('/users/:userType')
+  @Post('/users/:userType')
   async getUsersReportOfType(@Param('userType') userType: 'supervisor' | 'student', @Body() createReportDto: CreateReportDto) {
     if (userType == 'supervisor' || userType == 'student') {
       return await this.reportsService.getUsersReportOfType(userType, createReportDto.fromDate, createReportDto.toDate);

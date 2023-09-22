@@ -1,18 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { CreateReportDto } from './dto/create-report.dto';
-import { Message } from 'src/messages/entities/message.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Between, Repository } from 'typeorm';
 import { User } from 'src/users/entities/user.entity';
 import { Course } from 'src/courses/entities/course.entity';
 import { Category } from 'src/categories/entities/category.entity';
-import { Project } from 'src/projects/entities/project.entity';
-import { Exam } from 'src/exams/entities/exam.entity';
-import { Lesson } from 'src/lessons/entities/lesson.entity';
-import { Subscription } from 'src/subscriptions/entities/subscription.entity';
 import { GeneralReport } from './entities/general.report.entity';
 import { UsersReport } from './entities/users.report.entity';
 import { CoursesReport } from './entities/courses.report.entity';
+import { UserType } from '../helpers/user.type'
 
 @Injectable()
 export class ReportsService {
@@ -88,20 +83,20 @@ export class ReportsService {
    * this will return a result of type (GeneralReport)
    * @returns: GeneralReport
    */
-  async getUsersReportOfType(userType: 'supervisor' | 'student',fromDate: Date | null, toDate: Date | null ): Promise<UsersReport> {
+  async getUsersReportOfType(userType: UserType,fromDate: Date | null, toDate: Date | null ): Promise<UsersReport> {
     const usersReport: UsersReport = new UsersReport();
     // if one of them null then get all
     if (fromDate == null || toDate == null) {
       // get all users
       usersReport.users = await this.usersRepository.find({
         where: { userType: userType },
-        relations: ['likes','subscriptions','messages','projects']
+        relations: ['likes', 'subscriptions', 'subscriptions.course', 'messages', 'projects']
       });
     } else {
       // adding the users and categories from date to date
       usersReport.users = await this.usersRepository.find({
         where: { signupDate: Between(fromDate, toDate), userType: userType },
-        relations: ['likes','subscriptions','messages','projects']
+        relations: ['likes', 'subscriptions', 'subscriptions.course', 'messages', 'projects']
       });
       usersReport.fromDate = fromDate;
       usersReport.toDate   = toDate;

@@ -21,6 +21,7 @@
         <!--Reports Temps-->
         <GeneralTemp v-if="reportData && reportType == 'general'" :report-data="reportData" />
         <CoursesTemp v-if="reportData && reportType == 'courses'" :report-data="reportData" />
+        <UsersTemp v-if="reportData && (reportType == 'students' || reportType == 'supervisors')" :report-data="reportData" />
 
     </div>
 </template>
@@ -30,12 +31,14 @@ import { Options, Vue } from "vue-class-component";
 import ReportHeader from "./ReportHeader.vue";
 import GeneralTemp from "./GeneralTemp.vue";
 import CoursesTemp from "./CoursesTemp.vue"
+import UsersTemp from "./UsersTemp.vue"
 
 @Options({
     components: {
         ReportHeader,
         GeneralTemp,
-        CoursesTemp
+        CoursesTemp,
+        UsersTemp
     },
     data() {
         return {

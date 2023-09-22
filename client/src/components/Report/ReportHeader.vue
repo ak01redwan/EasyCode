@@ -101,6 +101,8 @@ type Payload = {
   fromDate: Date | null,
   toDate: Date | null
 }
+type UserType = 'supervisor' | 'student' | null;
+
 @Options({
   data() {
     return {
@@ -115,6 +117,18 @@ type Payload = {
     this.$emit("report-type-changed", this.selectedReportType);
   },
   methods: {
+    async loadUsersReportData(payload: Payload, userType: UserType) {
+      try {
+        const response = await axios.post(`http://localhost:3000/reports/users/${userType}`, payload);
+        return response.data
+      } catch (error) {
+        Swal.fire({
+          icon: "error",
+          title: "Load Users Oops..",
+          text: `can not get the ${userType} report data from the server`+error
+        });
+      }
+    },
     async loadCoursesReportData(payload: Payload) {
       try {
         const response = await axios.post("http://localhost:3000/reports/courses", payload);
@@ -151,6 +165,12 @@ type Payload = {
           break;
         case 'courses':
           data = await this.loadCoursesReportData(payload);
+          break;
+        case 'students':
+          data = await this.loadUsersReportData(payload, 'student');
+          break;
+        case 'supervisors':
+          data = await this.loadUsersReportData(payload, 'supervisor');
           break;
       }
       this.reportData = data;
