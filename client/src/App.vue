@@ -50,14 +50,14 @@
             </ul>
           </li>  
           <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('public')"
-            :title="`====================\nclick to see public notifications\n====================\n${notificationsTitle}`">
+            :title="`====================\nclick to see public notifications\n====================\n${publicNotificationsTitles}`">
               <i class="fas fa-bell fa-shake text-white"></i>
               <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
           </li>
           <li class="nav-item btn m-1 p-0" @click="goToNotificationsPage('personal')"
-            :title="`====================\nclick to see your personal notifications\n====================\n${notificationsTitle}`">
+            :title="`====================\nclick to see your personal notifications\n====================\n${personalNotificationsTitles}`">
               <i class="fa-solid fa-question fa-bounce text-white "></i>
-              <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ notifications.length }}</span>
+              <span v-if="notifications.length > 0" class="badge rounded-pill badge-notification bg-danger">{{ personalNotificationLength }}</span>
           </li>
         </ul>
         <div v-if="user" class="d-flex d-grid gap-1">
@@ -139,7 +139,9 @@ export default {
       user: null,
       currentPage: 'Home',
       notifications: [],
-      notificationsTitle: ''
+      personalNotificationsTitles: '',
+      publicNotificationsTitles: '',
+      personalNotificationLength: 0
     };
   },
   methods: {
@@ -152,9 +154,14 @@ export default {
         if (this.user) {
           const response = await axios.get(`http://localhost:3000/notifications/${this.user.id}`);
           this.notifications = response.data;
-          this.notificationsTitle = '';
+          this.personalNotificationLength = response.data.filter((notification) => notification.pageSection == 'ChattingRoom').length;
+          this.personalNotificationsTitles = '';
+          this.publicNotificationsTitles = '';
           response.data.forEach((notification) => {
-            this.notificationsTitle += `${notification.text}\n`;
+            this.publicNotificationsTitles += `${notification.text}\n`;
+            if (notification.pageSection == 'ChattingRoom') {
+              this.personalNotificationsTitles += `${notification.text}\n`;
+            }
           });
         }
       } catch (error) {
